@@ -1,9 +1,12 @@
+import { NamedEntity } from './common.dto';
+
 export type Item = {
   id: string;
-  realm: string;
+  realm: NamedEntity;
   category: string;
-  weapon?: WeaponInfo;
+  weapon: WeaponInfo | undefined;
   stakeable: boolean;
+  description: string | undefined;
   imageUrl?: string;
 };
 

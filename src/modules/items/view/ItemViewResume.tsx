@@ -1,30 +1,28 @@
 import React, { FC } from 'react';
 import { Grid, Link, Typography } from '@mui/material';
 import { t } from 'i18next';
-import { Npc } from '../../api/npc.dto';
-import { Realm } from '../../api/realm.dto';
+import { Item } from '../../api/item.dto';
 
-const NpcViewResume: FC<{
-  npc: Npc;
-  realm: Realm | null;
-}> = ({ npc, realm }) => {
+const ItemViewResume: FC<{
+  item: Item;
+}> = ({ item }) => {
   return (
     <>
       <Grid container spacing={2}>
         <Grid size={12}>
           <Typography variant="h6" color="primary" gutterBottom>
-            {npc.name}
+            {t(item.id)}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            <Link href={`/core/realms/view/${npc.realmId}`} color="textPrimary">
-              {realm?.name || 'Loading realm...'}
+            <Link href={`/core/realms/view/${item.realm.id}`} color="textPrimary">
+              {item.realm?.name || 'Loading realm...'}
             </Link>
           </Typography>
           <Typography variant="body1" gutterBottom>
-            {t(npc.category)}
+            {t(item.category)}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            {npc.description}
+            {t(item.description || 'No description available.')}
           </Typography>
         </Grid>
       </Grid>
@@ -32,4 +30,4 @@ const NpcViewResume: FC<{
   );
 };
 
-export default NpcViewResume;
+export default ItemViewResume;

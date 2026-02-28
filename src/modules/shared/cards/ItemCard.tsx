@@ -3,6 +3,8 @@ import { t } from 'i18next';
 import { Item } from '../../api/item.dto';
 import CardListItem from './CardListItem';
 
+const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
+
 const ItemCard: FC<{
   item: Item;
   onClick?: () => void;
@@ -11,7 +13,7 @@ const ItemCard: FC<{
     <CardListItem
       title={item.id}
       subtitle={t(item.category)}
-      image={item.id || '/static/images/items/unknown.png'}
+      image={item.imageUrl || `${imageBaseUrl}images/items/${item.id}.png`}
       onClick={onClick}
     />
   );

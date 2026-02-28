@@ -7,3 +7,8 @@ export type Page<I> = {
     totalPages: number;
   };
 };
+
+export type NamedEntity = {
+  id: string;
+  name: string;
+};

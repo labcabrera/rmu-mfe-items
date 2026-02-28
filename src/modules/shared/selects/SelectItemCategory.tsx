@@ -2,62 +2,31 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Autocomplete, TextField } from '@mui/material';
 
-const SelectNpcOutlookType: FC<{
+const SelectItemCategory: FC<{
   label: string;
   value: string;
   name: string;
-  addAllOption?: boolean;
   required?: boolean;
   onChange: (value: string | null) => void;
-}> = ({ label, value, name, onChange, addAllOption = false, required = false }) => {
+}> = ({ label, value, name, onChange, required = false }) => {
   const { t } = useTranslation();
 
-  const values = [
-    'aggressive',
-    'aloof',
-    'altruistic',
-    'belligerent',
-    'berserk',
-    'carefree',
-    'considerate',
-    'cruel',
-    'crusading',
-    'dominant',
-    'friendly',
-    'greedy',
-    'helpful',
-    'hidden-agenda',
-    'hostile',
-    'hungry',
-    'hunting',
-    'inconsiderate',
-    'inquisitive',
-    'jumpy',
-    'normal',
-    'obssesive',
-    'open',
-    'passive',
-    'playful',
-    'protective',
-    'secretive',
-    'timid',
-  ];
-
-  const options = addAllOption ? ['', ...values] : values;
+  const values = ['weapon', 'armor', 'shield', 'clothes', 'coins', 'tools', 'food', 'ammunition', 'other'];
 
   const getOptionLabel = (option: string) => {
     if (option === '') return '';
-    return t(`outlook-type-${option}`);
+    return t(option);
   };
 
   const hasError = required && (value === undefined || value === null || value === '');
 
   return (
     <Autocomplete
-      options={options}
+      options={values}
       value={value === undefined || value === null ? '' : value}
       onChange={(_, newValue) => onChange(newValue)}
       getOptionLabel={getOptionLabel}
+      fullWidth
       renderInput={(params) => (
         <TextField
           {...params}
@@ -73,4 +42,4 @@ const SelectNpcOutlookType: FC<{
   );
 };
 
-export default SelectNpcOutlookType;
+export default SelectItemCategory;

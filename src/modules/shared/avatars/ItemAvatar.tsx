@@ -6,6 +6,8 @@ import { Item } from '../../api/item.dto';
 import { getGenericImages } from '../../services/image-service';
 import ImageSelectorDialog from '../images/ImageSelectorDialog';
 
+const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
+
 const ItemAvatar: FC<{
   item: Item;
   size?: number;
@@ -34,7 +36,7 @@ const ItemAvatar: FC<{
   return (
     <>
       <Avatar
-        src={item.imageUrl || '/static/images/items/unknown.png '}
+        src={item.imageUrl || `${imageBaseUrl}images/items/${item.id}.png`}
         onClick={() => enableImageChange && setDialogOpen(true)}
         sx={{
           width: size,

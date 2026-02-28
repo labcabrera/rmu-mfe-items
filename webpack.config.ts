@@ -51,7 +51,7 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
         const port =
           devServer.server?.address() && typeof devServer.server.address() === 'object'
             ? (devServer.server.address() as any).port
-            : 8089;
+            : 8088;
 
         printCompilationMessage('compiling', port);
 
@@ -138,6 +138,7 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
         'process.env.RMU_API_CORE_URL': JSON.stringify(process.env.RMU_API_CORE_URL || ''),
         'process.env.RMU_API_NPCS_URL': JSON.stringify(process.env.RMU_API_NPCS_URL || ''),
         'process.env.RMU_MFE_NPCS_PUBLIC_PATH': JSON.stringify(process.env.RMU_MFE_NPCS_PUBLIC_PATH || ''),
+        'process.env.RMU_MFE_ASSETS': JSON.stringify(process.env.RMU_MFE_ASSETS || ''),
       }),
     ],
   };

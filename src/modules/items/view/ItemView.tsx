@@ -1,30 +1,23 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionSummary, Typography, AccordionDetails, Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
 import { fetchItem } from '../../api/item';
 import { Item } from '../../api/item.dto';
-import { fetchRealm } from '../../api/realm';
+import ItemAvatar from '../../shared/avatars/ItemAvatar';
 import ItemViewActions from './ItemViewActions';
+import ItemViewAttributes from './ItemViewAttributes';
+import ItemViewResume from './ItemViewResume';
 
 const ItemView: FC = () => {
   const location = useLocation();
   const { showError } = useError();
   const { itemId } = useParams<{ itemId?: string }>();
   const [item, setItem] = useState<Item>();
-  const [realm, setRealm] = useState(null);
 
   useEffect(() => {
-    if (item) {
-      fetchRealm(item.realm)
-        .then((response) => setRealm(response))
-        .catch((err) => showError(err.message));
-    }
-  }, [item, showError]);
-
-  useEffect(() => {
-    if (location.state && location.state.item) {
-      setItem(location.state.item);
-    } else if (itemId) {
+    if (itemId) {
       fetchItem(itemId)
         .then((response) => setItem(response))
         .catch((err) => showError(err.message));
@@ -36,19 +29,24 @@ const ItemView: FC = () => {
   return (
     <>
       <ItemViewActions item={item} setItem={setItem} />
-      {/* <NpcViewActions npc={npc} setNpc={setNpc} />
+
       <Grid container spacing={2}>
         <Grid size={2}>
-          <NpcAvatar npc={npc} onNpcUpdated={setNpc} />
-          <NpcViewResume npc={npc} realm={realm} />
+          <ItemAvatar item={item} onItemUpdated={setItem} />
+          <ItemViewResume item={item} />
         </Grid>
         <Grid size={10}>
-          <NpcViewAttributes npc={npc} />
-          <NpcViewAttacks npc={npc} setNpc={setNpc} />
-          <NpcViewSkills npc={npc} setNpc={setNpc} />
+          <ItemViewAttributes item={item} />
         </Grid>
-      </Grid> */}
-      <pre>{JSON.stringify(item, null, 2)}</pre>
+      </Grid>
+      <Accordion sx={{ mt: 5 }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="npc-debug" id="npc-debug-header">
+          <Typography component="span">Debug</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <pre>{JSON.stringify(item, null, 2)}</pre>
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 };
