@@ -5,7 +5,7 @@ import { WeaponInfo } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
 import NumericCard from '../../shared/cards/NumericCard';
 import TextCard from '../../shared/cards/TextCard';
-import ItemWeaponMode from './ItemWeaponMode';
+import ItemWeaponModeTable from './ItemWeaponModeTable';
 
 const ItemWeaponAttributes: FC<{
   weapon: WeaponInfo;
@@ -37,9 +37,7 @@ const ItemWeaponAttributes: FC<{
         </Grid>
         <Grid size={12}>
           <Grid size={12}>
-            {weapon.modes.map((mode, index) => (
-              <ItemWeaponMode key={index} mode={mode} />
-            ))}
+            <ItemWeaponModeTable modes={weapon.modes} />
           </Grid>
         </Grid>
       </Grid>
