@@ -3,10 +3,9 @@ import Avatar from '@mui/material/Avatar';
 import { useError } from '../../../ErrorContext';
 import { updateItem } from '../../api/item';
 import { Item } from '../../api/item.dto';
+import { imageBaseUrl } from '../../services/config';
 import { getGenericImages } from '../../services/image-service';
 import ImageSelectorDialog from '../images/ImageSelectorDialog';
-
-const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
 
 const ItemAvatar: FC<{
   item: Item;

@@ -13,7 +13,15 @@ export type Item = {
 export type WeaponInfo = {
   skillId: string;
   fumble: number;
-  // modes: WeaponMode[];
+  modes: WeaponMode[];
+};
+
+export type WeaponMode = {
+  type: string;
+  attackTypes: string[];
+  attackTable: string;
+  fumbleTable: string;
+  sizeAdjustment: number;
 };
 
 export type WeaponRange = {
