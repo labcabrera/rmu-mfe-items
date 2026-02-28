@@ -37,6 +37,7 @@ const ItemAvatar: FC<{
       <Avatar
         src={item.imageUrl || `${imageBaseUrl}images/items/${item.id}.png`}
         onClick={() => enableImageChange && setDialogOpen(true)}
+        variant="square"
         sx={{
           width: size,
           height: size,
