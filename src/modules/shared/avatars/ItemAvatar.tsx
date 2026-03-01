@@ -12,7 +12,7 @@ const ItemAvatar: FC<{
   size?: number;
   enableImageChange?: boolean;
   onItemUpdated?: (item: Item) => void;
-}> = ({ item, size = 300, enableImageChange = true, onItemUpdated }) => {
+}> = ({ item, size = 200, enableImageChange = true, onItemUpdated }) => {
   const { showError } = useError();
   const [dialogOpen, setDialogOpen] = useState(false);
 

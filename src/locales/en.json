@@ -59,6 +59,8 @@
   "ranks": "Ranks",
   "realm": "Realm",
   "realm-is-required": "Realm is required",
+  "required-item-identifier": "Required item identifier",
+  "required-realm": "Required realm",
   "size": "Size",
   "size-adjustment": "Size adjustment",
   "skill": "Skill",

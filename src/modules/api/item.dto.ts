@@ -62,8 +62,15 @@ export type ItemInfo = {
 
 export interface CreateItemDto {
   id: string;
+  realmId: string;
+  category: string;
+  weapon: ItemWeapon | undefined;
+  armor: ItemArmor | undefined;
+  shield: ItemShield | undefined;
+  info: ItemInfo;
+  stackable: boolean;
   description: string | undefined;
-  //TODO
+  imageUrl?: string;
 }
 
 export interface UpdateItemDto {

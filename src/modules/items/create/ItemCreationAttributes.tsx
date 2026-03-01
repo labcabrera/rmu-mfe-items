@@ -1,6 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Grid } from '@mui/material';
 import { CreateItemDto } from '../../api/item.dto';
+import ItemCreationInfo from './ItemCreationInfo';
 
 const ItemCreationAttributes: FC<{
   formData: CreateItemDto;
@@ -8,7 +9,9 @@ const ItemCreationAttributes: FC<{
 }> = ({ formData, setFormData }) => {
   return (
     <Grid container spacing={2}>
-      TODO
+      <Grid size={12}>
+        <ItemCreationInfo formData={formData} setFormData={setFormData} />
+      </Grid>
     </Grid>
   );
 };

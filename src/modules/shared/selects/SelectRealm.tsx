@@ -1,15 +1,14 @@
 import React, { ChangeEvent, FC } from 'react';
 import { MenuItem, TextField } from '@mui/material';
 import { t } from 'i18next';
-import { Realm } from '../../api/realm.dto';
+import { NamedEntity } from '../../api/common.dto';
 
 const SelectRealm: FC<{
   label: string;
   value: string;
-  realms: Realm[];
+  realms: NamedEntity[];
   required?: boolean;
-  // eslint-disable-next-line no-unused-vars
-  onChange: (realm: Realm | null) => void;
+  onChange: (realm: NamedEntity | null) => void;
 }> = ({ label, value, realms, required, onChange }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedValue = event.target.value;
@@ -28,7 +27,7 @@ const SelectRealm: FC<{
       variant="standard"
       onChange={handleChange}
       error={required && (value === undefined || value === null || value === '')}
-      helperText={required && (value === undefined || value === null || value === '') ? t('realm-is-required') : ''}
+      helperText={required && (value === undefined || value === null || value === '') ? t('required-realm') : ''}
     >
       {realms.map((option, index) => (
         <MenuItem key={index} value={option.id}>
