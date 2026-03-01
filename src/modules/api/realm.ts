@@ -1,9 +1,10 @@
 import { getAuthHeaders } from '../services/auth-token-service';
+import { apiCoreUrl } from '../services/config';
 import { buildErrorFromResponse } from './api-errors';
-import { Realm } from './realm.dto';
+import { NamedEntity } from './common.dto';
 
-export async function fetchRealm(realmId: string): Promise<Realm> {
-  const url = `${process.env.RMU_API_CORE_URL}/realms/${realmId}`;
+export async function fetchRealm(realmId: string): Promise<NamedEntity> {
+  const url = `${apiCoreUrl}/realms/${realmId}`;
   const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);
@@ -11,8 +12,8 @@ export async function fetchRealm(realmId: string): Promise<Realm> {
   return await response.json();
 }
 
-export async function fetchRealms(rsql: string, page: number, size: number): Promise<Realm[]> {
-  const url = `${process.env.RMU_API_CORE_URL}/realms?q=${rsql}&page=${page}&size=${size}`;
+export async function fetchRealms(rsql: string, page: number, size: number): Promise<NamedEntity[]> {
+  const url = `${apiCoreUrl}/realms?q=${rsql}&page=${page}&size=${size}`;
   const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);
