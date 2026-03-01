@@ -17,7 +17,7 @@ const ItemListActions: FC<{ setItems: Dispatch<SetStateAction<Item[]>> }> = ({ s
   };
 
   const onRefreshButtonClick = () => {
-    fetchItems('', 0, 20)
+    fetchItems('', 0, 24)
       .then((response) => setItems(response))
       .catch((err) => showError(err.message));
   };

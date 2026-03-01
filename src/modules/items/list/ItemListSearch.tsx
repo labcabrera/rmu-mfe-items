@@ -24,7 +24,7 @@ const ItemListSearch: FC<{
         label={t('item-identifier')}
         value={id}
         onChange={(e) => setId(e.target.value)}
-        variant="standard"
+        variant="outlined"
         fullWidth
       />
       <SelectArmorSlot

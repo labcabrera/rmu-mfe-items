@@ -66,10 +66,10 @@ export interface CreateItemDto {
   id: string;
   realmId: string;
   category: string;
-  weapon: ItemWeapon | undefined;
-  armor: ItemArmor | undefined;
-  shield: ItemShield | undefined;
-  info: ItemInfo;
+  weapon: Partial<ItemWeapon> | undefined;
+  armor: Partial<ItemArmor> | undefined;
+  shield: Partial<ItemShield> | undefined;
+  info: Partial<ItemInfo> | undefined;
   stackable: boolean;
   description: string | undefined;
   imageUrl?: string;

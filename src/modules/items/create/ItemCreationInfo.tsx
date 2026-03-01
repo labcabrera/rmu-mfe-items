@@ -8,19 +8,7 @@ const ItemCreationInfo: FC<{
   formData: CreateItemDto;
   setFormData: Dispatch<SetStateAction<CreateItemDto>>;
 }> = ({ formData, setFormData }) => {
-  const info = formData.info || {
-    cost: { min: 0, average: 0, max: 0 },
-    length: 0,
-    weight: undefined,
-    weightPercent: undefined,
-    strength: 0,
-    productionHours: 0,
-  };
-
-  const setCostField = (field: 'min' | 'average' | 'max', value: number | null) => {
-    const next = value === null ? 0 : value;
-    setFormData({ ...formData, info: { ...info, cost: { ...info.cost, [field]: next } } });
-  };
+  if (!formData.info) return <p>Loading item info...</p>;
 
   return (
     <Grid container spacing={2} mt={2}>
@@ -34,24 +22,33 @@ const ItemCreationInfo: FC<{
         <Box display="flex" gap={2} flexWrap="wrap">
           <Box width={160}>
             <NumericInput
-              value={info.cost?.min ?? null}
-              onChange={(v) => setCostField('min', v)}
+              value={formData.info!.cost?.min ?? null}
+              onChange={(v) =>
+                setFormData({ ...formData, info: { ...formData.info, cost: { ...formData.info!.cost, min: v ?? 0 } } })
+              }
               integer={false}
               label={t('cost-min')}
             />
           </Box>
           <Box width={160}>
             <NumericInput
-              value={info.cost?.average ?? null}
-              onChange={(v) => setCostField('average', v)}
+              value={formData.info!.cost?.average ?? null}
+              onChange={(v) =>
+                setFormData({
+                  ...formData,
+                  info: { ...formData.info, cost: { ...formData.info!.cost, average: v ?? 0 } },
+                })
+              }
               integer={false}
               label={t('cost-average')}
             />
           </Box>
           <Box width={160}>
             <NumericInput
-              value={info.cost?.max ?? null}
-              onChange={(v) => setCostField('max', v)}
+              value={formData.info!.cost?.max ?? null}
+              onChange={(v) =>
+                setFormData({ ...formData, info: { ...formData.info, cost: { ...formData.info!.cost, max: v ?? 0 } } })
+              }
               integer={false}
               label={t('cost-max')}
             />
@@ -63,8 +60,8 @@ const ItemCreationInfo: FC<{
         <Box display="flex" gap={2} flexWrap="wrap" mt={1}>
           <Box width={160}>
             <NumericInput
-              value={info.length ?? null}
-              onChange={(v) => setFormData({ ...formData, info: { ...info, length: v ?? 0 } })}
+              value={formData.info!.length ?? null}
+              onChange={(v) => setFormData({ ...formData, info: { ...formData.info, length: v ?? 0 } })}
               integer={false}
               label={t('size')}
             />
@@ -72,8 +69,10 @@ const ItemCreationInfo: FC<{
 
           <Box width={160}>
             <NumericInput
-              value={info.weight ?? null}
-              onChange={(v) => setFormData({ ...formData, info: { ...info, weight: v === null ? undefined : v } })}
+              value={formData.info!.weight ?? null}
+              onChange={(v) =>
+                setFormData({ ...formData, info: { ...formData.info, weight: v === null ? undefined : v } })
+              }
               integer={false}
               label={t('weight')}
             />
@@ -81,9 +80,9 @@ const ItemCreationInfo: FC<{
 
           <Box width={160}>
             <NumericInput
-              value={info.weightPercent ?? null}
+              value={formData.info!.weightPercent ?? null}
               onChange={(v) =>
-                setFormData({ ...formData, info: { ...info, weightPercent: v === null ? undefined : v } })
+                setFormData({ ...formData, info: { ...formData.info, weightPercent: v === null ? undefined : v } })
               }
               integer={false}
               label={t('weight-percent')}
@@ -92,8 +91,8 @@ const ItemCreationInfo: FC<{
 
           <Box width={160}>
             <NumericInput
-              value={info.strength ?? null}
-              onChange={(v) => setFormData({ ...formData, info: { ...info, strength: v ?? 0 } })}
+              value={formData.info!.strength ?? null}
+              onChange={(v) => setFormData({ ...formData, info: { ...formData.info, strength: v ?? 0 } })}
               integer={true}
               label={t('strength')}
             />
@@ -101,8 +100,8 @@ const ItemCreationInfo: FC<{
 
           <Box width={200}>
             <NumericInput
-              value={info.productionHours ?? null}
-              onChange={(v) => setFormData({ ...formData, info: { ...info, productionHours: v ?? 0 } })}
+              value={formData.info!.productionHours ?? null}
+              onChange={(v) => setFormData({ ...formData, info: { ...formData.info, productionHours: v ?? 0 } })}
               integer={true}
               label={t('production-hours')}
             />

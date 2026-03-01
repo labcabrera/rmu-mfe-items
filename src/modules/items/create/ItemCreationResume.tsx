@@ -14,12 +14,13 @@ const ItemCreationResume: FC<{
   const onChangeCategory = (category: string | null) => {
     const nextCategory = category || '';
     const next: Partial<typeof formData> = { category: nextCategory };
+    const info = { cost: { min: 0, average: 0, max: 0 } };
     if (nextCategory === 'weapon') {
       next.weapon = { skillId: '', fumble: 0, modes: [] };
       next.armor = undefined;
       next.shield = undefined;
     } else if (nextCategory === 'armor') {
-      next.armor = { slot: '', at: 0, enc: 0, maneuver: 0, rangedPenalty: 0, perception: 0, baseDifficulty: '' };
+      next.armor = { slot: undefined, at: 0, enc: 0, maneuver: 0, rangedPenalty: 0, perception: 0, baseDifficulty: '' };
       next.weapon = undefined;
       next.shield = undefined;
     } else if (nextCategory === 'shield') {
@@ -31,7 +32,7 @@ const ItemCreationResume: FC<{
       next.armor = undefined;
       next.shield = undefined;
     }
-    setFormData({ ...formData, ...next });
+    setFormData({ ...formData, ...next, info });
   };
 
   return (
@@ -39,7 +40,7 @@ const ItemCreationResume: FC<{
       <Grid size={12}>
         <TextField
           label={t('item-identifier')}
-          variant="standard"
+          variant="outlined"
           name="item-identifier"
           value={formData.id}
           onChange={(e) => setFormData({ ...formData, id: e.target.value })}
@@ -69,7 +70,7 @@ const ItemCreationResume: FC<{
       <Grid size={12}>
         <TextField
           label={t('description')}
-          variant="standard"
+          variant="outlined"
           name="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}

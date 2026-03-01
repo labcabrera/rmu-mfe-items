@@ -4,7 +4,7 @@ import { useError } from '../../../ErrorContext';
 import { updateItem } from '../../api/item';
 import { Item } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
-import { getGenericImages } from '../../services/image-service';
+import { getItemImages } from '../../services/image-service';
 import ImageSelectorDialog from '../images/ImageSelectorDialog';
 
 const ItemAvatar: FC<{
@@ -46,7 +46,7 @@ const ItemAvatar: FC<{
       />
       <ImageSelectorDialog
         open={dialogOpen}
-        images={getGenericImages()}
+        images={getItemImages()}
         onClose={() => setDialogOpen(false)}
         onSelect={(image) => onUpdateImage(image)}
       />

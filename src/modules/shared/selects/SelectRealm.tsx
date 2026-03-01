@@ -24,7 +24,7 @@ const SelectRealm: FC<{
       label={label}
       value={value === undefined || value === null || realms.length === 0 ? '' : value}
       fullWidth
-      variant="standard"
+      variant="outlined"
       onChange={handleChange}
       error={required && (value === undefined || value === null || value === '')}
       helperText={required && (value === undefined || value === null || value === '') ? t('required-realm') : ''}

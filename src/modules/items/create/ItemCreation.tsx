@@ -15,7 +15,9 @@ import ItemCreationWeaponAttributes from './ItemCreationWeaponAttributes';
 const ItemCreation: FC = () => {
   const { showError } = useError();
   const [realms, setRealms] = useState<NamedEntity[]>([]);
-  const [formData, setFormData] = useState<CreateItemDto>({} as CreateItemDto);
+  const [formData, setFormData] = useState<CreateItemDto>({
+    info: { cost: { min: 0, average: 0, max: 0 } },
+  } as CreateItemDto);
   const [isValid, setIsValid] = useState(false);
 
   const validateForm = (formData: CreateItemDto) => {
