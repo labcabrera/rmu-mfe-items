@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { t } from 'i18next';
+import { Item } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
 import NumericCard from '../../shared/cards/NumericCard';
 import TextCard from '../../shared/cards/TextCard';

@@ -6,8 +6,9 @@ export type Item = {
   category: string;
   weapon: ItemWeapon | undefined;
   armor: ItemArmor | undefined;
+  shield: ItemShield | undefined;
   info: ItemInfo;
-  stakeable: boolean;
+  stackable: boolean;
   description: string | undefined;
   imageUrl?: string;
 };
@@ -40,6 +41,10 @@ export type WeaponRange = {
   from: number;
   to: number;
   bonus: number;
+};
+
+export type ItemShield = {
+  attacks: number;
 };
 
 export type ItemInfo = {

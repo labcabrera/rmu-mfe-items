@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material';
 import { Item } from '../../api/item.dto';
 import ItemArmorAttributes from './ItemArmorAttributes';
 import ItemInfoAttributes from './ItemInfoAttributes';
+import ItemShieldAttributes from './ItemShieldAttributes';
 import ItemWeaponAttributes from './ItemWeaponAttributes';
 
 const ItemViewAttributes: FC<{
@@ -22,6 +23,11 @@ const ItemViewAttributes: FC<{
         {item.armor && (
           <Grid size={12}>
             <ItemArmorAttributes armor={item.armor} />
+          </Grid>
+        )}
+        {item.shield && (
+          <Grid size={12}>
+            <ItemShieldAttributes itemShield={item.shield} />
           </Grid>
         )}
         <Grid size={12}>
