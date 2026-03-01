@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { FormControl, Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { t } from 'i18next';
 import { UpdateItemDto } from '../../api/item.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
@@ -105,6 +105,25 @@ const ItemEditInfoAttributes: FC<{
           min={0.01}
           maxFractionDigits={2}
         />
+      </Grid>
+      <Grid size={6}>
+        <FormControl sx={{ mt: 1 }}>
+          <ToggleButtonGroup
+            value={info.stackable}
+            exclusive
+            size="small"
+            onChange={(_, val) => {
+              updateInfo({ stackable: val === null ? undefined : val });
+            }}
+          >
+            <ToggleButton value={false} size="small" sx={{ minWidth: 100 }}>
+              Single
+            </ToggleButton>
+            <ToggleButton value={true} size="small" sx={{ minWidth: 100 }}>
+              Stackable
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </FormControl>
       </Grid>
     </Grid>
   );

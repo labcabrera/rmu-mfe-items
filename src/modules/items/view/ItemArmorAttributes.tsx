@@ -22,39 +22,39 @@ const ItemArmorAttributes: FC<{
             <TextCard
               value={t(armor.slot)}
               subtitle={t('slot')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/armor-skill.png`}
             />
             <NumericCard
               value={armor.at || 0}
               subtitle={t('at')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/armor.png`}
               applyColor={false}
             />
             <NumericCard
               value={armor.enc || 0}
               subtitle={t('encumbrance')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/weight-penalty.png`}
               applyColor={false}
             />
             <NumericCard
               value={armor.maneuver || 0}
               subtitle={t('maneuver-penalty')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/maneuver-penalty.png`}
             />
             <NumericCard
               value={armor.rangedPenalty || 0}
               subtitle={t('ranged-penalty')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/armor-ranged-penalty.png`}
             />
             <NumericCard
               value={armor.perception || 0}
-              subtitle={t('perception')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              subtitle={t('perception-penalty')}
+              image={`${imageBaseUrl}images/generic/armor-perception-penalty.png`}
             />
             <TextCard
               value={armor.baseDifficulty || ''}
               subtitle={t('base-difficulty')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/maneuver-penalty.png`}
             />
           </Box>
         </Grid>

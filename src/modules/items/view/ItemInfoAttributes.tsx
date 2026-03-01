@@ -54,7 +54,7 @@ const ItemInfoAttributes: FC<{
             )}
 
             <TextCard
-              value={item.stackable ? t('yes') : t('no')}
+              value={item.info.stackable ? t('yes') : t('no')}
               subtitle={t('stackable')}
               image={`${imageBaseUrl}images/generic/configuration.png`}
             />

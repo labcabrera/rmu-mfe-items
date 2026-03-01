@@ -8,7 +8,6 @@ export type Item = {
   armor: ItemArmor | undefined;
   shield: ItemShield | undefined;
   info: ItemInfo;
-  stackable: boolean;
   description: string | undefined;
   imageUrl?: string;
 };
@@ -60,6 +59,7 @@ export type ItemInfo = {
   weightPercent: number | null;
   strength: number | null;
   productionHours: number | null;
+  stackable: boolean;
 };
 
 export interface CreateItemDto {
@@ -70,7 +70,6 @@ export interface CreateItemDto {
   armor: Partial<ItemArmor> | undefined;
   shield: Partial<ItemShield> | undefined;
   info: Partial<ItemInfo> | undefined;
-  stackable: boolean;
   description: string | undefined;
   imageUrl?: string;
 }
