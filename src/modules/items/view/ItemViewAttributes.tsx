@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Item } from '../../api/item.dto';
+import ItemArmorAttributes from './ItemArmorAttributes';
+import ItemInfoAttributes from './ItemInfoAttributes';
 import ItemWeaponAttributes from './ItemWeaponAttributes';
 
 const ItemViewAttributes: FC<{
@@ -9,7 +11,6 @@ const ItemViewAttributes: FC<{
   return (
     <>
       <Grid container spacing={2}>
-        <Grid size={12}>TODO item attributes</Grid>
         {item.weapon && (
           <Grid size={12}>
             <Typography variant="h6" gutterBottom>
@@ -18,6 +19,14 @@ const ItemViewAttributes: FC<{
             <ItemWeaponAttributes weapon={item.weapon} />
           </Grid>
         )}
+        {item.armor && (
+          <Grid size={12}>
+            <ItemArmorAttributes armor={item.armor} />
+          </Grid>
+        )}
+        <Grid size={12}>
+          <ItemInfoAttributes item={item} />
+        </Grid>
       </Grid>
     </>
   );

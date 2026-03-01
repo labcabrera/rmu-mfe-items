@@ -1,18 +1,23 @@
 import React, { FC } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import { t } from 'i18next';
-import { WeaponInfo } from '../../api/item.dto';
+import { ItemWeapon } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
 import NumericCard from '../../shared/cards/NumericCard';
 import TextCard from '../../shared/cards/TextCard';
 import ItemWeaponModeTable from './ItemWeaponModeTable';
 
 const ItemWeaponAttributes: FC<{
-  weapon: WeaponInfo;
+  weapon: ItemWeapon;
 }> = ({ weapon }) => {
   return (
     <>
       <Grid container spacing={2}>
+        <Grid size={12}>
+          <Typography variant="h6" gutterBottom>
+            {t('weapon')}
+          </Typography>
+        </Grid>
         <Grid size={12}>
           <Stack direction="row" spacing={2} flexWrap="wrap">
             <TextCard

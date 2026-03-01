@@ -4,16 +4,28 @@ export type Item = {
   id: string;
   realm: NamedEntity;
   category: string;
-  weapon: WeaponInfo | undefined;
+  weapon: ItemWeapon | undefined;
+  armor: ItemArmor | undefined;
+  info: ItemInfo;
   stakeable: boolean;
   description: string | undefined;
   imageUrl?: string;
 };
 
-export type WeaponInfo = {
+export type ItemWeapon = {
   skillId: string;
   fumble: number;
   modes: WeaponMode[];
+};
+
+export type ItemArmor = {
+  slot: string;
+  at: number;
+  enc: number;
+  maneuver: number;
+  rangedPenalty: number;
+  perception: number;
+  baseDifficulty: string;
 };
 
 export type WeaponMode = {
@@ -37,7 +49,8 @@ export type ItemInfo = {
     max: number;
   };
   length: number;
-  weight: number;
+  weight: number | undefined;
+  weightPercent: number | undefined;
   strength: number;
   productionHours: number;
 };
