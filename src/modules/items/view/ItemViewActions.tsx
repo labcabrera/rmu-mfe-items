@@ -59,7 +59,7 @@ const ItemViewActions: FC<{
             <Link component={RouterLink} color="primary" underline="hover" to="/items">
               {t('items')}
             </Link>
-            <span>{item.id}</span>
+            <span>{t(item.id)}</span>
           </Breadcrumbs>
         </Box>
         <Stack direction="row" spacing={1}>

@@ -11,7 +11,7 @@ const ItemCard: FC<{
 }> = ({ item, onClick }) => {
   return (
     <CardListItem
-      title={item.id}
+      title={t(item.id)}
       subtitle={t(item.category)}
       image={item.imageUrl || `${imageBaseUrl}images/items/${item.id}.png`}
       onClick={onClick}

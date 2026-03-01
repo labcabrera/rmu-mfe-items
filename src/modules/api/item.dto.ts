@@ -1,5 +1,9 @@
 import { NamedEntity } from './common.dto';
 
+export type WeaponModeType = 'one-hand' | 'two-hands';
+
+export type WeaponAttackType = 'melee' | 'ranged' | 'thrown';
+
 export type Item = {
   id: string;
   realm: NamedEntity;
@@ -31,8 +35,8 @@ export type ItemArmor = {
 export type ItemArmorSlot = 'head' | 'body' | 'arms' | 'legs';
 
 export type WeaponMode = {
-  type: string;
-  attackTypes: string[];
+  type: WeaponModeType;
+  attackTypes: WeaponAttackType[];
   attackTable: string;
   fumbleTable: string;
   sizeAdjustment: number;

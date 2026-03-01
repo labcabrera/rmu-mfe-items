@@ -28,13 +28,12 @@ const ItemView: FC = () => {
   return (
     <>
       <ItemViewActions item={item} setItem={setItem} />
-
-      <Grid container spacing={2}>
-        <Grid size={2}>
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <ItemAvatar item={item} onItemUpdated={setItem} />
           <ItemViewResume item={item} />
         </Grid>
-        <Grid size={10}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <ItemViewAttributes item={item} />
         </Grid>
       </Grid>

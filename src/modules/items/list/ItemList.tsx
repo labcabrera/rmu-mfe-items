@@ -26,7 +26,10 @@ const ItemList: FC = () => {
   const bindItems = (id: string, category: string, pageNumber: number = 0) => {
     let query = '';
     if (id) query += `id=re=${id}`;
-    if (category) query += `category==${category}`;
+    if (category) {
+      if (query) query += ';';
+      query += `category==${category}`;
+    }
 
     fetchPagedItems(query, pageNumber, PAGE_SIZE)
       .then((response) => {
