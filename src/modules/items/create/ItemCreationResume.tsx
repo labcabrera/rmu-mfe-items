@@ -11,6 +11,10 @@ const ItemCreationResume: FC<{
   setFormData: Dispatch<SetStateAction<CreateItemDto>>;
   realms: NamedEntity[];
 }> = ({ formData, setFormData, realms }) => {
+  const onChangeCategory = (category: string | null) => {
+    setFormData({ ...formData, category: category || '' });
+  };
+
   return (
     <Grid container spacing={2} mt={2}>
       TODO
@@ -41,7 +45,7 @@ const ItemCreationResume: FC<{
           name="category"
           value={formData.category}
           required
-          onChange={(category) => setFormData({ ...formData, category: category || '' })}
+          onChange={onChangeCategory}
         />
       </Grid>
       <Grid size={12}>
