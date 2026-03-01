@@ -22,15 +22,7 @@ const SelectSkill: FC<{
       getOptionLabel={(option) => t(option.id)}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          name={name}
-          variant="outlined"
-          fullWidth
-          error={!value}
-          helperText={!value ? t('required-skill') : ''}
-        />
+        <TextField {...params} label={label} name={name} variant="outlined" fullWidth error={!value} />
       )}
     />
   );

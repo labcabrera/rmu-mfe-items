@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FC } from 'react';
 import { MenuItem, TextField } from '@mui/material';
-import { t } from 'i18next';
 import { NamedEntity } from '../../api/common.dto';
 
 const SelectRealm: FC<{
@@ -27,7 +26,6 @@ const SelectRealm: FC<{
       variant="outlined"
       onChange={handleChange}
       error={required && (value === undefined || value === null || value === '')}
-      helperText={required && (value === undefined || value === null || value === '') ? t('required-realm') : ''}
     >
       {realms.map((option, index) => (
         <MenuItem key={index} value={option.id}>

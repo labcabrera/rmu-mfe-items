@@ -28,9 +28,6 @@ const SelectItemCategory: FC<{
       variant="outlined"
       onChange={handleChange}
       error={required && (value === undefined || value === null || value === '')}
-      helperText={
-        required && (value === undefined || value === null || value === '') ? t('required-item-category') : ''
-      }
     >
       {values.map((option, index) => (
         <MenuItem key={index} value={option}>

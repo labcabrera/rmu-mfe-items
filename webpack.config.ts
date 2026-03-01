@@ -135,10 +135,11 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
         defaults: './.env',
       }),
       new webpack.DefinePlugin({
-        'process.env.RMU_API_CORE_URL': JSON.stringify(process.env.RMU_API_CORE_URL || ''),
-        'process.env.RMU_API_NPCS_URL': JSON.stringify(process.env.RMU_API_NPCS_URL || ''),
         'process.env.RMU_MFE_NPCS_PUBLIC_PATH': JSON.stringify(process.env.RMU_MFE_NPCS_PUBLIC_PATH || ''),
         'process.env.RMU_MFE_ASSETS': JSON.stringify(process.env.RMU_MFE_ASSETS || ''),
+        'process.env.RMU_API_CORE_URL': JSON.stringify(process.env.RMU_API_CORE_URL || ''),
+        'process.env.RMU_API_NPCS_URL': JSON.stringify(process.env.RMU_API_NPCS_URL || ''),
+        'process.env.RMU_API_ATTACK_TABLES_URL': JSON.stringify(process.env.RMU_API_ATTACK_TABLES_URL || ''),
       }),
     ],
   };

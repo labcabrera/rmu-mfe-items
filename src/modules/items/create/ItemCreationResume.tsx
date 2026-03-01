@@ -46,7 +46,6 @@ const ItemCreationResume: FC<{
           onChange={(e) => setFormData({ ...formData, id: e.target.value })}
           fullWidth
           error={!formData.id || formData.id.trim() === ''}
-          helperText={!formData.id || formData.id.trim() === '' ? t('required-item-identifier') : ''}
         />
       </Grid>
       <Grid size={12}>
