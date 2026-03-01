@@ -1,10 +1,11 @@
 import { getAuthHeaders, mergeJsonHeaders } from '../services/auth-token-service';
+import { apiItemsUrl } from '../services/config';
 import { buildErrorFromResponse } from './api-errors';
 import { Page } from './common.dto';
 import { Item } from './item.dto';
 
 export async function fetchItem(itemId: string): Promise<Item> {
-  const url = `${process.env.RMU_API_ITEMS_URL}/items/${itemId}`;
+  const url = `${apiItemsUrl}/items/${itemId}`;
   const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);
@@ -13,7 +14,7 @@ export async function fetchItem(itemId: string): Promise<Item> {
 }
 
 export async function fetchItems(rsql: string, page: number, size: number): Promise<Item[]> {
-  const url = `${process.env.RMU_API_ITEMS_URL}/items?q=${rsql}&page=${page}&size=${size}`;
+  const url = `${apiItemsUrl}/items?q=${rsql}&page=${page}&size=${size}`;
   const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);
@@ -23,7 +24,7 @@ export async function fetchItems(rsql: string, page: number, size: number): Prom
 }
 
 export async function fetchPagedItems(rsql: string, page: number, size: number): Promise<Page<Item>> {
-  const url = `${process.env.RMU_API_ITEMS_URL}/items?q=${rsql}&page=${page}&size=${size}`;
+  const url = `${apiItemsUrl}/items?q=${rsql}&page=${page}&size=${size}`;
   const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);
@@ -33,7 +34,7 @@ export async function fetchPagedItems(rsql: string, page: number, size: number):
 }
 
 export async function createItem(item: any): Promise<Item> {
-  const url = `${process.env.RMU_API_ITEMS_URL}/items`;
+  const url = `${apiItemsUrl}/items`;
   const response = await fetch(url, {
     method: 'POST',
     headers: mergeJsonHeaders(),
@@ -46,7 +47,7 @@ export async function createItem(item: any): Promise<Item> {
 }
 
 export async function updateItem(itemId: string, dto: any): Promise<Item> {
-  const url = `${process.env.RMU_API_ITEMS_URL}/items/${itemId}`;
+  const url = `${apiItemsUrl}/items/${itemId}`;
   const response = await fetch(url, {
     method: 'PATCH',
     headers: mergeJsonHeaders(),
@@ -59,7 +60,7 @@ export async function updateItem(itemId: string, dto: any): Promise<Item> {
 }
 
 export async function deleteItem(itemId: string): Promise<void> {
-  const url = `${process.env.RMU_API_ITEMS_URL}/items/${itemId}`;
+  const url = `${apiItemsUrl}/items/${itemId}`;
   const response = await fetch(url, { method: 'DELETE', headers: getAuthHeaders() });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);

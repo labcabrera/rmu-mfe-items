@@ -3,7 +3,7 @@ import { Grid, TextField } from '@mui/material';
 import { t } from 'i18next';
 import { NamedEntity } from '../../api/common.dto';
 import { CreateItemDto } from '../../api/item.dto';
-import SelectItemCategory from '../../shared/selects/SelectItemCategory';
+import SelectArmorSlot from '../../shared/selects/SelectItemCategory';
 import SelectRealm from '../../shared/selects/SelectRealm';
 
 const ItemCreationResume: FC<{
@@ -12,12 +12,30 @@ const ItemCreationResume: FC<{
   realms: NamedEntity[];
 }> = ({ formData, setFormData, realms }) => {
   const onChangeCategory = (category: string | null) => {
-    setFormData({ ...formData, category: category || '' });
+    const nextCategory = category || '';
+    const next: Partial<typeof formData> = { category: nextCategory };
+    if (nextCategory === 'weapon') {
+      next.weapon = { skillId: '', fumble: 0, modes: [] };
+      next.armor = undefined;
+      next.shield = undefined;
+    } else if (nextCategory === 'armor') {
+      next.armor = { slot: '', at: 0, enc: 0, maneuver: 0, rangedPenalty: 0, perception: 0, baseDifficulty: '' };
+      next.weapon = undefined;
+      next.shield = undefined;
+    } else if (nextCategory === 'shield') {
+      next.shield = { attacks: 0 };
+      next.weapon = undefined;
+      next.armor = undefined;
+    } else {
+      next.weapon = undefined;
+      next.armor = undefined;
+      next.shield = undefined;
+    }
+    setFormData({ ...formData, ...next });
   };
 
   return (
     <Grid container spacing={2} mt={2}>
-      TODO
       <Grid size={12}>
         <TextField
           label={t('item-identifier')}
@@ -40,7 +58,7 @@ const ItemCreationResume: FC<{
         />
       </Grid>
       <Grid size={12}>
-        <SelectItemCategory
+        <SelectArmorSlot
           label={t('category')}
           name="category"
           value={formData.category}

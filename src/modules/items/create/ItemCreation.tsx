@@ -1,18 +1,20 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
+import { NamedEntity } from '../../api/common.dto';
 import { CreateItemDto } from '../../api/item.dto';
 import { fetchRealms } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
 import { imageBaseUrl } from '../../services/config';
 import GenericAvatar from '../../shared/avatars/GenericAvatar';
 import ItemCreationActions from './ItemCreationActions';
+import ItemCreationArmorAttributes from './ItemCreationArmorAttributes';
 import ItemCreationAttributes from './ItemCreationAttributes';
 import ItemCreationResume from './ItemCreationResume';
+import ItemCreationWeaponAttributes from './ItemCreationWeaponAttributes';
 
 const ItemCreation: FC = () => {
   const { showError } = useError();
-  const [realms, setRealms] = useState<Realm[]>([]);
+  const [realms, setRealms] = useState<NamedEntity[]>([]);
   const [formData, setFormData] = useState<CreateItemDto>({} as CreateItemDto);
   const [isValid, setIsValid] = useState(false);
 
@@ -39,6 +41,8 @@ const ItemCreation: FC = () => {
           <ItemCreationResume formData={formData} setFormData={setFormData} realms={realms} />
         </Grid>
         <Grid size={8}>
+          <ItemCreationArmorAttributes formData={formData} setFormData={setFormData} />
+          {formData.weapon && <ItemCreationWeaponAttributes formData={formData} setFormData={setFormData} />}
           <ItemCreationAttributes formData={formData} setFormData={setFormData} />
         </Grid>
       </Grid>

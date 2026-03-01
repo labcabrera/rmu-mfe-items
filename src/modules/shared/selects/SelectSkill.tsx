@@ -8,7 +8,6 @@ const SelectSkill: FC<{
   value: string;
   name: string;
   skills: Skill[];
-  // eslint-disable-next-line no-unused-vars
   onChange: (skill: Skill | null) => void;
 }> = ({ label, value, name, skills, onChange }) => {
   if (!skills) return <p>Loading...</p>;
@@ -22,7 +21,7 @@ const SelectSkill: FC<{
       onChange={(_, newValue) => onChange(newValue)}
       getOptionLabel={(option) => t(option.id)}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      renderInput={(params) => <TextField {...params} label={label} name={name} variant="standard" fullWidth />}
+      renderInput={(params) => <TextField {...params} label={label} name={name} variant="outlined" fullWidth />}
     />
   );
 };

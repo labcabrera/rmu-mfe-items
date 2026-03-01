@@ -10,13 +10,13 @@ const SelectRealm: FC<{
   required?: boolean;
   onChange: (realm: NamedEntity | null) => void;
 }> = ({ label, value, realms, required, onChange }) => {
+  if (!realms) return <p>Loading realms...</p>;
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedValue = event.target.value;
     const selectedRealm = realms.find((realm) => realm.id === selectedValue) || null;
     onChange(selectedRealm);
   };
-
-  if (!realms) return <p>Loading...</p>;
 
   return (
     <TextField

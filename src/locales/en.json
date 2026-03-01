@@ -59,6 +59,8 @@
   "ranks": "Ranks",
   "realm": "Realm",
   "realm-is-required": "Realm is required",
+  "required-armor-type": "Required armor type",
+  "required-item-category": "Required item category",
   "required-item-identifier": "Required item identifier",
   "required-realm": "Required realm",
   "size": "Size",

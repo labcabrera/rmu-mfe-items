@@ -20,7 +20,7 @@ export type ItemWeapon = {
 };
 
 export type ItemArmor = {
-  slot: string;
+  slot: ItemArmorSlot;
   at: number;
   enc: number;
   maneuver: number;
@@ -28,6 +28,8 @@ export type ItemArmor = {
   perception: number;
   baseDifficulty: string;
 };
+
+export type ItemArmorSlot = 'head' | 'body' | 'arms' | 'legs';
 
 export type WeaponMode = {
   type: string;

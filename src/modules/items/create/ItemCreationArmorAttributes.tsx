@@ -1,0 +1,84 @@
+import React, { Dispatch, FC, SetStateAction } from 'react';
+import { Grid, Typography } from '@mui/material';
+import { t } from 'i18next';
+import { CreateItemDto } from '../../api/item.dto';
+import { NumericInput } from '../../shared/inputs/NumericInput';
+import SelectArmorSlot from '../../shared/selects/SelectArmorSlot';
+import SelectArmorType from '../../shared/selects/SelectArmorType';
+import SelectDifficulty from '../../shared/selects/SelectDifficulty';
+
+const ItemCreationArmorAttributes: FC<{
+  formData: CreateItemDto;
+  setFormData: Dispatch<SetStateAction<CreateItemDto>>;
+}> = ({ formData, setFormData }) => {
+  if (!formData || !formData.armor) return null;
+
+  return (
+    <Grid container spacing={2} mt={2}>
+      <Grid size={12}>
+        <Typography variant="h6" gutterBottom>
+          {t('armor')}
+        </Typography>
+      </Grid>
+
+      <Grid size={3}>
+        <SelectArmorSlot
+          label={t('slot')}
+          name={'slot'}
+          value={formData.armor?.slot || null}
+          onChange={(value) => setFormData({ ...formData, armor: { ...formData.armor, slot: value! } })}
+        />
+      </Grid>
+      <Grid size={3}>
+        <SelectArmorType
+          value={formData.armor?.at ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, at: v ?? 0 } })}
+          label={t('at')}
+        />
+      </Grid>
+      <Grid size={3}>
+        <NumericInput
+          value={formData.armor?.enc ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, enc: v ?? 0 } })}
+          integer={true}
+          label={t('encumbrance')}
+        />
+      </Grid>
+      <Grid size={3}>
+        <NumericInput
+          value={formData.armor?.maneuver ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, maneuver: v ?? 0 } })}
+          integer={false}
+          label={t('maneuver-penalty')}
+        />
+      </Grid>
+      <Grid size={3}>
+        <NumericInput
+          value={formData.armor?.rangedPenalty ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, rangedPenalty: v ?? 0 } })}
+          integer={false}
+          label={t('ranged-penalty')}
+        />
+      </Grid>
+      <Grid size={3}>
+        <NumericInput
+          value={formData.armor?.perception ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, perception: v ?? 0 } })}
+          integer={false}
+          label={t('perception-penalty')}
+        />
+      </Grid>
+      <Grid size={3}>
+        <SelectDifficulty
+          label={t('base-difficulty')}
+          value={formData.armor?.baseDifficulty || ''}
+          onChange={(difficulty) =>
+            setFormData({ ...formData, armor: { ...formData.armor, baseDifficulty: difficulty! } })
+          }
+        />
+      </Grid>
+    </Grid>
+  );
+};
+
+export default ItemCreationArmorAttributes;

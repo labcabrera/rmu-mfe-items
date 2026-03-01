@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import { TextField, Box, IconButton } from '@mui/material';
 import { t } from 'i18next';
-import SelectItemCategory from '../../shared/selects/SelectItemCategory';
+import SelectArmorSlot from '../../shared/selects/SelectItemCategory';
 
 const ItemListSearch: FC<{
   onSearch: (id: string, category: string) => void;
@@ -27,7 +27,7 @@ const ItemListSearch: FC<{
         variant="standard"
         fullWidth
       />
-      <SelectItemCategory
+      <SelectArmorSlot
         value={category}
         onChange={(value) => setCategory(value || '')}
         label={t('category')}

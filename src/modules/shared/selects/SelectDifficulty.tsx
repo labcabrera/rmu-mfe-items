@@ -2,20 +2,18 @@ import React, { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MenuItem, TextField } from '@mui/material';
 
-const SelectItemCategory: FC<{
+const SelectDifficulty: FC<{
   label: string;
   value: string | null;
-  name: string;
-  required?: boolean;
+  name?: string;
   onChange: (value: string | null) => void;
-}> = ({ label, value, name, onChange, required = false }) => {
+}> = ({ label, value, name = 'difficulty', onChange }) => {
   const { t } = useTranslation();
 
-  const values = ['weapon', 'armor', 'shield', 'clothes', 'coins', 'tools', 'food', 'ammunition', 'other'];
+  const values: string[] = ['c', 's'];
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedValue = event.target.value;
-    onChange(selectedValue === '' ? null : selectedValue);
+    onChange(event.target.value);
   };
 
   return (
@@ -27,10 +25,8 @@ const SelectItemCategory: FC<{
       fullWidth
       variant="outlined"
       onChange={handleChange}
-      error={required && (value === undefined || value === null || value === '')}
-      helperText={
-        required && (value === undefined || value === null || value === '') ? t('required-item-category') : ''
-      }
+      error={value === undefined || value === null}
+      helperText={value === undefined || value === null ? t('required-difficulty') : ''}
     >
       {values.map((option, index) => (
         <MenuItem key={index} value={option}>
@@ -41,4 +37,4 @@ const SelectItemCategory: FC<{
   );
 };
 
-export default SelectItemCategory;
+export default SelectDifficulty;
