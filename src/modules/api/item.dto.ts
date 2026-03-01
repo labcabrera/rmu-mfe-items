@@ -4,6 +4,10 @@ export type WeaponModeType = 'one-hand' | 'two-hands';
 
 export type WeaponAttackType = 'melee' | 'ranged' | 'thrown';
 
+export type ItemModifierType = 'bonus' | 'breakage' | 'skill-bonus' | 'material';
+
+export type ItemArmorSlot = 'head' | 'body' | 'arms' | 'legs';
+
 export type Item = {
   id: string;
   realm: NamedEntity;
@@ -31,8 +35,6 @@ export type ItemArmor = {
   perception: number;
   baseDifficulty: string;
 };
-
-export type ItemArmorSlot = 'head' | 'body' | 'arms' | 'legs';
 
 export type WeaponMode = {
   type: WeaponModeType;
@@ -65,6 +67,13 @@ export type ItemInfo = {
   productionHours: number | null;
   stackable: boolean;
 };
+
+export interface ItemModifier {
+  readonly id: string;
+  readonly type: ItemModifierType;
+  readonly modifier: string | undefined;
+  readonly value: number | undefined;
+}
 
 export interface CreateItemDto {
   id: string;

@@ -62,9 +62,7 @@ export async function updateItem(itemId: string, dto: UpdateItemDto): Promise<It
 export async function deleteItem(itemId: string): Promise<void> {
   const url = `${apiItemsUrl}/items/${itemId}`;
   const response = await fetch(url, { method: 'DELETE', headers: getAuthHeaders() });
-  if (response.status !== 200) {
+  if (response.status !== 204) {
     throw await buildErrorFromResponse(response, url);
   }
-  // delete endpoints commonly return an empty body; don't attempt to parse JSON
-  return;
 }
