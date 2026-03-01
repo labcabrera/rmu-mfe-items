@@ -15,8 +15,10 @@ const ItemEditResume: FC<{
           name="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          variant="standard"
+          variant="outlined"
           fullWidth
+          multiline
+          rows={10}
         />
       </Grid>
     </Grid>

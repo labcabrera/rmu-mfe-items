@@ -19,12 +19,6 @@ const ItemViewActions: FC<{
   const { showError } = useError();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const onDeleteItem = () => {
-    deleteItem(item.id)
-      .then(() => navigate('/items'))
-      .catch((err) => showError(err.message));
-  };
-
   const onRefreshButtonClick = () => {
     fetchItem(item.id)
       .then((response) => setItem(response))
@@ -44,8 +38,12 @@ const ItemViewActions: FC<{
   };
 
   const onDeleteDialogClick = () => {
-    onDeleteItem();
-    setDeleteDialogOpen(false);
+    deleteItem(item.id)
+      .then(() => {
+        setDeleteDialogOpen(false);
+        navigate('/items');
+      })
+      .catch((err) => showError(err.message));
   };
 
   if (!item) return <p>Loading item...</p>;

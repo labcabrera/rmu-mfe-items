@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionSummary, Typography, AccordionDetails, Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
@@ -11,7 +11,6 @@ import ItemViewAttributes from './ItemViewAttributes';
 import ItemViewResume from './ItemViewResume';
 
 const ItemView: FC = () => {
-  const location = useLocation();
   const { showError } = useError();
   const { itemId } = useParams<{ itemId?: string }>();
   const [item, setItem] = useState<Item>();
@@ -22,9 +21,9 @@ const ItemView: FC = () => {
         .then((response) => setItem(response))
         .catch((err) => showError(err.message));
     }
-  }, [location.state, itemId, showError]);
+  }, [itemId, showError]);
 
-  if (!item) return <p>Loading realm...</p>;
+  if (!item) return <p>Item not found.</p>;
 
   return (
     <>

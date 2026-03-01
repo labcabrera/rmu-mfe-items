@@ -2,7 +2,7 @@ import { getAuthHeaders, mergeJsonHeaders } from '../services/auth-token-service
 import { apiItemsUrl } from '../services/config';
 import { buildErrorFromResponse } from './api-errors';
 import { Page } from './common.dto';
-import { Item } from './item.dto';
+import { CreateItemDto, Item, UpdateItemDto } from './item.dto';
 
 export async function fetchItem(itemId: string): Promise<Item> {
   const url = `${apiItemsUrl}/items/${itemId}`;
@@ -33,7 +33,7 @@ export async function fetchPagedItems(rsql: string, page: number, size: number):
   return pageContent;
 }
 
-export async function createItem(item: any): Promise<Item> {
+export async function createItem(item: CreateItemDto): Promise<Item> {
   const url = `${apiItemsUrl}/items`;
   const response = await fetch(url, {
     method: 'POST',
@@ -46,7 +46,7 @@ export async function createItem(item: any): Promise<Item> {
   return await response.json();
 }
 
-export async function updateItem(itemId: string, dto: any): Promise<Item> {
+export async function updateItem(itemId: string, dto: UpdateItemDto): Promise<Item> {
   const url = `${apiItemsUrl}/items/${itemId}`;
   const response = await fetch(url, {
     method: 'PATCH',
@@ -65,5 +65,6 @@ export async function deleteItem(itemId: string): Promise<void> {
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);
   }
-  return await response.json();
+  // delete endpoints commonly return an empty body; don't attempt to parse JSON
+  return;
 }

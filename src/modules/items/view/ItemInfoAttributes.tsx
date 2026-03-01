@@ -14,8 +14,51 @@ const ItemInfoAttributes: FC<{
       <Grid container spacing={2}>
         <Grid size={12}>
           <Typography variant="h6" gutterBottom>
-            {t('information')}
+            {t('item-information')}
           </Typography>
+        </Grid>
+
+        <Grid size={12}>
+          <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+            {item.info.length && (
+              <NumericCard
+                value={item.info.length || 0}
+                subtitle={t('length')}
+                image={`${imageBaseUrl}images/generic/configuration.png`}
+                applyColor={false}
+              />
+            )}
+            {item.info.weight && (
+              <NumericCard
+                value={item.info.weight || 0}
+                subtitle={t('weight')}
+                image={`${imageBaseUrl}images/generic/configuration.png`}
+                applyColor={false}
+              />
+            )}
+            {item.info.weightPercent && (
+              <NumericCard
+                value={item.info.weightPercent || 0}
+                subtitle={t('weight-percent')}
+                image={`${imageBaseUrl}images/generic/configuration.png`}
+                applyColor={false}
+              />
+            )}
+            {item.info.strength && (
+              <NumericCard
+                value={item.info.strength || 0}
+                subtitle={t('strength')}
+                image={`${imageBaseUrl}images/generic/configuration.png`}
+                applyColor={false}
+              />
+            )}
+
+            <TextCard
+              value={item.stackable ? t('yes') : t('no')}
+              subtitle={t('stackable')}
+              image={`${imageBaseUrl}images/generic/configuration.png`}
+            />
+          </Box>
         </Grid>
         <Grid size={12}>
           <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
@@ -37,38 +80,11 @@ const ItemInfoAttributes: FC<{
               image={`${imageBaseUrl}images/generic/coins.png`}
               applyColor={false}
             />
-            {item.info.weight && (
-              <NumericCard
-                value={item.info.weight || 0}
-                subtitle={t('weight')}
-                image={`${imageBaseUrl}images/generic/configuration.png`}
-                applyColor={false}
-              />
-            )}
-            {item.info.weightPercent && (
-              <NumericCard
-                value={item.info.weightPercent || 0}
-                subtitle={t('weight-percent')}
-                image={`${imageBaseUrl}images/generic/configuration.png`}
-                applyColor={false}
-              />
-            )}
-            <NumericCard
-              value={item.info.strength || 0}
-              subtitle={t('strength')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
-              applyColor={false}
-            />
             <NumericCard
               value={item.info.productionHours || 0}
               subtitle={t('production-hours')}
               image={`${imageBaseUrl}images/generic/configuration.png`}
               applyColor={false}
-            />
-            <TextCard
-              value={item.stackable ? t('yes') : t('no')}
-              subtitle={t('stackable')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
             />
           </Box>
         </Grid>

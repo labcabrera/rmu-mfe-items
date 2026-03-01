@@ -55,11 +55,11 @@ export type ItemInfo = {
     average: number;
     max: number;
   };
-  length: number;
-  weight: number | undefined;
-  weightPercent: number | undefined;
-  strength: number;
-  productionHours: number;
+  length: number | null;
+  weight: number | null;
+  weightPercent: number | null;
+  strength: number | null;
+  productionHours: number | null;
 };
 
 export interface CreateItemDto {
@@ -76,7 +76,12 @@ export interface CreateItemDto {
 }
 
 export interface UpdateItemDto {
+  realmId: string | undefined;
+  weapon: Partial<ItemWeapon> | undefined;
+  armor: Partial<ItemArmor> | undefined;
+  shield: Partial<ItemShield> | undefined;
+  info: Partial<ItemInfo> | undefined;
+  stackable: boolean | undefined;
   description: string | undefined;
   imageUrl: string | undefined;
-  //TODO
 }
