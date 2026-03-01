@@ -49,7 +49,7 @@ const ItemCreationWeaponAttributes: FC<{
         />
       </Grid>
       <Grid size={12}>
-        <ItemCreationWeaponModes />
+        <ItemCreationWeaponModes formData={formData} setFormData={setFormData} />
       </Grid>
     </Grid>
   );

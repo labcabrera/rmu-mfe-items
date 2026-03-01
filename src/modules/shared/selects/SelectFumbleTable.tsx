@@ -19,15 +19,7 @@ const SelectFumbleTable: FC<{
       getOptionLabel={(option) => t(option)}
       isOptionEqualToValue={(option, value) => option === value}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          name={name}
-          variant="outlined"
-          fullWidth
-          error={!value}
-          helperText={!value ? t('required-fumble-table') : ''}
-        />
+        <TextField {...params} label={label} name={name} variant="outlined" fullWidth error={!value} />
       )}
     />
   );
