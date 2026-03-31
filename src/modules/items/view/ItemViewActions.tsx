@@ -1,15 +1,17 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Box, Breadcrumbs, Link, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import {
+  DeleteButton,
+  DeleteDialog,
+  EditButton,
+  RefreshButton,
+  RmuBreadcrumbs,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { deleteItem } from '../../api/item';
 import { fetchItem } from '../../api/item';
 import { Item } from '../../api/item.dto';
-import DeleteButton from '../../shared/buttons/DeleteButton';
-import EditButton from '../../shared/buttons/EditButton';
-import RefreshButton from '../../shared/buttons/RefreshButton';
-import DeleteDialog from '../../shared/dialogs/DeleteDialog';
 
 const ItemViewActions: FC<{
   item: Item;
@@ -18,6 +20,7 @@ const ItemViewActions: FC<{
   const navigate = useNavigate();
   const { showError } = useError();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const breadcrumbs = [{ name: t('Items'), link: '/items' }, { name: t('Edit') }];
 
   const onRefreshButtonClick = () => {
     fetchItem(item.id)
@@ -50,24 +53,11 @@ const ItemViewActions: FC<{
 
   return (
     <>
-      <Stack spacing={2} direction="row" justifyContent="space-between" alignItems="center" sx={{ minHeight: 80 }}>
-        <Box>
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" underline="hover" href="/">
-              {t('home')}
-            </Link>
-            <Link component={RouterLink} color="primary" underline="hover" to="/items">
-              {t('items')}
-            </Link>
-            <span>{t(item.id)}</span>
-          </Breadcrumbs>
-        </Box>
-        <Stack direction="row" spacing={1}>
-          <RefreshButton onClick={() => onRefreshButtonClick()} />
-          <EditButton onClick={() => onEditButtonClick()} />
-          <DeleteButton onClick={() => onDeleteButtonClick()} />
-        </Stack>
-      </Stack>
+      <RmuBreadcrumbs items={breadcrumbs}>
+        <RefreshButton onClick={() => onRefreshButtonClick()} />
+        <EditButton onClick={() => onEditButtonClick()} />
+        <DeleteButton onClick={() => onDeleteButtonClick()} />
+      </RmuBreadcrumbs>
       <DeleteDialog
         open={deleteDialogOpen}
         message={`Are you sure you want to delete ${item.id} item? This action cannot be undone.`}

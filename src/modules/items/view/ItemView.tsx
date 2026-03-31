@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { GenericAvatar, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { fetchItem } from '../../api/item';
 import { Item } from '../../api/item.dto';
@@ -24,14 +25,14 @@ const ItemView: FC = () => {
     }
   }, [itemId, showError]);
 
-  if (!item) return <p>Item not found.</p>;
+  if (!item) return <p>{t('Item not found')}</p>;
 
   return (
     <>
       <ItemViewActions item={item} setItem={setItem} />
       <Grid container spacing={1}>
         <Grid size={gridSizeResume}>
-          <GenericAvatar imageUrl={`${imageBaseUrl}images/items/${item.id}.png`} />
+          <GenericAvatar imageUrl={`${imageBaseUrl}images/items/${item.id}.png`} variant="square" />
           <ItemViewResume item={item} />
         </Grid>
         <Grid size={gridSizeMain}>

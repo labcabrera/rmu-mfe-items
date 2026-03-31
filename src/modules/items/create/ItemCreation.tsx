@@ -1,23 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { useError } from '../../../ErrorContext';
-import { NamedEntity } from '../../api/common.dto';
+import { TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { CreateItemDto } from '../../api/item.dto';
-import { fetchRealms } from '../../api/realm';
 import { imageBaseUrl } from '../../services/config';
+import { gridSizeMain, gridSizeResume } from '../../services/display';
 import GenericAvatar from '../../shared/avatars/GenericAvatar';
 import ItemCreationActions from './ItemCreationActions';
 import ItemCreationArmorAttributes from './ItemCreationArmorAttributes';
 import ItemCreationAttributes from './ItemCreationAttributes';
-import ItemCreationResume from './ItemCreationResume';
 import ItemCreationWeaponAttributes from './ItemCreationWeaponAttributes';
 
 const ItemCreation: FC = () => {
-  const { showError } = useError();
-  const [realms, setRealms] = useState<NamedEntity[]>([]);
-  const [formData, setFormData] = useState<CreateItemDto>({
-    info: { cost: { min: 0, average: 0, max: 0 } },
-  } as CreateItemDto);
+  const [formData, setFormData] = useState<CreateItemDto>({ info: {} } as CreateItemDto);
   const [isValid, setIsValid] = useState(false);
 
   const validateForm = (formData: CreateItemDto) => {
@@ -26,29 +20,29 @@ const ItemCreation: FC = () => {
   };
 
   useEffect(() => {
-    setIsValid(validateForm(formData));
-    fetchRealms('', 0, 100)
-      .then((realms) => setRealms(realms))
-      .catch((err: Error) => showError(err.message));
-  }, [formData, showError]);
+    if (formData) {
+      setIsValid(validateForm(formData));
+    }
+  }, [formData]);
 
   if (!formData) return <div>Loading...</div>;
 
   return (
     <>
       <ItemCreationActions formData={formData} isValid={isValid} />
-      <Grid container spacing={2}>
-        <Grid size={2}>
+      <Grid container spacing={1}>
+        <Grid size={gridSizeResume}>
           <GenericAvatar imageUrl={`${imageBaseUrl}images/generic/configuration.png`} />
-          <ItemCreationResume formData={formData} setFormData={setFormData} realms={realms} />
         </Grid>
-        <Grid size={8}>
+        <Grid size={gridSizeMain}>
+          <ItemCreationAttributes formData={formData} setFormData={setFormData} />
           <ItemCreationArmorAttributes formData={formData} setFormData={setFormData} />
           {formData.weapon && <ItemCreationWeaponAttributes formData={formData} setFormData={setFormData} />}
-          <ItemCreationAttributes formData={formData} setFormData={setFormData} />
+          <TechnicalInfo>
+            <pre>{JSON.stringify(formData, null, 2)}</pre>
+          </TechnicalInfo>
         </Grid>
       </Grid>
-      <pre>{JSON.stringify(formData, null, 2)}</pre>
     </>
   );
 };
