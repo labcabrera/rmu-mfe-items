@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useEffect } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { CreateItemDto } from '../../api/item.dto';
@@ -26,26 +27,24 @@ const ItemCreationWeaponAttributes: FC<{
   return (
     <Grid container spacing={1}>
       <Grid size={12}>
-        <Typography variant="h6" gutterBottom>
-          {t('weapon')}
-        </Typography>
+        <CategorySeparator text={t('Weapon')} />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <SelectSkill
           name="skill"
-          label={t('skill')}
+          label={t('Skill')}
           value={formData.weapon!.skillId || ''}
           onChange={(skill) => setFormData({ ...formData, weapon: { ...formData.weapon!, skillId: skill?.id || '' } })}
           skills={combatSkills}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
           value={formData.weapon!.fumble ?? null}
           onChange={(fumble) => setFormData({ ...formData, weapon: { ...formData.weapon!, fumble: fumble ?? 0 } })}
           integer={true}
           min={0}
-          label={t('fumble')}
+          label={t('Fumble')}
         />
       </Grid>
       <Grid size={12}>

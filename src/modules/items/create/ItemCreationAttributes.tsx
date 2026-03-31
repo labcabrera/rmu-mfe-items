@@ -10,6 +10,8 @@ import { fetchRealms } from '../../api/realm';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 import SelectRealm from '../../shared/selects/SelectRealm';
+import ItemCreationArmorAttributes from './ItemCreationArmorAttributes';
+import ItemCreationWeaponAttributes from './ItemCreationWeaponAttributes';
 
 const ItemCreationAttributes: FC<{
   formData: CreateItemDto;
@@ -216,6 +218,11 @@ const ItemCreationAttributes: FC<{
             </ToggleButton>
           </ToggleButtonGroup>
         </FormControl>
+      </Grid>
+
+      <Grid size={12}>
+        <ItemCreationArmorAttributes formData={formData} setFormData={setFormData} />
+        {formData.weapon && <ItemCreationWeaponAttributes formData={formData} setFormData={setFormData} />}
       </Grid>
 
       <Grid size={12}>

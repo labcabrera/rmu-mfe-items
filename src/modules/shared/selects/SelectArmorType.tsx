@@ -1,10 +1,9 @@
 import React, { ChangeEvent, FC } from 'react';
 import { MenuItem, TextField } from '@mui/material';
-import { t } from 'i18next';
 
 const SelectArmorType: FC<{
   label: string;
-  value: number;
+  value: number | undefined;
   name?: string;
   onChange: (value: number) => void;
 }> = ({ label, value, name = 'at', onChange }) => {
@@ -20,10 +19,8 @@ const SelectArmorType: FC<{
       label={label}
       value={value === undefined || value === null ? '' : value}
       fullWidth
-      variant="outlined"
       onChange={handleChange}
       error={!value}
-      helperText={!value ? t('required-armor-type') : ''}
     >
       {Array.from({ length: 10 }, (_, i) => i + 1).map((option) => (
         <MenuItem key={option} value={option}>

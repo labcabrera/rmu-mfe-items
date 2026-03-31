@@ -106,148 +106,150 @@ export default function ItemCreationWeaponModes({ formData, setFormData }: Props
   }, [formData.weapon?.modes]);
 
   return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-        <h4 style={{ flex: 1, margin: 0 }}>Attack modes</h4>
-        <IconButton aria-label="add" color="primary" onClick={() => setOpen(true)}>
-          <AddIcon />
-        </IconButton>
-      </div>
+    <>
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+          <h4 style={{ flex: 1, margin: 0 }}>Attack modes</h4>
+          <IconButton aria-label="add" color="primary" onClick={() => setOpen(true)}>
+            <AddIcon />
+          </IconButton>
+        </div>
 
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Type</th>
-            <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Attack Types</th>
-            <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Attack Table</th>
-            <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Fumble Table</th>
-            <th style={{ borderBottom: '1px solid #ddd', padding: 8 }}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.length === 0 ? (
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
             <tr>
-              <td colSpan={5} style={{ padding: 8 }}>
-                <Typography variant="body2" color="error">
-                  {t('at-least-one-mode-required')}
-                </Typography>
-              </td>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Type</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Attack Types</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Attack Table</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: 8 }}>Fumble Table</th>
+              <th style={{ borderBottom: '1px solid #ddd', padding: 8 }}></th>
             </tr>
-          ) : (
-            items.map((m) => (
-              <tr key={m.id}>
-                <td style={{ padding: 8 }}>{t(m.type)}</td>
-                <td style={{ padding: 8 }}>{t(m.attackTypes.join(', '))}</td>
-                <td style={{ padding: 8 }}>{t(m.attackTable)}</td>
-                <td style={{ padding: 8 }}>{t(m.fumbleTable)}</td>
-                <td style={{ padding: 8 }}>
-                  <IconButton size="small" onClick={() => handleDelete(m.id)}>
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
+          </thead>
+          <tbody>
+            {items.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ padding: 8 }}>
+                  <Typography variant="body2" color="error">
+                    {t('at-least-one-mode-required')}
+                  </Typography>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              items.map((m) => (
+                <tr key={m.id}>
+                  <td style={{ padding: 8 }}>{t(m.type)}</td>
+                  <td style={{ padding: 8 }}>{t(m.attackTypes.join(', '))}</td>
+                  <td style={{ padding: 8 }}>{t(m.attackTable)}</td>
+                  <td style={{ padding: 8 }}>{t(m.fumbleTable)}</td>
+                  <td style={{ padding: 8 }}>
+                    <IconButton size="small" onClick={() => handleDelete(m.id)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
 
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Añadir modo</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid size={12}>
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="mode-type-label">Tipo</InputLabel>
-                <Select
-                  labelId="mode-type-label"
-                  value={type}
-                  label="Tipo"
-                  onChange={(e) => setType(e.target.value as WeaponModeType)}
-                >
-                  <MenuItem value="one-hand">one-hand</MenuItem>
-                  <MenuItem value="two-hands">two-hands</MenuItem>
-                </Select>
-              </FormControl>
+        <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
+          <DialogTitle>Añadir modo</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2}>
+              <Grid size={12}>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel id="mode-type-label">Tipo</InputLabel>
+                  <Select
+                    labelId="mode-type-label"
+                    value={type}
+                    label="Tipo"
+                    onChange={(e) => setType(e.target.value as WeaponModeType)}
+                  >
+                    <MenuItem value="one-hand">one-hand</MenuItem>
+                    <MenuItem value="two-hands">two-hands</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid size={12}>
+                <FormControl component="fieldset" margin="normal">
+                  <FormGroup row>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={attackTypes.includes('melee')}
+                          onChange={() => {
+                            setAttackTypes((prev) =>
+                              prev.includes('melee') ? prev.filter((p) => p !== 'melee') : [...prev, 'melee']
+                            );
+                          }}
+                        />
+                      }
+                      label="melee"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={attackTypes.includes('ranged')}
+                          onChange={() => {
+                            setAttackTypes((prev) =>
+                              prev.includes('ranged') ? prev.filter((p) => p !== 'ranged') : [...prev, 'ranged']
+                            );
+                          }}
+                        />
+                      }
+                      label="ranged"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={attackTypes.includes('thrown')}
+                          onChange={() => {
+                            setAttackTypes((prev) =>
+                              prev.includes('thrown') ? prev.filter((p) => p !== 'thrown') : [...prev, 'thrown']
+                            );
+                          }}
+                        />
+                      }
+                      label="thrown"
+                    />
+                  </FormGroup>
+                </FormControl>
+              </Grid>
+              <Grid size={12}>
+                <SelectAttackTable
+                  label="Attack table"
+                  name="attackTable"
+                  tables={attackTables}
+                  value={attackTable}
+                  onChange={setAttackTable}
+                />
+              </Grid>
+              <Grid size={12}>
+                <SelectFumbleTable
+                  label="Fumble table"
+                  name="fumbleTable"
+                  tables={fumbleTables}
+                  value={fumbleTable}
+                  onChange={setFumbleTable}
+                />
+              </Grid>
+              <Grid size={12}>
+                <NumericInput
+                  label="Size adjustment"
+                  onChange={(size) => setSizeAdjustment(Number(size))}
+                  value={sizeAdjustment}
+                />
+              </Grid>
             </Grid>
-            <Grid size={12}>
-              <FormControl component="fieldset" margin="normal">
-                <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={attackTypes.includes('melee')}
-                        onChange={() => {
-                          setAttackTypes((prev) =>
-                            prev.includes('melee') ? prev.filter((p) => p !== 'melee') : [...prev, 'melee']
-                          );
-                        }}
-                      />
-                    }
-                    label="melee"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={attackTypes.includes('ranged')}
-                        onChange={() => {
-                          setAttackTypes((prev) =>
-                            prev.includes('ranged') ? prev.filter((p) => p !== 'ranged') : [...prev, 'ranged']
-                          );
-                        }}
-                      />
-                    }
-                    label="ranged"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={attackTypes.includes('thrown')}
-                        onChange={() => {
-                          setAttackTypes((prev) =>
-                            prev.includes('thrown') ? prev.filter((p) => p !== 'thrown') : [...prev, 'thrown']
-                          );
-                        }}
-                      />
-                    }
-                    label="thrown"
-                  />
-                </FormGroup>
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <SelectAttackTable
-                label="Attack table"
-                name="attackTable"
-                tables={attackTables}
-                value={attackTable}
-                onChange={setAttackTable}
-              />
-            </Grid>
-            <Grid size={12}>
-              <SelectFumbleTable
-                label="Fumble table"
-                name="fumbleTable"
-                tables={fumbleTables}
-                value={fumbleTable}
-                onChange={setFumbleTable}
-              />
-            </Grid>
-            <Grid size={12}>
-              <NumericInput
-                label="Size adjustment"
-                onChange={(size) => setSizeAdjustment(Number(size))}
-                value={sizeAdjustment}
-              />
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancelar</Button>
-          <Button onClick={handleAdd} variant="contained" color="primary">
-            Añadir
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Cancelar</Button>
+            <Button onClick={handleAdd} variant="contained" color="primary">
+              Añadir
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </>
   );
 }

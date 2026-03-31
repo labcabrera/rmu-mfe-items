@@ -6,9 +6,7 @@ import { imageBaseUrl } from '../../services/config';
 import { gridSizeMain, gridSizeResume } from '../../services/display';
 import GenericAvatar from '../../shared/avatars/GenericAvatar';
 import ItemCreationActions from './ItemCreationActions';
-import ItemCreationArmorAttributes from './ItemCreationArmorAttributes';
 import ItemCreationAttributes from './ItemCreationAttributes';
-import ItemCreationWeaponAttributes from './ItemCreationWeaponAttributes';
 
 const ItemCreation: FC = () => {
   const [formData, setFormData] = useState<CreateItemDto>({ info: {} } as CreateItemDto);
@@ -36,8 +34,6 @@ const ItemCreation: FC = () => {
         </Grid>
         <Grid size={gridSizeMain}>
           <ItemCreationAttributes formData={formData} setFormData={setFormData} />
-          <ItemCreationArmorAttributes formData={formData} setFormData={setFormData} />
-          {formData.weapon && <ItemCreationWeaponAttributes formData={formData} setFormData={setFormData} />}
           <TechnicalInfo>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
           </TechnicalInfo>

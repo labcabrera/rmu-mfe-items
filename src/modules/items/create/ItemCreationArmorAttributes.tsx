@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { CreateItemDto } from '../../api/item.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
@@ -14,14 +15,11 @@ const ItemCreationArmorAttributes: FC<{
   if (!formData || !formData.armor) return null;
 
   return (
-    <Grid container spacing={2} mt={2}>
+    <Grid container spacing={1}>
       <Grid size={12}>
-        <Typography variant="h6" gutterBottom>
-          {t('armor')}
-        </Typography>
+        <CategorySeparator text={t('Armor')} />
       </Grid>
-
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <SelectArmorSlot
           label={t('slot')}
           name={'slot'}
@@ -29,14 +27,14 @@ const ItemCreationArmorAttributes: FC<{
           onChange={(value) => setFormData({ ...formData, armor: { ...formData.armor, slot: value! } })}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <SelectArmorType
-          value={formData.armor?.at ?? null}
+          value={formData.armor?.at}
           onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, at: v ?? 0 } })}
           label={t('at')}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
           value={formData.armor?.enc ?? null}
           onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, enc: v ?? 0 } })}
@@ -44,7 +42,7 @@ const ItemCreationArmorAttributes: FC<{
           label={t('encumbrance')}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
           value={formData.armor?.maneuver ?? null}
           onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, maneuver: v ?? 0 } })}
@@ -52,7 +50,7 @@ const ItemCreationArmorAttributes: FC<{
           label={t('maneuver-penalty')}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
           value={formData.armor?.rangedPenalty ?? null}
           onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, rangedPenalty: v ?? 0 } })}
@@ -60,7 +58,7 @@ const ItemCreationArmorAttributes: FC<{
           label={t('ranged-penalty')}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
           value={formData.armor?.perception ?? null}
           onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, perception: v ?? 0 } })}
@@ -68,7 +66,7 @@ const ItemCreationArmorAttributes: FC<{
           label={t('perception-penalty')}
         />
       </Grid>
-      <Grid size={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <SelectDifficulty
           label={t('base-difficulty')}
           value={formData.armor?.baseDifficulty || ''}
