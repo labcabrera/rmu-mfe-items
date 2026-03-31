@@ -5,7 +5,7 @@ S3_BUCKET=${S3_BUCKET:-rmu-static-assets-pro}
 S3_PREFIX=${S3_PREFIX:-rmu-mfe-items}
 AWS_REGION=${AWS_REGION:-eu-west-1}
 
-# CLOUDFRONT_DISTRIBUTION_ID=E1QDPSV2TQ5J6V
+CLOUDFRONT_DISTRIBUTION_ID=E2EF77NPL7ZAZM
 
 S3_TARGET="s3://$S3_BUCKET/$S3_PREFIX"
 
@@ -13,4 +13,4 @@ aws s3 rm "$S3_TARGET" --recursive --region "$AWS_REGION"
 
 aws s3 cp --recursive dist/ "$S3_TARGET" --region "$AWS_REGION"
 
-# aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"
+aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"

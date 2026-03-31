@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import { CategorySeparator, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { ItemWeapon } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
-import NumericCard from '../../shared/cards/NumericCard';
-import TextCard from '../../shared/cards/TextCard';
+import { gridSizeCard } from '../../services/display';
 import ItemWeaponModeTable from './ItemWeaponModeTable';
 
 const ItemWeaponAttributes: FC<{
@@ -12,38 +12,30 @@ const ItemWeaponAttributes: FC<{
 }> = ({ weapon }) => {
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid size={12}>
-          <Typography variant="h6" gutterBottom>
-            {t('weapon')}
-          </Typography>
+      <CategorySeparator text={t('Weapon')} />
+      <Grid container spacing={1}>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={t(weapon.skillId)}
+            subtitle={t('skill')}
+            image={`${imageBaseUrl}images/generic/configuration.png`}
+          />
         </Grid>
-        <Grid size={12}>
-          <Stack direction="row" spacing={2} flexWrap="wrap">
-            <TextCard
-              value={t(weapon.skillId)}
-              subtitle={t('skill')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
-              maxWidth={500}
-              minWidth={500}
-            />
-            <NumericCard
-              value={weapon.fumble || 0}
-              subtitle={t('fumble')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
-              applyColor={false}
-            />
-          </Stack>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={weapon.fumble || 0}
+            subtitle={t('fumble')}
+            image={`${imageBaseUrl}images/generic/configuration.png`}
+            applyColor={false}
+          />
         </Grid>
+      </Grid>
+      <Grid size={12}>
+        <CategorySeparator text={t('Attack modes')} />
+      </Grid>
+      <Grid size={12}>
         <Grid size={12}>
-          <Typography variant="h6" gutterBottom>
-            Attack modes
-          </Typography>
-        </Grid>
-        <Grid size={12}>
-          <Grid size={12}>
-            <ItemWeaponModeTable modes={weapon.modes} />
-          </Grid>
+          <ItemWeaponModeTable modes={weapon.modes} />
         </Grid>
       </Grid>
     </>

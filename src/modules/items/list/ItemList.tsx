@@ -1,10 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Pagination } from '@mui/material';
+import { RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { fetchPagedItems } from '../../api/item';
 import { Item } from '../../api/item.dto';
-import ItemCard from '../../shared/cards/ItemCard';
+import { imageBaseUrl } from '../../services/config';
+import { gridSizeCard, gridSizeMain, gridSizeResume, itemFilter } from '../../services/display';
 import ItemListActions from './ItemListActions';
 import ItemListSearch from './ItemListSearch';
 
@@ -57,21 +60,30 @@ const ItemList: FC = () => {
 
   return (
     <>
-      <ItemListActions setItems={setItems} />
-      <ItemListSearch onSearch={handleSearch} />
-      <Grid container spacing={2} mb={2} alignItems="center">
-        <Grid size={12}>
-          <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {items.map((item) => (
-              <ItemCard key={item.id} onClick={() => onCardClick(item)} item={item} />
+      <Grid container spacing={1}>
+        <Grid size={gridSizeResume}></Grid>
+        <Grid size={gridSizeMain}>
+          <ItemListActions setItems={setItems} />
+          <ItemListSearch onSearch={handleSearch} />
+          <Grid container spacing={1}>
+            {items.map((item, index) => (
+              <Grid size={gridSizeCard} key={index}>
+                <RmuTextCard
+                  value={t(item.id)}
+                  subtitle={t(item.category)}
+                  image={`${imageBaseUrl}images/items/${item.id}.png`}
+                  onClick={() => onCardClick(item)}
+                  imageFilter={itemFilter}
+                />
+              </Grid>
             ))}
+            {items.length === 0 ? <p>No items found.</p> : null}
+          </Grid>
+          <Box mt={1} display="flex" justifyContent="center">
+            <Pagination count={totalPages} page={page + 1} onChange={handlePageChange} color="primary" />
           </Box>
-          {items.length === 0 ? <p>No items found.</p> : null}
         </Grid>
       </Grid>
-      <Box mt={2} display="flex" justifyContent="center">
-        <Pagination count={totalPages} page={page + 1} onChange={handlePageChange} color="primary" />
-      </Box>
     </>
   );
 };
