@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
-import ClearIcon from '@mui/icons-material/Clear';
-import { TextField, Box, IconButton } from '@mui/material';
+import { Box } from '@mui/material';
+import { ClearableTextField } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import SelectArmorSlot from '../../shared/selects/SelectItemCategory';
 
@@ -20,28 +20,14 @@ const ItemListSearch: FC<{
 
   return (
     <Box display="flex" gap={2} alignItems="center" mb={2}>
-      <TextField
-        label={t('item-identifier')}
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-        variant="outlined"
-        fullWidth
-      />
+      <ClearableTextField value={id} onChange={(e) => setId(e.target.value)} label={t('Name')} name={'Name'} />
       <SelectArmorSlot
         value={category}
         onChange={(value) => setCategory(value || '')}
         label={t('category')}
         name={'category'}
+        allowAll
       />
-      <IconButton
-        onClick={() => {
-          setId('');
-          setCategory('');
-        }}
-        title={t('clear')}
-      >
-        <ClearIcon />
-      </IconButton>
     </Box>
   );
 };

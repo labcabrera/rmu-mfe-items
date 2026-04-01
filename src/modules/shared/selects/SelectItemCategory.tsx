@@ -7,8 +7,9 @@ const SelectItemCategory: FC<{
   value: string | null;
   name: string;
   required?: boolean;
+  allowAll?: boolean;
   onChange: (value: string | null) => void;
-}> = ({ label, value, name, onChange, required = false }) => {
+}> = ({ label, value, name, required = false, allowAll = false, onChange }) => {
   const { t } = useTranslation();
 
   const values = ['weapon', 'armor', 'shield', 'clothes', 'coins', 'tools', 'food', 'ammunition', 'other'];
@@ -25,10 +26,14 @@ const SelectItemCategory: FC<{
       label={label}
       value={value === undefined || value === null ? '' : value}
       fullWidth
-      variant="outlined"
       onChange={handleChange}
       error={required && (value === undefined || value === null || value === '')}
     >
+      {allowAll && (
+        <MenuItem key={null} value={t('All')}>
+          <em>All</em>
+        </MenuItem>
+      )}
       {values.map((option, index) => (
         <MenuItem key={index} value={option}>
           {t(option)}

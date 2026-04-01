@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Box, Breadcrumbs, Stack, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { CancelButton, RmuBreadcrumbs, SaveButton } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { createItem } from '../../api/item';
 import { CreateItemDto } from '../../api/item.dto';
-import CancelButton from '../../shared/buttons/CancelButton';
-import SaveButton from '../../shared/buttons/SaveButton';
 
 const ItemCreationActions: FC<{
   formData: CreateItemDto;
@@ -14,6 +12,7 @@ const ItemCreationActions: FC<{
 }> = ({ formData, isValid }) => {
   const navigate = useNavigate();
   const { showError } = useError();
+  const breadcrumbs = [{ name: t('Items'), link: '/items' }, { name: t('Creation') }];
 
   const onSaveClick = async () => {
     createItem(formData)
@@ -26,23 +25,10 @@ const ItemCreationActions: FC<{
   };
 
   return (
-    <Stack spacing={2} direction="row" justifyContent="space-between" alignItems="center" sx={{ minHeight: 80 }}>
-      <Box>
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link color="primary" underline="hover" href="/">
-            {t('home')}
-          </Link>
-          <Link component={RouterLink} to="/items" color="primary" underline="hover">
-            {t('items')}
-          </Link>
-          <span>{t('create')}</span>
-        </Breadcrumbs>
-      </Box>
-      <Stack spacing={1} direction="row">
-        <CancelButton onClick={onBackClick} />
-        <SaveButton onClick={onSaveClick} disabled={!isValid} />
-      </Stack>
-    </Stack>
+    <RmuBreadcrumbs items={breadcrumbs}>
+      <CancelButton onClick={onBackClick} />
+      <SaveButton onClick={onSaveClick} disabled={!isValid} />
+    </RmuBreadcrumbs>
   );
 };
 
