@@ -8,7 +8,7 @@ import { fetchPagedSkills } from '../../api/skill';
 import { Skill } from '../../api/skill.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectSkill from '../../shared/selects/SelectSkill';
-import ItemCreationWeaponModes from './ItemCreationWeaponModes';
+import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 
 const ItemCreationWeaponAttributes: FC<{
   formData: CreateItemDto;
@@ -48,7 +48,7 @@ const ItemCreationWeaponAttributes: FC<{
         />
       </Grid>
       <Grid size={12}>
-        <ItemCreationWeaponModes formData={formData} setFormData={setFormData} />
+        <ItemFormWeaponAttacks formData={formData} setFormData={setFormData} />
       </Grid>
     </Grid>
   );

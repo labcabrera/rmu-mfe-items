@@ -8,7 +8,7 @@ import SelectArmorSlot from '../../shared/selects/SelectArmorSlot';
 import SelectArmorType from '../../shared/selects/SelectArmorType';
 import SelectDifficulty from '../../shared/selects/SelectDifficulty';
 
-const ItemCreationArmorAttributes: FC<{
+const ItemFormArmor: FC<{
   formData: CreateItemDto;
   setFormData: Dispatch<SetStateAction<CreateItemDto>>;
 }> = ({ formData, setFormData }) => {
@@ -79,4 +79,4 @@ const ItemCreationArmorAttributes: FC<{
   );
 };
 
-export default ItemCreationArmorAttributes;
+export default ItemFormArmor;

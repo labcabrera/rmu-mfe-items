@@ -5,8 +5,8 @@ import { CreateItemDto } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeMain, gridSizeResume } from '../../services/display';
 import GenericAvatar from '../../shared/avatars/GenericAvatar';
+import ItemForm from '../shared/ItemForm';
 import ItemCreationActions from './ItemCreationActions';
-import ItemCreationAttributes from './ItemCreationAttributes';
 
 const ItemCreation: FC = () => {
   const [formData, setFormData] = useState<CreateItemDto>({ info: {} } as CreateItemDto);
@@ -33,7 +33,7 @@ const ItemCreation: FC = () => {
           <GenericAvatar imageUrl={`${imageBaseUrl}images/generic/configuration.png`} />
         </Grid>
         <Grid size={gridSizeMain}>
-          <ItemCreationAttributes formData={formData} setFormData={setFormData} />
+          <ItemForm formData={formData} setFormData={setFormData} />
           <TechnicalInfo>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
           </TechnicalInfo>
