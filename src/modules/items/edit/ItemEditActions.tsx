@@ -1,22 +1,20 @@
 import React, { FC } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+import { RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { updateItem } from '../../api/item';
-import { Item, UpdateItemDto } from '../../api/item.dto';
+import { Item } from '../../api/item.dto';
 import CancelButton from '../../shared/buttons/CancelButton';
 import SaveButton from '../../shared/buttons/SaveButton';
 
 const ItemEditActions: FC<{
   item: Item;
-  formData: UpdateItemDto;
+  formData: Item;
 }> = ({ item, formData }) => {
   const navigate = useNavigate();
   const { showError } = useError();
+  const breadcrumbs = [{ name: t('Items'), link: '/items' }, { name: t('Edit') }];
 
   const onSaveButtonClick = async () => {
     updateItem(item.id, formData)
@@ -36,24 +34,10 @@ const ItemEditActions: FC<{
   if (!item) return <p>Loading...</p>;
 
   return (
-    <Stack spacing={2} direction="row" justifyContent="space-between" alignItems="center" sx={{ minHeight: 80 }}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="primary" underline="hover" href="/">
-          {t('home')}
-        </Link>
-        <Link component={RouterLink} color="primary" underline="hover" to="/items">
-          {t('items')}
-        </Link>
-        <Link color="primary" underline="hover" component={RouterLink} to={`/items/view/${item.id}`} state={{ item }}>
-          {item.id}
-        </Link>
-        <Typography sx={{ color: 'text.primary' }}>{t('edit')}</Typography>
-      </Breadcrumbs>
-      <Stack direction="row" spacing={1}>
-        <CancelButton onClick={onCancelButtonClick} />
-        <SaveButton onClick={onSaveButtonClick} />
-      </Stack>
-    </Stack>
+    <RmuBreadcrumbs items={breadcrumbs}>
+      <CancelButton onClick={onCancelButtonClick} />
+      <SaveButton onClick={onSaveButtonClick} />
+    </RmuBreadcrumbs>
   );
 };
 

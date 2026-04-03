@@ -5,7 +5,7 @@ import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { NamedEntity } from '../../api/common.dto';
-import { CreateItemDto } from '../../api/item.dto';
+import { Item } from '../../api/item.dto';
 import { fetchRealms } from '../../api/realm';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
@@ -14,8 +14,8 @@ import ItemFormArmor from './ItemFormArmor';
 import ItemFormWeapon from './ItemFormWeapon';
 
 const ItemForm: FC<{
-  formData: CreateItemDto;
-  setFormData: Dispatch<SetStateAction<CreateItemDto>>;
+  formData: Item;
+  setFormData: Dispatch<SetStateAction<Item | null>>;
 }> = ({ formData, setFormData }) => {
   const { showError } = useError();
   const [realms, setRealms] = useState<NamedEntity[]>();
@@ -86,7 +86,6 @@ const ItemForm: FC<{
           label={t('realm')}
           realms={realms}
           value={formData.realmId}
-          required
           onChange={(realm) => setFormData({ ...formData, realmId: realm ? realm.id : '' })}
         />
       </Grid>

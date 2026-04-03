@@ -1,12 +1,12 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { FormControl, Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { t } from 'i18next';
-import { UpdateItemDto } from '../../api/item.dto';
+import { Item, UpdateItemDto } from '../../api/item.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 
 const ItemEditInfoAttributes: FC<{
-  formData: UpdateItemDto;
-  setFormData: Dispatch<SetStateAction<UpdateItemDto>>;
+  formData: Item;
+  setFormData: Dispatch<SetStateAction<Item | undefined>>;
 }> = ({ formData, setFormData }) => {
   if (!formData.info) return <p>Loading item info...</p>;
 
@@ -26,7 +26,7 @@ const ItemEditInfoAttributes: FC<{
     <Grid container spacing={2}>
       <Grid size={12}>
         <Typography variant="h6" gutterBottom>
-          {t('information')}
+          {t('Information')}
         </Typography>
       </Grid>
       <Grid size={3}>
@@ -34,7 +34,7 @@ const ItemEditInfoAttributes: FC<{
           value={info.length ?? null}
           onChange={(length) => setFormData((prev) => ({ ...prev, info: { ...prev.info, length: length } }))}
           integer={false}
-          label={t('length')}
+          label={t('Length')}
         />
       </Grid>
       <Grid size={3}>
@@ -42,7 +42,7 @@ const ItemEditInfoAttributes: FC<{
           value={info.weight ?? null}
           onChange={(weight) => setFormData((prev) => ({ ...prev, info: { ...prev.info, weight } }))}
           integer={false}
-          label={t('weight')}
+          label={t('Weight')}
           allowNegatives={false}
           maxFractionDigits={3}
         />
