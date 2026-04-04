@@ -6,6 +6,8 @@ import { Item } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
 
+const grayscale = 0.7;
+
 const ItemInfoAttributes: FC<{
   item: Item;
 }> = ({ item }) => {
@@ -20,6 +22,7 @@ const ItemInfoAttributes: FC<{
               subtitle={t('Length')}
               image={`${imageBaseUrl}images/generic/configuration.png`}
               applyColor={false}
+              grayscale={grayscale}
             />
           </Grid>
         )}
@@ -30,6 +33,7 @@ const ItemInfoAttributes: FC<{
               subtitle={t('Weight')}
               image={`${imageBaseUrl}images/generic/configuration.png`}
               applyColor={false}
+              grayscale={grayscale}
             />
           </Grid>
         )}
@@ -40,6 +44,7 @@ const ItemInfoAttributes: FC<{
               subtitle={t('weight-percent')}
               image={`${imageBaseUrl}images/generic/configuration.png`}
               applyColor={false}
+              grayscale={grayscale}
             />
           </Grid>
         )}
@@ -50,6 +55,7 @@ const ItemInfoAttributes: FC<{
               subtitle={t('strength')}
               image={`${imageBaseUrl}images/generic/configuration.png`}
               applyColor={false}
+              grayscale={grayscale}
             />
           </Grid>
         )}
@@ -58,14 +64,19 @@ const ItemInfoAttributes: FC<{
             value={item.info.stackable ? t('yes') : t('no')}
             subtitle={t('stackable')}
             image={`${imageBaseUrl}images/generic/configuration.png`}
+            grayscale={grayscale}
           />
         </Grid>
+      </Grid>
+      <CategorySeparator text={t('Item information')} />
+      <Grid container spacing={1}>
         <Grid size={gridSizeCard}>
           <RmuTextCard
             value={item.info.cost?.min || 0}
             subtitle={t('cost-min')}
             image={`${imageBaseUrl}images/generic/coins.png`}
             applyColor={false}
+            grayscale={grayscale}
           />
         </Grid>
         <Grid size={gridSizeCard}>
@@ -74,6 +85,7 @@ const ItemInfoAttributes: FC<{
             subtitle={t('cost-average')}
             image={`${imageBaseUrl}images/generic/coins.png`}
             applyColor={false}
+            grayscale={grayscale}
           />
         </Grid>
         <Grid size={gridSizeCard}>
@@ -82,6 +94,7 @@ const ItemInfoAttributes: FC<{
             subtitle={t('cost-max')}
             image={`${imageBaseUrl}images/generic/coins.png`}
             applyColor={false}
+            grayscale={grayscale}
           />
         </Grid>
         <Grid size={gridSizeCard}>
@@ -90,6 +103,7 @@ const ItemInfoAttributes: FC<{
             subtitle={t('production-hours')}
             image={`${imageBaseUrl}images/generic/configuration.png`}
             applyColor={false}
+            grayscale={grayscale}
           />
         </Grid>
       </Grid>

@@ -16,11 +16,13 @@ const ItemViewResume: FC<{
           <Typography variant="body1" gutterBottom>
             {t(item.category)}
           </Typography>
-          <Typography variant="body1" gutterBottom>
-            <Link href={`/core/realms/view/${item.realm.id}`} color="textPrimary">
-              {item.realm?.name || 'Loading realm...'}
-            </Link>
-          </Typography>
+          {item.realm && (
+            <Typography variant="body1" gutterBottom>
+              <Link href={`/core/realms/view/${item.realm.id}`} color="textPrimary">
+                {item.realm?.name || 'Loading realm...'}
+              </Link>
+            </Typography>
+          )}
           <Typography variant="body1" gutterBottom>
             {t(item.description || 'No description available.')}
           </Typography>

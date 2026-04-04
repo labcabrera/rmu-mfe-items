@@ -10,7 +10,7 @@ export type ItemArmorSlot = 'head' | 'body' | 'arms' | 'legs';
 
 export type Item = {
   id: string;
-  realm: NamedEntity;
+  realm: NamedEntity | undefined;
   category: string;
   weapon: ItemWeapon | undefined;
   armor: ItemArmor | undefined;
