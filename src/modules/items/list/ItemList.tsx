@@ -1,11 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Pagination } from '@mui/material';
-import { RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { fetchItems, Item, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { fetchPagedItems } from '../../api/item';
-import { Item } from '../../api/item.dto';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard, gridSizeMain, gridSizeResume, itemFilter } from '../../services/display';
 import ItemListActions from './ItemListActions';
@@ -34,12 +32,12 @@ const ItemList: FC = () => {
       query += `category==${category}`;
     }
 
-    fetchPagedItems(query, pageNumber, PAGE_SIZE)
+    fetchItems(query, pageNumber, PAGE_SIZE)
       .then((response) => {
         setItems(response.content);
         setTotalPages(response.pagination.totalPages || 1);
       })
-      .catch((err: Error) => showError(err.message));
+      .catch((err) => showError(err.message));
   };
 
   const handleSearch = (id: string, category: string) => {

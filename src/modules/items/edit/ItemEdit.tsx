@@ -2,12 +2,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
-import { TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { EditableAvatar, fetchItem, Item, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchItem } from '../../api/item';
-import { Item } from '../../api/item.dto';
+import { imageBaseUrl } from '../../services/config';
 import { gridSizeMain, gridSizeResume } from '../../services/display';
-import ItemAvatar from '../../shared/avatars/ItemAvatar';
 import ItemForm from '../shared/ItemForm';
 import ItemEditActions from './ItemEditActions';
 
@@ -17,9 +15,10 @@ const ItemEdit: FC = () => {
   const [item, setItem] = useState<Item>();
   const [formData, setFormData] = useState<Item>();
 
-  const onImageUpdated = (updatedItem: Item) => {
-    setItem(updatedItem);
-    setFormData({ ...formData!, imageUrl: updatedItem.imageUrl });
+  const itemImageUrl = item?.imageUrl ? item.imageUrl : `${imageBaseUrl}images/items/${item?.id}.png`;
+
+  const onImageChanged = (imageUrl: string) => {
+    showError('Not implemented image update ' + imageUrl);
   };
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const ItemEdit: FC = () => {
       <ItemEditActions item={item} formData={formData} />
       <Grid container spacing={1}>
         <Grid size={gridSizeResume}>
-          <ItemAvatar item={item} onItemUpdated={onImageUpdated} />
+          <EditableAvatar imageUrl={itemImageUrl} images={[]} onImageChange={(image) => onImageChanged(image)} />
         </Grid>
         <Grid size={gridSizeMain}>
           <ItemForm formData={formData} setFormData={setFormData} />

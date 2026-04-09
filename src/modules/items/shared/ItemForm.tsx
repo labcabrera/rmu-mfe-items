@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { FormControl, Grid, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { CategorySeparator, Item } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { NamedEntity } from '../../api/common.dto';
-import { Item } from '../../api/item.dto';
 import { fetchRealms } from '../../api/realm';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 import SelectRealm from '../../shared/selects/SelectRealm';
 import ItemFormArmor from './ItemFormArmor';
+import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
 
 const ItemForm: FC<{
@@ -222,6 +222,7 @@ const ItemForm: FC<{
       <Grid size={12}>
         {formData.armor && <ItemFormArmor formData={formData} setFormData={setFormData} />}
         {formData.weapon && <ItemFormWeapon formData={formData} setFormData={setFormData} />}
+        {formData.shield && <ItemFormShield formData={formData} setFormData={setFormData} />}
       </Grid>
 
       <Grid size={12}>

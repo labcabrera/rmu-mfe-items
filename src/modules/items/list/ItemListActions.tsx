@@ -1,10 +1,8 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AddButton, RefreshButton, RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { AddButton, fetchItems, RefreshButton, RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { fetchItems } from '../../api/item';
-import { Item } from '../../api/item.dto';
 
 const ItemListActions: FC<{ setItems: Dispatch<SetStateAction<Item[]>> }> = ({ setItems }) => {
   const navigate = useNavigate();
@@ -17,7 +15,7 @@ const ItemListActions: FC<{ setItems: Dispatch<SetStateAction<Item[]>> }> = ({ s
 
   const onRefreshButtonClick = () => {
     fetchItems('', 0, 24)
-      .then((response) => setItems(response))
+      .then((response) => setItems(response.content))
       .catch((err) => showError(err.message));
   };
 

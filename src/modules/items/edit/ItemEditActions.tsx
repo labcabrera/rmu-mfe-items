@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { Item, RmuBreadcrumbs, updateItem } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { updateItem } from '../../api/item';
-import { Item } from '../../api/item.dto';
 import CancelButton from '../../shared/buttons/CancelButton';
 import SaveButton from '../../shared/buttons/SaveButton';
 

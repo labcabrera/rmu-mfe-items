@@ -1,8 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Grid } from '@mui/material';
-import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { CategorySeparator, CreateItemDto } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
-import { CreateItemDto } from '../../api/item.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectArmorSlot from '../../shared/selects/SelectArmorSlot';
 import SelectArmorType from '../../shared/selects/SelectArmorType';

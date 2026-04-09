@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import {
   DeleteButton,
   DeleteDialog,
+  deleteItem,
   EditButton,
+  fetchItem,
+  Item,
   RefreshButton,
   RmuBreadcrumbs,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { deleteItem } from '../../api/item';
-import { fetchItem } from '../../api/item';
-import { Item } from '../../api/item.dto';
 
 const ItemViewActions: FC<{
   item: Item;
