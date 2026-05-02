@@ -1,15 +1,11 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
-import { AddButton, fetchItems, Item, RefreshButton, RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../ErrorContext';
+import { AddButton, RefreshButton, RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-const ItemListActions: FC<{ setItems: Dispatch<SetStateAction<Item[]>> }> = ({ setItems }) => {
-  const auth = useAuth();
+export default function ItemListActions({ onRefresh }: { onRefresh: () => void }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { showError } = useError();
   const breadcrumbs = [
     { name: t('home'), link: '/' },
     { name: t('items'), link: '/items' },
@@ -19,18 +15,10 @@ const ItemListActions: FC<{ setItems: Dispatch<SetStateAction<Item[]>> }> = ({ s
     navigate('/items/create');
   };
 
-  const onRefreshButtonClick = () => {
-    fetchItems('', 0, 24, auth)
-      .then((response) => setItems(response.content))
-      .catch((err) => showError(err.message));
-  };
-
   return (
     <RmuBreadcrumbs items={breadcrumbs}>
-      <RefreshButton onClick={() => onRefreshButtonClick()} />
+      <RefreshButton onClick={() => onRefresh()} />
       <AddButton onClick={() => onAddItemClick()} />
     </RmuBreadcrumbs>
   );
-};
-
-export default ItemListActions;
+}

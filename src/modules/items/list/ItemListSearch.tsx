@@ -1,19 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { ClearableTextField } from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectArmorSlot from '../../shared/selects/SelectItemCategory';
 
-const ItemListSearch: FC<{
-  onSearch: (name: string, category: string) => void;
-}> = ({ onSearch }) => {
+// eslint-disable-next-line no-unused-vars
+export default function ItemListSearch({ onChange }: { onChange: (rsql: string) => void }) {
   const { t } = useTranslation();
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
 
   const handleSearch = () => {
-    onSearch(name, category);
+    let rsql = '';
+    if (name) rsql += `name=re=${name}`;
+    if (category) {
+      if (rsql) rsql += ';';
+      rsql += `category==${category}`;
+    }
+    onChange(rsql);
   };
 
   useEffect(() => {
@@ -32,6 +37,4 @@ const ItemListSearch: FC<{
       />
     </Box>
   );
-};
-
-export default ItemListSearch;
+}

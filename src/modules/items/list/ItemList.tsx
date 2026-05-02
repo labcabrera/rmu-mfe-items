@@ -1,88 +1,69 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, Pagination } from '@mui/material';
-import { fetchItems, Item, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { Grid, Typography } from '@mui/material';
+import { fetchItems, Item, Page, RmuPagination, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard, gridSizeMain, gridSizeResume, itemFilter } from '../../services/display';
 import ItemListActions from './ItemListActions';
 import ItemListSearch from './ItemListSearch';
-
-const PAGE_SIZE = 24;
 
 export default function ItemList() {
   const auth = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showError } = useError();
-  const [items, setItems] = useState<Item[]>([]);
-  const [searchId, setSearchId] = useState<string>('');
-  const [searchCategory, setSearchCategory] = useState<string>('');
+  const [pageData, setPageData] = useState<Page<Item>>();
+  const [rsql, setRsql] = useState<string>('');
   const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(24);
 
   const onCardClick = (item: Item) => {
     navigate(`/items/view/${item.id}`, { state: { item } });
   };
 
-  const bindItems = (id: string, category: string, pageNumber: number = 0) => {
-    let query = '';
-    if (id) query += `name=re=${id}`;
-    if (category) {
-      if (query) query += ';';
-      query += `category==${category}`;
-    }
-
-    fetchItems(query, pageNumber, PAGE_SIZE, auth)
-      .then((response) => {
-        setItems(response.content);
-        setTotalPages(response.pagination.totalPages || 1);
-      })
+  const bindItems = () => {
+    fetchItems(rsql, page, pageSize, auth)
+      .then((response) => setPageData(response))
       .catch((err) => showError(err.message));
   };
 
-  const handleSearch = (id: string, category: string) => {
-    setSearchId(id);
-    setSearchCategory(category);
-    setPage(0);
-    bindItems(id, category, 0);
-  };
-
-  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value - 1);
-    bindItems(searchId, searchCategory, value - 1);
-  };
-
   useEffect(() => {
-    bindItems('', '', 0);
-  }, []);
+    bindItems();
+  }, [rsql, page, pageSize]);
 
   return (
     <>
       <Grid container spacing={1}>
         <Grid size={gridSizeResume}></Grid>
         <Grid size={gridSizeMain}>
-          <ItemListActions setItems={setItems} />
-          <ItemListSearch onSearch={handleSearch} />
+          <ItemListActions onRefresh={() => bindItems()} />
+          <ItemListSearch onChange={(e) => setRsql(e)} />
           <Grid container spacing={1}>
-            {items.map((item, index) => (
-              <Grid size={gridSizeCard} key={index}>
-                <RmuTextCard
-                  value={t(item.name)}
-                  subtitle={t(item.category)}
-                  image={item.imageUrl}
-                  onClick={() => onCardClick(item)}
-                  imageFilter={itemFilter}
-                />
-              </Grid>
-            ))}
-            {items.length === 0 ? <p>No items found.</p> : null}
+            {!pageData && <p>Loading...</p>}
+            {pageData &&
+              pageData.content.map((item, index) => (
+                <Grid size={gridSizeCard} key={index}>
+                  <RmuTextCard
+                    value={t(item.name)}
+                    subtitle={t(item.category)}
+                    image={item.imageUrl}
+                    onClick={() => onCardClick(item)}
+                    imageFilter={itemFilter}
+                  />
+                </Grid>
+              ))}
+            {pageData && pageData.content.length < 1 && <Typography>{t('no-results')}</Typography>}
           </Grid>
-          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-            <Pagination count={totalPages} page={page + 1} onChange={handlePageChange} color="primary" />
-          </Box>
+          <RmuPagination
+            page={page}
+            pageSize={pageSize}
+            totalPages={page}
+            setPage={setPage}
+            setPageSize={setPageSize}
+          />
         </Grid>
       </Grid>
     </>
