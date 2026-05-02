@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
-import { CategorySeparator, CreateItemDto } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
+import { CategorySeparator, CreateItemDto, RmuSelect } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectArmorSlot from '../../shared/selects/SelectArmorSlot';
 import SelectArmorType from '../../shared/selects/SelectArmorType';
@@ -11,18 +11,20 @@ const ItemFormArmor: FC<{
   formData: CreateItemDto;
   setFormData: Dispatch<SetStateAction<CreateItemDto>>;
 }> = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
+
   if (!formData || !formData.armor) return null;
 
   return (
     <Grid container spacing={1}>
       <Grid size={12}>
-        <CategorySeparator text={t('Armor')} />
+        <CategorySeparator text={t('armor')} />
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
-        <SelectArmorSlot
+        <RmuSelect
           label={t('slot')}
-          name={'slot'}
-          value={formData.armor?.slot || null}
+          value={formData.armor.slot || ''}
+          options={['head', 'body', 'arms', 'legs']}
           onChange={(value) => setFormData({ ...formData, armor: { ...formData.armor, slot: value! } })}
         />
       </Grid>
