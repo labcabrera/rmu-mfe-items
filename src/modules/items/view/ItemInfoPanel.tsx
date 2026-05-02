@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import { Item, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-export default function ItemInfoAttributes({ item }: { item: Item }) {
+export default function ItemInfoPanel({ item }: { item: Item }) {
   const { t } = useTranslation();
 
   return (

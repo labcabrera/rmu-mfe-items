@@ -1,14 +1,12 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Grid } from '@mui/material';
 import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemArmorAttributes from './ItemArmorAttributes';
-import ItemInfoAttributes from './ItemInfoAttributes';
+import ItemInfoPanel from './ItemInfoPanel';
 import ItemShieldAttributes from './ItemShieldAttributes';
 import ItemWeaponAttributes from './ItemWeaponAttributes';
 
-const ItemViewAttributes: FC<{
-  item: Item;
-}> = ({ item }) => {
+export default function ItemViewAttributes({ item }: { item: Item }) {
   return (
     <Grid container spacing={1}>
       {item.weapon && (
@@ -27,10 +25,8 @@ const ItemViewAttributes: FC<{
         </Grid>
       )}
       <Grid size={12}>
-        <ItemInfoAttributes item={item} />
+        <ItemInfoPanel item={item} />
       </Grid>
     </Grid>
   );
-};
-
-export default ItemViewAttributes;
+}

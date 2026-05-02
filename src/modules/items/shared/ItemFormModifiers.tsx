@@ -14,6 +14,10 @@ export default function ItemFormModifiers({
   const { t } = useTranslation();
   const [modifierDialogOpen, setModifierDialogOpen] = useState<boolean>(false);
 
+  const onModifierAdded = (modifier: ItemModifier) => {
+    setFormData({ ...formData, modifiers: [...(formData.modifiers || []), modifier] });
+  };
+
   const onDelete = (index: number) => {};
 
   return (
@@ -45,8 +49,9 @@ export default function ItemFormModifiers({
       </Grid>
       <AddItemModifierDialog
         open={modifierDialogOpen}
-        onAdd={function (mode: WeaponMode): void {
-          throw new Error('Function not implemented.');
+        onAdd={(e) => {
+          onModifierAdded(e);
+          setModifierDialogOpen(false);
         }}
         onClose={() => setModifierDialogOpen(false)}
       />

@@ -2,7 +2,8 @@ import React from 'react';
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemArmorAttributes from './ItemArmorAttributes';
-import ItemInfoAttributes from './ItemInfoAttributes';
+import ItemInfoPanel from './ItemInfoPanel';
+import ItemModifiersPanel from './ItemModifiersPanel';
 import ItemWeaponAttributes from './ItemWeaponAttributes';
 
 export default function ItemViewContent({ item }: { item: Item }) {
@@ -23,7 +24,10 @@ export default function ItemViewContent({ item }: { item: Item }) {
           </Grid>
         )}
         <Grid size={isMobile ? 12 : 6}>
-          <ItemInfoAttributes item={item} />
+          <ItemInfoPanel item={item} />
+        </Grid>
+        <Grid size={12}>
+          <ItemModifiersPanel item={item} />
         </Grid>
       </Grid>
     </>

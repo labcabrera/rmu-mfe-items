@@ -2,36 +2,39 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import {
   fetchItemModifierOptions,
   ItemModifier,
   ItemModifierOption,
+  ItemModifierType,
   NumericInput,
   RmuDialog,
   RmuSelect,
+  SkillSelector,
   TechnicalInfo,
-  WeaponMode,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function AddItemModifierDialog({
   open,
   onAdd,
   onClose,
+  onError,
 }: {
   open: boolean;
   onAdd: (mode: ItemModifier) => void;
   onClose: () => void;
+  onError: (err: string) => void;
 }) {
   const auth = useAuth();
   const { t } = useTranslation();
   const [options, setOptions] = useState<ItemModifierOption[]>();
   const [option, setOption] = useState<ItemModifierOption>();
-  const [formData, setFormData] = useState<ItemModifier>({ id: 'xxx' } as ItemModifier);
+  const [formData, setFormData] = useState<ItemModifier>({ id: crypto.randomUUID() } as ItemModifier);
 
   const types = (options || []).map((e) => e.modifierType);
 
-  const onTypeChange = (type: string) => {
+  const onTypeChange = (type: ItemModifierType) => {
     setOption(options?.find((e) => e.modifierType === type));
     setFormData({ ...formData, type });
   };
@@ -43,10 +46,24 @@ export default function AddItemModifierDialog({
   if (!types) return;
 
   return (
-    <RmuDialog title={t('add-modifier')} open={open}>
+    <RmuDialog
+      title={t('add-modifier')}
+      open={open}
+      buttons={[
+        <Button onClick={onClose}>{t('close')}</Button>,
+        <Button onClick={() => onAdd(formData)} color="success">
+          {t('add')}
+        </Button>,
+      ]}
+    >
       <Grid container spacing={2}>
         <Grid size={12}>
-          <RmuSelect value={formData.type} label={t('type')} options={types} onChange={(e) => onTypeChange(e)} />
+          <RmuSelect
+            value={formData.type}
+            label={t('type')}
+            options={types}
+            onChange={(e) => onTypeChange(e as ItemModifierType)}
+          />
         </Grid>
         {option && option.allowValue && (
           <Grid size={12}>
@@ -56,6 +73,13 @@ export default function AddItemModifierDialog({
               onChange={(e) => setFormData({ ...formData, value: e })}
             />
           </Grid>
+        )}
+        {option && option.allowModifier && option.selectorType === '@skill' && (
+          <SkillSelector
+            onSkillChange={(e) => setFormData({ ...formData, modifier: e })}
+            onSpecializationChange={(e) => setFormData({ ...formData, specialization: e })}
+            onError={(e) => onError(e)}
+          />
         )}
         <Grid size={12}></Grid>
       </Grid>
