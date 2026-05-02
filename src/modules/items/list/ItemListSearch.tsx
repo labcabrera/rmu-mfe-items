@@ -1,15 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
-import { ClearableTextField } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectArmorSlot from '../../shared/selects/SelectItemCategory';
+import { useAuth } from 'react-oidc-context';
+import { Stack, useMediaQuery, useTheme } from '@mui/material';
+import { ClearableTextField, fetchRealms, Realm, RmuSelect, SelectRealm } from '@labcabrera-rmu/rmu-react-shared-lib';
+import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 
 // eslint-disable-next-line no-unused-vars
 export default function ItemListSearch({ onChange }: { onChange: (rsql: string) => void }) {
+  const auth = useAuth();
   const { t } = useTranslation();
+  const [realms, setRealms] = useState<Realm[]>([]);
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<string>();
+  const [realmId, setRealmId] = useState<string>();
+  const [rarity, setRarity] = useState<string>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleSearch = () => {
     let rsql = '';
@@ -25,16 +32,22 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
     handleSearch();
   }, [name, category]);
 
+  useEffect(() => {
+    fetchRealms('', 0, 100, auth).then((response) => setRealms(response.content));
+  }, []);
+
   return (
-    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
+    <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
       <ClearableTextField value={name} onChange={(e) => setName(e.target.value)} label={t('Name')} name={'Name'} />
-      <SelectArmorSlot
-        value={category}
+      <SelectItemCategory
+        value={category || ''}
         onChange={(value) => setCategory(value || '')}
         label={t('category')}
         name={'category'}
         allowAll
       />
-    </Box>
+      <SelectRealm value={''} realms={realms} onChange={(e) => setRealmId(e || undefined)} />
+      <RmuSelect value={realmId || ''} label={t('rarity')} options={[]} onChange={(e) => setRarity(e)} />
+    </Stack>
   );
 }

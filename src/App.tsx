@@ -13,7 +13,7 @@ const App = () => {
   return (
     <ThemeProvider theme={useTheme()}>
       <ErrorProvider>
-        <Box sx={{ p: 2 }}>
+        <Box>
           <Routes>
             <Route path="/" element={<ItemList />} />
             <Route path="/view/:itemId" element={<ItemView />} />
