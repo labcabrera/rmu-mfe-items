@@ -3,7 +3,7 @@ import { Card, CardContent, Divider, Typography } from '@mui/material';
 
 export default function Section({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <Card elevation={0}>
+    <Card elevation={0.7}>
       <CardContent>
         {title && (
           <>

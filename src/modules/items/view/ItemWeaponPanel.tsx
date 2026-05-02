@@ -4,7 +4,7 @@ import { Divider, Stack } from '@mui/material';
 import { ItemWeapon, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 import Section from '../../components/Section';
 
-export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | null }) {
+export default function ItemWeaponPanel({ weapon }: { weapon: ItemWeapon | null }) {
   const { t } = useTranslation();
 
   if (!weapon) return;
