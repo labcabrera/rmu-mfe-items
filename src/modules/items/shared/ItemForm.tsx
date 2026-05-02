@@ -7,6 +7,7 @@ import {
   CategorySeparator,
   fetchRealms,
   Item,
+  ITEM_RARITIES,
   ItemRarity,
   Realm,
   RmuSelect,
@@ -18,8 +19,6 @@ import SelectRealm from '../../shared/selects/SelectRealm';
 import ItemFormArmor from './ItemFormArmor';
 import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
-
-const RARITY_OPTIONS: ItemRarity[] = ['common', 'uncommon', 'rare', 'very-rare'];
 
 export default function ItemForm({
   formData,
@@ -184,7 +183,7 @@ export default function ItemForm({
         <RmuSelect
           value={formData.info.rarity}
           label={t('rarity')}
-          options={RARITY_OPTIONS}
+          options={ITEM_RARITIES}
           onChange={(e) => setFormData({ ...formData, info: { ...formData.info, rarity: e as ItemRarity } })}
         />
       </Grid>

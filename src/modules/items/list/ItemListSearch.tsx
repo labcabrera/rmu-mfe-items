@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Stack, useMediaQuery, useTheme } from '@mui/material';
-import { ClearableTextField, fetchRealms, Realm, RmuSelect, SelectRealm } from '@labcabrera-rmu/rmu-react-shared-lib';
+import {
+  ClearableTextField,
+  fetchRealms,
+  ITEM_RARITIES,
+  Realm,
+  RmuSelect,
+  SelectRealm,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 
 // eslint-disable-next-line no-unused-vars
@@ -25,12 +32,20 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
       if (rsql) rsql += ';';
       rsql += `category==${category}`;
     }
+    if (rarity) {
+      if (rsql) rsql += ';';
+      rsql += `info.rarity==${rarity}`;
+    }
+    if (realmId) {
+      if (rsql) rsql += ';';
+      rsql += `realmId==${realmId}`;
+    }
     onChange(rsql);
   };
 
   useEffect(() => {
     handleSearch();
-  }, [name, category]);
+  }, [name, category, rarity, realmId]);
 
   useEffect(() => {
     fetchRealms('', 0, 100, auth).then((response) => setRealms(response.content));
@@ -47,7 +62,7 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
         allowAll
       />
       <SelectRealm value={''} realms={realms} onChange={(e) => setRealmId(e || undefined)} />
-      <RmuSelect value={realmId || ''} label={t('rarity')} options={[]} onChange={(e) => setRarity(e)} />
+      <RmuSelect value={realmId || ''} label={t('rarity')} options={ITEM_RARITIES} onChange={(e) => setRarity(e)} />
     </Stack>
   );
 }
