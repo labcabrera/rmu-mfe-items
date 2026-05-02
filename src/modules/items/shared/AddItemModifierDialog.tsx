@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Button, Grid } from '@mui/material';
 import {
+  fetchEnumerations,
   fetchItemModifierOptions,
   ItemModifier,
   ItemModifierOption,
@@ -14,6 +15,8 @@ import {
   SkillSelector,
   TechnicalInfo,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
+
+const ENUM_PREFIX = '@enumeration:';
 
 export default function AddItemModifierDialog({
   open,
@@ -31,13 +34,45 @@ export default function AddItemModifierDialog({
   const [options, setOptions] = useState<ItemModifierOption[]>();
   const [option, setOption] = useState<ItemModifierOption>();
   const [formData, setFormData] = useState<ItemModifier>({ id: crypto.randomUUID() } as ItemModifier);
+  const [modifierOptions, setModifierOptions] = useState<string[]>();
+  const [validForm, setValidForm] = useState<boolean>(false);
 
   const types = (options || []).map((e) => e.modifierType);
 
   const onTypeChange = (type: ItemModifierType) => {
-    setOption(options?.find((e) => e.modifierType === type));
-    setFormData({ ...formData, type });
+    const option = options?.find((e) => e.modifierType === type);
+    setOption(option);
+    setFormData({ id: crypto.randomUUID(), type: type } as ItemModifier);
+    if (option?.selectorType?.startsWith(ENUM_PREFIX)) {
+      const enumName = option.selectorType.substring(ENUM_PREFIX.length);
+      fetchEnumerations(`category==${enumName}`, 0, 1000, auth)
+        .then((response) => response.content)
+        .then((e) => e.map((e) => e.key))
+        .then((e) => setModifierOptions(e))
+        .catch((err) => onError(err.message));
+    }
   };
+
+  const onClickAdd = () => {
+    onAdd(formData);
+    onClose();
+    setFormData({ id: crypto.randomUUID() } as ItemModifier);
+  };
+
+  const isValidForm = () => {
+    if (!option || !formData || !formData.type) return false;
+    if (option.value === 'forbidden' && formData.value) return false;
+    if (option.value === 'required' && !formData.value) return false;
+    if (option.modifier === 'required' && !formData.modifier) return false;
+    if (option.modifier === 'forbidden' && formData.modifier) return false;
+    if (option.specialization === 'required' && !formData.specialization) return false;
+    if (option.specialization === 'forbidden' && formData.specialization) return false;
+    return true;
+  };
+
+  useEffect(() => {
+    setValidForm(isValidForm());
+  }, [formData]);
 
   useEffect(() => {
     fetchItemModifierOptions(auth).then((response) => setOptions(response));
@@ -51,7 +86,7 @@ export default function AddItemModifierDialog({
       open={open}
       buttons={[
         <Button onClick={onClose}>{t('close')}</Button>,
-        <Button onClick={() => onAdd(formData)} color="success">
+        <Button color="success" disabled={!validForm} onClick={() => onClickAdd()}>
           {t('add')}
         </Button>,
       ]}
@@ -65,7 +100,7 @@ export default function AddItemModifierDialog({
             onChange={(e) => onTypeChange(e as ItemModifierType)}
           />
         </Grid>
-        {option && option.allowValue && (
+        {option && option.value !== 'forbidden' && (
           <Grid size={12}>
             <NumericInput
               value={formData.value}
@@ -74,14 +109,21 @@ export default function AddItemModifierDialog({
             />
           </Grid>
         )}
-        {option && option.allowModifier && option.selectorType === '@skill' && (
+        {option && option.modifier !== 'forbidden' && option.selectorType === '@skill' && (
           <SkillSelector
             onSkillChange={(e) => setFormData({ ...formData, modifier: e })}
             onSpecializationChange={(e) => setFormData({ ...formData, specialization: e })}
             onError={(e) => onError(e)}
           />
         )}
-        <Grid size={12}></Grid>
+        {option && modifierOptions && (
+          <RmuSelect
+            value={formData.modifier || ''}
+            label={t('modifier')}
+            options={modifierOptions}
+            onChange={(e) => setFormData({ ...formData, modifier: e })}
+          />
+        )}
       </Grid>
       <TechnicalInfo>
         <pre>FormData: {JSON.stringify(formData, null, 2)}</pre>

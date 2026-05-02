@@ -20,7 +20,7 @@ export default function LayoutBase({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const headerSection = (
     <>
-      <Card variant="elevation">
+      <Card variant="elevation" elevation={0.5}>
         <CardContent>
           <Stack direction={isMobile ? 'column' : 'row'} sx={{ justifyContent: 'space-between' }}>
             {breadcrumbs && <RmuBreadcrumbs items={breadcrumbs} />}
@@ -39,7 +39,7 @@ export default function LayoutBase({
     return (
       <Box sx={{ p: 1 }}>
         {headerSection}
-        <Card variant="elevation" sx={{ mt: 1 }}>
+        <Card variant="elevation" elevation={0.5} sx={{ mt: 1 }}>
           <CardContent>
             {leftPanel && <Box sx={{ mb: 1 }}>{leftPanel}</Box>}
             <Box>{children}</Box>
@@ -53,7 +53,7 @@ export default function LayoutBase({
     <Container maxWidth="xl">
       <Box sx={{ p: 1 }}>
         {headerSection}
-        <Card variant="elevation" sx={{ mt: 1 }}>
+        <Card variant="elevation" elevation={0.5} sx={{ mt: 1 }}>
           <CardContent>
             <Grid container spacing={1}>
               {leftPanel && <Grid size={{ xs: 12, md: 3, lg: 2 }}>{leftPanel}</Grid>}
