@@ -7,18 +7,14 @@ import {
   DeleteButton,
   DeleteDialog,
   deleteItem,
-  EditableAvatar,
   EditButton,
   fetchItem,
   Item,
   RefreshButton,
   TechnicalInfo,
-  updateItem,
-  UpdateItemDto,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import LayoutBase from '../../components/LayoutBase';
-import { getItemImages } from '../../services/image-service';
 import ItemViewContent from './ItemViewContent';
 import ItemViewResume from './ItemViewResume';
 
@@ -32,13 +28,6 @@ export default function ItemView() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [item, setItem] = useState<Item>();
   const breadcrumbs = [{ name: t('home'), link: '/' }, { name: t('items'), link: '/items' }, { name: t('view') }];
-
-  const updateItemImage = (imageUrl: string) => {
-    const dto = { imageUrl } as UpdateItemDto;
-    updateItem(item!.id, dto, auth)
-      .then((response) => setItem(response))
-      .catch((err) => showError(err.message));
-  };
 
   const onDelete = () => {
     deleteItem(item!.id, auth)
@@ -71,17 +60,7 @@ export default function ItemView() {
           <EditButton onClick={() => navigate(`/items/edit/${item!.id}`, { state: { item } })} />,
           <DeleteButton onClick={() => setDeleteDialogOpen(true)} />,
         ]}
-        leftPanel={
-          <>
-            <EditableAvatar
-              imageUrl={item.imageUrl}
-              variant="rounded"
-              images={getItemImages()}
-              onImageChange={(e) => updateItemImage(e)}
-            />
-            <ItemViewResume item={item} />
-          </>
-        }
+        leftPanel={<ItemViewResume item={item} setItem={setItem} />}
       >
         <ItemViewContent item={item} />
         <TechnicalInfo>

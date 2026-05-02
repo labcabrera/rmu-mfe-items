@@ -1,13 +1,14 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import { CategorySeparator, Item } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 
 const ItemFormShield: FC<{
   formData: Item;
   setFormData: Dispatch<SetStateAction<Item>>;
 }> = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
   if (!formData || !formData.shield) return null;
 
   return (

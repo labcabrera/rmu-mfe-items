@@ -1,9 +1,10 @@
 import React from 'react';
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
-import ItemArmorPanel from './ItemArmorAttributes';
+import ItemArmorPanel from './ItemArmorPanel';
 import ItemInfoPanel from './ItemInfoPanel';
 import ItemModifiersPanel from './ItemModifiersPanel';
+import ItemShieldPanel from './ItemShieldPanel';
 import ItemWeaponPanel from './ItemWeaponPanel';
 
 export default function ItemViewContent({ item }: { item: Item }) {
@@ -21,6 +22,11 @@ export default function ItemViewContent({ item }: { item: Item }) {
         {item.armor && (
           <Grid size={isMobile ? 12 : 6}>
             <ItemArmorPanel armor={item.armor} />
+          </Grid>
+        )}
+        {item.shield && (
+          <Grid size={isMobile ? 12 : 6}>
+            <ItemShieldPanel shield={item.shield} />
           </Grid>
         )}
         <Grid size={isMobile ? 12 : 6}>

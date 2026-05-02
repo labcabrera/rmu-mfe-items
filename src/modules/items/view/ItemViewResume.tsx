@@ -1,17 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Stack, Typography } from '@mui/material';
-import { fetchRealm, Item, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
+import {
+  EditableAvatar,
+  fetchRealm,
+  Item,
+  Realm,
+  updateItem,
+  UpdateItemDto,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
+import { getItemImages } from '../../services/image-service';
 
-export default function ItemViewResume({ item }: { item: Item }) {
+export default function ItemViewResume({
+  item,
+  setItem,
+}: {
+  item: Item;
+  setItem: Dispatch<SetStateAction<Item | undefined>>;
+}) {
   const auth = useAuth();
   const { t } = useTranslation();
   const { showError } = useError();
   const [realm, setRealm] = useState<Realm>();
+
+  const updateItemImage = (imageUrl: string) => {
+    const dto = { imageUrl } as UpdateItemDto;
+    updateItem(item!.id, dto, auth)
+      .then((response) => setItem(response))
+      .catch((err) => showError(err.message));
+  };
 
   useEffect(() => {
     if (item && item.realmId) {
@@ -23,6 +44,12 @@ export default function ItemViewResume({ item }: { item: Item }) {
 
   return (
     <>
+      <EditableAvatar
+        imageUrl={item.imageUrl}
+        variant="rounded"
+        images={getItemImages()}
+        onImageChange={(e) => updateItemImage(e)}
+      />
       <Stack direction="column" spacing={1}>
         <Typography variant="h6" color="primary" gutterBottom>
           {t(item.name)}
