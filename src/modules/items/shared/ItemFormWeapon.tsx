@@ -5,11 +5,11 @@ import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
 import {
   CategorySeparator,
-  CreateItemDto,
   fetchSkills,
   fetchEnumerations,
   RmuKeyLabelSelect,
   KeyLabel,
+  Item,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { NumericInput } from '../../shared/inputs/NumericInput';
@@ -18,8 +18,8 @@ import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 const gridSize = { xs: 12, md: 3 };
 
 const ItemCreationWeaponAttributes: FC<{
-  formData: CreateItemDto;
-  setFormData: Dispatch<SetStateAction<CreateItemDto>>;
+  formData: Item;
+  setFormData: Dispatch<SetStateAction<Item>>;
 }> = ({ formData, setFormData }) => {
   const auth = useAuth();
   const { t } = useTranslation();

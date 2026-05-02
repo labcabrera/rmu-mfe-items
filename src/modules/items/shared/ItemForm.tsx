@@ -42,14 +42,14 @@ export default function ItemForm({
   const onChangeCategory = (category: string | null) => {
     const nextCategory = category || '';
     const next: Partial<typeof formData> = { category: nextCategory };
-    const info = { cost: { min: 0, average: 0, max: 0 } };
+    // const info = { cost: { min: 0, average: 0, max: 0 } };
     if (nextCategory === 'weapon') {
       next.weapon = { skillId: '', fumble: 0, modes: [] };
       next.armor = undefined;
       next.shield = undefined;
     } else if (nextCategory === 'armor') {
       next.armor = {
-        slot: undefined,
+        slot: 'body',
         at: 0,
         enc: 0,
         maneuverPenalty: 0,
@@ -60,7 +60,7 @@ export default function ItemForm({
       next.weapon = undefined;
       next.shield = undefined;
     } else if (nextCategory === 'shield') {
-      next.shield = { attacks: 0 };
+      next.shield = { db: 0, blockCount: 0 };
       next.weapon = undefined;
       next.armor = undefined;
     } else {
@@ -68,23 +68,7 @@ export default function ItemForm({
       next.armor = undefined;
       next.shield = undefined;
     }
-    setFormData({ ...formData, ...next, info });
-  };
-
-  const updateWeight = (weight: number | null) => {
-    const weightPercent = weight ? null : formData.info!.weightPercent;
-    setFormData((prev) => ({
-      ...prev,
-      info: { ...prev.info, weight: weight === null ? undefined : weight, weightPercent },
-    }));
-  };
-
-  const updateWeightPercent = (weightPercent: number | null) => {
-    const weight = weightPercent ? null : formData.info!.weight;
-    setFormData((prev) => ({
-      ...prev,
-      info: { ...prev.info, weight, weightPercent: weightPercent === null ? undefined : weightPercent },
-    }));
+    setFormData({ ...formData, ...next });
   };
 
   if (!formData || !realms) return <p>Loading item info...</p>;
@@ -134,7 +118,7 @@ export default function ItemForm({
       <Grid size={3}>
         <NumericInput
           value={formData.info!.weight ?? null}
-          onChange={(weight) => updateWeight(weight)}
+          onChange={(weight) => setFormData({ ...formData, info: { ...formData.info, weight } })}
           integer={false}
           label={t('weight')}
           maxFractionDigits={3}
@@ -164,10 +148,7 @@ export default function ItemForm({
         <NumericInput
           value={formData.info!.cost?.min ?? null}
           onChange={(v) =>
-            setFormData({
-              ...formData,
-              info: { ...formData.info, cost: { ...formData.info!.cost, min: v ?? 0 } },
-            })
+            setFormData({ ...formData, info: { ...formData.info, cost: { ...formData.info.cost!, min: v! } } })
           }
           integer={false}
           label={t('cost-min')}
@@ -179,10 +160,7 @@ export default function ItemForm({
         <NumericInput
           value={formData.info!.cost?.average ?? null}
           onChange={(v) =>
-            setFormData({
-              ...formData,
-              info: { ...formData.info, cost: { ...formData.info!.cost, average: v ?? 0 } },
-            })
+            setFormData({ ...formData, info: { ...formData.info, cost: { ...formData.info.cost!, average: v! } } })
           }
           integer={false}
           label={t('cost-average')}
@@ -194,10 +172,7 @@ export default function ItemForm({
         <NumericInput
           value={formData.info!.cost?.max ?? null}
           onChange={(v) =>
-            setFormData({
-              ...formData,
-              info: { ...formData.info, cost: { ...formData.info!.cost, max: v ?? 0 } },
-            })
+            setFormData({ ...formData, info: { ...formData.info, cost: { ...formData.info.cost!, max: v! } } })
           }
           integer={false}
           label={t('cost-max')}

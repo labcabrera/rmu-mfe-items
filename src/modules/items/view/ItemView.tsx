@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Card, CardContent, Grid } from '@mui/material';
 import {
   EditableAvatar,
@@ -19,9 +18,10 @@ import ItemViewActions from './ItemViewActions';
 import ItemViewContent from './ItemViewContent';
 import ItemViewResume from './ItemViewResume';
 
-const ItemView: FC = () => {
+export default function ItemView() {
   const auth = useAuth();
   const { t } = useTranslation();
+  const location = useLocation();
   const { showError } = useError();
   const { itemId } = useParams<{ itemId?: string }>();
   const [item, setItem] = useState<Item>();
@@ -34,12 +34,14 @@ const ItemView: FC = () => {
   };
 
   useEffect(() => {
-    if (itemId) {
+    if (location.state && location.state.item) {
+      setItem(location.state.item);
+    } else if (itemId) {
       fetchItem(itemId, auth)
         .then((response) => setItem(response))
         .catch((err) => showError(err.message));
     }
-  }, [itemId]);
+  }, [location.state, itemId, auth, showError]);
 
   if (!item) return <p>{t('no-results')}</p>;
 
@@ -73,6 +75,4 @@ const ItemView: FC = () => {
       </Grid>
     </>
   );
-};
-
-export default ItemView;
+}

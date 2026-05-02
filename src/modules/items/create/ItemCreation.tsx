@@ -7,8 +7,17 @@ import GenericAvatar from '../../shared/avatars/GenericAvatar';
 import ItemForm from '../shared/ItemForm';
 import ItemCreationActions from './ItemCreationActions';
 
+const EMPTY_ITEM = {
+  info: {
+    cost: {},
+    rarity: 'common',
+    stackable: false,
+    unique: false,
+  },
+} as Item;
+
 export default function ItemCreation() {
-  const [formData, setFormData] = useState<Item>({ info: {} } as Item);
+  const [formData, setFormData] = useState<Item>(EMPTY_ITEM);
   const [isValid, setIsValid] = useState(false);
 
   const validateForm = (formData: Item) => {
