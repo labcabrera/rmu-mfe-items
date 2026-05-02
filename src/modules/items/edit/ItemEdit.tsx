@@ -64,7 +64,12 @@ export default function ItemEdit() {
       breadcrumbs={breadcrumbs}
       leftPanel={
         <>
-          <EditableAvatar imageUrl={itemImageUrl} images={[]} onImageChange={(image) => onImageChanged(image)} />
+          <EditableAvatar
+            imageUrl={itemImageUrl}
+            images={[]}
+            onImageChange={(image) => onImageChanged(image)}
+            variant="rounded"
+          />
         </>
       }
       actions={[

@@ -75,7 +75,7 @@ export default function ItemView() {
           <>
             <EditableAvatar
               imageUrl={item.imageUrl}
-              variant="square"
+              variant="rounded"
               images={getItemImages()}
               onImageChange={(e) => updateItemImage(e)}
             />

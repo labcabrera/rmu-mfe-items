@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Divider, Paper } from '@mui/material';
+import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import { ItemWeapon, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | null }) {
@@ -12,9 +12,13 @@ export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | 
   const specialization = weapon.skillId.includes('@') ? weapon.skillId.split('@')[1] : weapon.skillId;
 
   return (
-    <>
-      <Paper elevation={0}>
-        <Box sx={{ p: 2 }}>
+    <Card elevation={0}>
+      <CardContent>
+        <Typography variant="body1" color="primary" sx={{ fontWeight: 600 }}>
+          {t('weapon')}
+        </Typography>
+        <Divider sx={{ mt: 2 }} />
+        <Stack direction={'column'} spacing={1}>
           <StatRow label={t('skill')} value={t(skillId)} />
           <StatRow label={t('specialization')} value={t(specialization)} />
           <StatRow label={t('fumble')} value={weapon.fumble} />
@@ -26,26 +30,25 @@ export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | 
               <StatRow label={t('attack-table')} value={t(e.attackTable)} />
               <StatRow label={t('fumble-table')} value={t(e.fumbleTable)} />
               <StatRow label={t('size-adjustment')} value={e.sizeAdjustment} />
+              {e.ranges && (
+                <>
+                  <Divider />
+                  <StatRow label={t('Ranges')} value="" />
+                  {e.ranges.map((r, i) => (
+                    <StatRow
+                      key={i}
+                      label={`${r.from}' - ${r.to}'`}
+                      value={r.bonus}
+                      danger={r.bonus < 0}
+                      success={r.bonus > 0}
+                    />
+                  ))}
+                </>
+              )}
             </Fragment>
           ))}
-        </Box>
-      </Paper>
-      {/* <Paper>foo bar value</Paper>
-      <Paper elevation={-4}>foo bar value -4</Paper>
-      <Paper elevation={-3}>foo bar value -3</Paper>
-      <Paper elevation={-2}>foo bar value -2</Paper>
-      <Paper elevation={-1}>foo bar value -1</Paper>
-      <Paper elevation={0}>foo bar value 0</Paper>
-      <Paper elevation={0.5}>foo bar value 0.5</Paper>
-      <Paper elevation={1}>foo bar value 1</Paper>
-      <Paper elevation={2}>foo bar value 2</Paper>
-      <Paper elevation={3}>foo bar value</Paper>
-      <Paper elevation={4}>foo bar value</Paper>
-      <Paper elevation={5}>foo bar value</Paper>
-      <Paper elevation={6}>foo bar value</Paper>
-      <Paper elevation={7}>foo bar value</Paper>
-      <Paper elevation={8}>foo bar value</Paper>
-      <Paper elevation={9}>foo bar value 9</Paper> */}
-    </>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
