@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Box, Card, CardContent, Container, Grid, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { RmuBreadcrumbs } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function LayoutBase({
   breadcrumbs,
@@ -7,7 +8,10 @@ export default function LayoutBase({
   leftPanel,
   children,
 }: {
-  breadcrumbs?: ReactNode;
+  breadcrumbs?: {
+    name: string;
+    link?: string;
+  }[];
   actions?: ReactNode;
   leftPanel?: ReactNode | null;
   children: ReactNode;
@@ -19,7 +23,7 @@ export default function LayoutBase({
       <Card variant="elevation">
         <CardContent>
           <Stack direction={isMobile ? 'column' : 'row'} sx={{ justifyContent: 'space-between' }}>
-            {breadcrumbs && <Box sx={{ mb: 0 }}>{breadcrumbs}</Box>}
+            {breadcrumbs && <RmuBreadcrumbs items={breadcrumbs} />}
             {actions && (
               <Stack direction="row" sx={{ mb: 0 }}>
                 {actions}

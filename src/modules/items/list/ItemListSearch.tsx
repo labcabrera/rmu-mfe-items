@@ -52,7 +52,7 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
   }, []);
 
   return (
-    <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
+    <Stack direction={isMobile ? 'column' : 'row'} spacing={1} sx={{ alignItems: 'center' }}>
       <ClearableTextField value={name} onChange={(e) => setName(e.target.value)} label={t('Name')} name={'Name'} />
       <SelectItemCategory
         value={category || ''}
@@ -62,7 +62,13 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
         allowAll
       />
       <SelectRealm value={''} realms={realms} onChange={(e) => setRealmId(e || undefined)} />
-      <RmuSelect value={realmId || ''} label={t('rarity')} options={ITEM_RARITIES} onChange={(e) => setRarity(e)} />
+      <RmuSelect
+        value={rarity || ''}
+        label={t('rarity')}
+        emptyOption="all"
+        options={ITEM_RARITIES}
+        onChange={(e) => setRarity(e)}
+      />
     </Stack>
   );
 }

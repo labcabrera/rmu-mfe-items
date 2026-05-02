@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   AddButton,
   fetchItems,
   Item,
   Page,
   RefreshButton,
-  RmuBreadcrumbs,
   RmuPagination,
   RmuTextCard,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
@@ -50,7 +49,7 @@ export default function ItemList() {
   return (
     <>
       <LayoutBase
-        breadcrumbs={<RmuBreadcrumbs items={breadcrumbs} />}
+        breadcrumbs={breadcrumbs}
         actions={[
           <RefreshButton onClick={() => bindItems()} />,
           <AddButton onClick={() => navigate('/items/create')} />,

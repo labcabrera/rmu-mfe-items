@@ -25,6 +25,7 @@ const SelectItemCategory: FC<{
       name={name}
       label={label}
       value={value === undefined || value === null ? '' : value}
+      size="small"
       fullWidth
       onChange={handleChange}
       error={required && (value === undefined || value === null || value === '')}
