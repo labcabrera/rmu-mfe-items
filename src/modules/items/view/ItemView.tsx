@@ -15,11 +15,9 @@ import {
 import { useError } from '../../../ErrorContext';
 import { gridSizeResume, gridSizeMain } from '../../services/display';
 import { getItemImages } from '../../services/image-service';
-import ItemInfoAttributes from './ItemInfoAttributes';
 import ItemViewActions from './ItemViewActions';
-import ItemViewAttributes from './ItemViewAttributes';
+import ItemViewContent from './ItemViewContent';
 import ItemViewResume from './ItemViewResume';
-import ItemWeaponAttributes from './ItemWeaponAttributes';
 
 const ItemView: FC = () => {
   const auth = useAuth();
@@ -65,9 +63,7 @@ const ItemView: FC = () => {
           <Card variant="outlined">
             <CardContent>
               <ItemViewActions item={item} setItem={setItem} />
-              <ItemWeaponAttributes weapon={item.weapon} />
-              <ItemInfoAttributes item={item} />
-              <ItemViewAttributes item={item} />
+              <ItemViewContent item={item} />
               <TechnicalInfo>
                 <pre>{JSON.stringify(item, null, 2)}</pre>
               </TechnicalInfo>

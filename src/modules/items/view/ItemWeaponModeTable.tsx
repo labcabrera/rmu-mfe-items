@@ -11,15 +11,8 @@ export default function ItemWeaponModeTable({ modes }: { modes: WeaponMode[] }) 
   return (
     <Box sx={{ mt: 2 }}>
       <TableContainer component={Paper} sx={{ mt: 1 }}>
-        <Table>
-          <TableHead
-            sx={{
-              '& .MuiTableCell-root': {
-                color: 'primary.main',
-                fontWeight: 'bold',
-              },
-            }}
-          >
+        <Table size="small">
+          <TableHead>
             <TableRow>
               <TableCell>{t('attack-type')}</TableCell>
               <TableCell>{t('attack-types') || 'Attack types'}</TableCell>

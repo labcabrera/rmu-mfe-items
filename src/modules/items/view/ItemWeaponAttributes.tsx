@@ -1,9 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid } from '@mui/material';
-import { CategorySeparator, ItemWeapon, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { imageBaseUrl } from '../../services/config';
-import { gridSizeCard } from '../../services/display';
+import { Box } from '@mui/material';
+import { ItemWeapon, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemWeaponModeTable from './ItemWeaponModeTable';
 
 export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | null }) {
@@ -11,36 +9,19 @@ export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | 
 
   if (!weapon) return;
 
+  const skillId = weapon.skillId.includes('@') ? weapon.skillId.split('@')[0] : weapon.skillId;
+  const specialization = weapon.skillId.includes('@') ? weapon.skillId.split('@')[1] : weapon.skillId;
+
   return (
     <>
-      <Grid container spacing={1}>
-        <Grid size={12}>
-          <CategorySeparator text={t('weapon')} />
-        </Grid>
-        <Grid size={gridSizeCard}>
-          <RmuTextCard
-            value={t(weapon.skillId)}
-            subtitle={t('skill')}
-            image={`${imageBaseUrl}images/generic/configuration.png`}
-          />
-        </Grid>
-        <Grid size={gridSizeCard}>
-          <RmuTextCard
-            value={weapon.fumble || 0}
-            subtitle={t('fumble')}
-            image={`${imageBaseUrl}images/generic/configuration.png`}
-            applyColor={false}
-          />
-        </Grid>
-      </Grid>
-      <Grid size={12}>
-        <CategorySeparator text={t('attack-modes')} />
-      </Grid>
-      <Grid size={12}>
-        <Grid size={12}>
-          <ItemWeaponModeTable modes={weapon.modes} />
-        </Grid>
-      </Grid>
+      <Box sx={{ p: 2 }}>
+        <StatRow label={t('skill')} value={t(skillId)} />
+        <StatRow label={t('specialization')} value={t(specialization)} />
+        <StatRow label={t('fumble')} value={weapon.fumble} />
+      </Box>
+      <Box>
+        <ItemWeaponModeTable modes={weapon.modes} />
+      </Box>
     </>
   );
 }

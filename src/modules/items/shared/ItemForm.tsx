@@ -2,16 +2,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import {
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  Switch,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@mui/material';
+import { FormControlLabel, FormGroup, Grid, Switch, TextField } from '@mui/material';
 import {
   CategorySeparator,
   fetchRealms,
@@ -226,7 +217,7 @@ export default function ItemForm({
         <FormGroup>
           <FormControlLabel
             control={<Switch checked={formData.info.stackable} />}
-            label={'stackable'}
+            label={t('stackable')}
             onChange={(_, v) => setFormData({ ...formData, info: { ...formData.info, stackable: v } })}
           />
         </FormGroup>
@@ -235,7 +226,7 @@ export default function ItemForm({
         <FormGroup>
           <FormControlLabel
             control={<Switch checked={formData.info.unique} />}
-            label={'unique'}
+            label={t('unique')}
             onChange={(_, v) =>
               setFormData({
                 ...formData,

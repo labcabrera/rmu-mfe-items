@@ -52,6 +52,7 @@ const AddAttackModeDialog: FC<{
   const handleAdd = () => {
     onModeAdded(formData);
     setFormData(emptyForm);
+    onClose();
   };
 
   const validateForm = () => {

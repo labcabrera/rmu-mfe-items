@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Divider, Stack, Typography } from '@mui/material';
-import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { Box, Divider } from '@mui/material';
+import { Item, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemInfoAttributes({ item }: { item: Item }) {
   const { t } = useTranslation();
@@ -23,34 +23,5 @@ export default function ItemInfoAttributes({ item }: { item: Item }) {
         <StatRow label={t('production-hours')} value={item.info.productionHours || '-'} />
       </Box>
     </>
-  );
-}
-
-function StatRow({
-  label,
-  value,
-  danger,
-  success,
-}: {
-  label: string;
-  value: string | number;
-  danger?: boolean;
-  success?: boolean;
-}) {
-  return (
-    <Stack direction="row" sx={{ py: 0.5, justifyContent: 'space-between' }}>
-      <Typography variant="body2" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          fontWeight: 600,
-          color: success ? 'success.main' : danger ? 'error.main' : 'text.primary',
-        }}
-      >
-        {value}
-      </Typography>
-    </Stack>
   );
 }
