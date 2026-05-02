@@ -44,11 +44,8 @@ const ItemViewActions: FC<{
   };
 
   const onDeleteDialogClick = () => {
-    deleteItem(item.id)
-      .then(() => {
-        setDeleteDialogOpen(false);
-        navigate('/items', { replace: true });
-      })
+    deleteItem(item.id, auth)
+      .then(() => navigate('/items', { replace: true }))
       .catch((err) => showError(err.message));
   };
 

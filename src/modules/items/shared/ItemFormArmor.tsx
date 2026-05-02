@@ -1,11 +1,9 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
-import { CategorySeparator, CreateItemDto, RmuSelect } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { CategorySeparator, CreateItemDto, RmuSelect, SelectDifficulty } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { NumericInput } from '../../shared/inputs/NumericInput';
-import SelectArmorSlot from '../../shared/selects/SelectArmorSlot';
 import SelectArmorType from '../../shared/selects/SelectArmorType';
-import SelectDifficulty from '../../shared/selects/SelectDifficulty';
 
 const ItemFormArmor: FC<{
   formData: CreateItemDto;
@@ -71,9 +69,7 @@ const ItemFormArmor: FC<{
         <SelectDifficulty
           label={t('base-difficulty')}
           value={formData.armor?.baseDifficulty || ''}
-          onChange={(difficulty) =>
-            setFormData({ ...formData, armor: { ...formData.armor, baseDifficulty: difficulty! } })
-          }
+          onChange={(k) => setFormData({ ...formData, armor: { ...formData.armor, baseDifficulty: k.key } })}
         />
       </Grid>
     </Grid>

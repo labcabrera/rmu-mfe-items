@@ -8,7 +8,7 @@ export default function ItemInfoAttributes({ item }: { item: Item }) {
 
   return (
     <>
-      <Box>
+      <Box sx={{ p: 2 }}>
         <StatRow label={t('rarity')} value={item.info.rarity || '-'} />
         <StatRow label={t('unique')} value={t(`${item.info.unique}`)} />
         <StatRow label={t('stackable')} value={t(`${item.info.stackable}`)} />
