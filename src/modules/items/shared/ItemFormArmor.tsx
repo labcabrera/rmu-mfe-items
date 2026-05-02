@@ -43,8 +43,8 @@ const ItemFormArmor: FC<{
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
-          value={formData.armor?.maneuver ?? null}
-          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, maneuver: v ?? 0 } })}
+          value={formData.armor?.maneuverPenalty ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, maneuverPenalty: v ?? 0 } })}
           integer={false}
           label={t('maneuver-penalty')}
         />
@@ -59,8 +59,8 @@ const ItemFormArmor: FC<{
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
         <NumericInput
-          value={formData.armor?.perception ?? null}
-          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, perception: v ?? 0 } })}
+          value={formData.armor?.perceptionPenalty ?? null}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor, perceptionPenalty: v ?? 0 } })}
           integer={false}
           label={t('perception-penalty')}
         />

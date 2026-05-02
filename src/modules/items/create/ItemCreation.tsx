@@ -33,7 +33,7 @@ const ItemCreation: FC = () => {
         <Grid size={gridSizeMain}>
           <ItemCreationActions formData={formData} isValid={isValid} />
           <Paper sx={{ p: 2 }}>
-            <ItemForm formData={formData} setFormData={setFormData} />
+            <ItemForm formData={formData} setFormData={setFormData} create />
           </Paper>
           <TechnicalInfo>
             <pre>{JSON.stringify(formData, null, 2)}</pre>

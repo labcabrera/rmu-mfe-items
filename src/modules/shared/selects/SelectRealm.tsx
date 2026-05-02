@@ -1,39 +1,49 @@
-import React, { ChangeEvent, FC } from 'react';
-import { MenuItem, TextField } from '@mui/material';
-import { NamedEntity } from '../../api/common.dto';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
+import { Autocomplete, TextField } from '@mui/material';
+import { fetchRealms, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-const SelectRealm: FC<{
-  label: string;
-  value: string;
-  realms: NamedEntity[];
+export default function SelectRealm({
+  label = 'realm',
+  value,
+  required,
+  onChange,
+}: {
+  label?: string;
+  value: string | null;
   required?: boolean;
-  onChange: (realm: NamedEntity | null) => void;
-}> = ({ label, value, realms, required, onChange }) => {
-  if (!realms) return <p>Loading realms...</p>;
+  onChange: (_: Realm | null) => void;
+}) {
+  const auth = useAuth();
+  const { t } = useTranslation();
+  const [realms, setRealms] = useState<Realm[]>();
+  const selectedRealm = realms ? realms.find((r) => r.id === value) || null : null;
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedValue = event.target.value;
-    const selectedRealm = realms.find((realm) => realm.id === selectedValue) || null;
-    onChange(selectedRealm);
-  };
+  useEffect(() => {
+    fetchRealms('', 0, 100, auth).then((response) => setRealms(response.content));
+  }, []);
 
   return (
-    <TextField
-      select
-      label={label}
-      value={value === undefined || value === null || realms.length === 0 ? '' : value}
+    <Autocomplete<Realm, false, false, false>
+      options={realms || []}
+      getOptionLabel={(option) => option.name}
+      isOptionEqualToValue={(option, val) => option.id === val.id}
+      value={selectedRealm}
+      onChange={(_, newValue) => onChange(newValue)}
       fullWidth
-      variant="outlined"
-      onChange={handleChange}
-      error={required && (value === undefined || value === null || value === '')}
-    >
-      {realms.map((option, index) => (
-        <MenuItem key={index} value={option.id}>
-          {option.name}
-        </MenuItem>
-      ))}
-    </TextField>
+      disablePortal={false}
+      renderInput={(params) => {
+        return (
+          <TextField
+            {...params}
+            label={t(label)}
+            // variant="outlined"
+            error={required && (value === undefined || value === null || value === '')}
+          />
+        );
+      }}
+    />
   );
-};
-
-export default SelectRealm;
+}

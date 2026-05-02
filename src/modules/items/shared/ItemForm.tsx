@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { FormControl, Grid, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategorySeparator, fetchRealms, Item, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
@@ -14,11 +14,14 @@ import ItemFormWeapon from './ItemFormWeapon';
 
 export default function ItemForm({
   formData,
+  create,
   setFormData,
 }: {
   formData: Item;
+  create: boolean;
   setFormData: Dispatch<SetStateAction<Item>>;
 }) {
+  const { t } = useTranslation();
   const auth = useAuth();
   const { showError } = useError();
   const [realms, setRealms] = useState<Realm[]>();
@@ -38,7 +41,15 @@ export default function ItemForm({
       next.armor = undefined;
       next.shield = undefined;
     } else if (nextCategory === 'armor') {
-      next.armor = { slot: undefined, at: 0, enc: 0, maneuver: 0, rangedPenalty: 0, perception: 0, baseDifficulty: '' };
+      next.armor = {
+        slot: undefined,
+        at: 0,
+        enc: 0,
+        maneuverPenalty: 0,
+        rangedPenalty: 0,
+        perceptionPenalty: 0,
+        baseDifficulty: '',
+      };
       next.weapon = undefined;
       next.shield = undefined;
     } else if (nextCategory === 'shield') {
@@ -76,19 +87,18 @@ export default function ItemForm({
       <Grid size={{ xs: 12, lg: 3 }}>
         <TextField
           label={t('item-identifier')}
-          variant="outlined"
-          name="item-identifier"
+          name="itemId"
           value={formData.id}
+          disabled={!create}
           onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+          error={!formData.id}
           fullWidth
-          error={!formData.id || formData.id.trim() === ''}
         />
       </Grid>
       <Grid size={{ xs: 12, lg: 3 }}>
         <SelectRealm
           label={t('realm')}
-          realms={realms}
-          value={formData.realmId}
+          value={formData.realmId || null}
           onChange={(realm) => setFormData({ ...formData, realmId: realm ? realm.id : '' })}
         />
       </Grid>

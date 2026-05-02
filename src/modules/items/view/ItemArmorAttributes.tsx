@@ -42,7 +42,7 @@ export default function ItemArmorAttributes({ armor }: { armor: ItemArmor }) {
         </Grid>
         <Grid size={gridSizeCard}>
           <RmuTextCard
-            value={armor.maneuver || 0}
+            value={armor.maneuverPenalty || 0}
             subtitle={t('maneuver-penalty')}
             image={`${imageBaseUrl}images/generic/maneuver-penalty.png`}
             grayscale={grayscale}
@@ -60,7 +60,7 @@ export default function ItemArmorAttributes({ armor }: { armor: ItemArmor }) {
         </Grid>
         <Grid size={gridSizeCard}>
           <RmuTextCard
-            value={armor.perception || 0}
+            value={armor.perceptionPenalty || 0}
             subtitle={t('perception-penalty')}
             image={`${imageBaseUrl}images/generic/armor-perception-penalty.png`}
             grayscale={grayscale}
