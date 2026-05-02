@@ -1,21 +1,21 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import { CategorySeparator, ItemShield, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
 
-const ItemShieldAttributes: FC<{
-  itemShield: ItemShield;
-}> = ({ itemShield }) => {
+export default function ItemShieldAttributes({ itemShield }: { itemShield: ItemShield }) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <CategorySeparator text={t('Shield')} />
+      <CategorySeparator text={t('shield')} />
       <Grid container spacing={1}>
         <Grid size={gridSizeCard}>
           <RmuTextCard
             value={itemShield.db || '-'}
-            subtitle={t('Defensive bonus')}
+            subtitle={t('defensive-bonus')}
             image={`${imageBaseUrl}images/generic/configuration.png`}
             applyColor={false}
           />
@@ -23,7 +23,7 @@ const ItemShieldAttributes: FC<{
         <Grid size={gridSizeCard}>
           <RmuTextCard
             value={itemShield.blockCount || '-'}
-            subtitle={t('Block count')}
+            subtitle={t('block-count')}
             image={`${imageBaseUrl}images/generic/configuration.png`}
             applyColor={false}
           />
@@ -31,7 +31,7 @@ const ItemShieldAttributes: FC<{
         <Grid size={gridSizeCard}>
           <RmuTextCard
             value={4}
-            subtitle={t('Fumble')}
+            subtitle={t('fumble')}
             image={`${imageBaseUrl}images/generic/configuration.png`}
             applyColor={false}
           />
@@ -39,6 +39,4 @@ const ItemShieldAttributes: FC<{
       </Grid>
     </>
   );
-};
-
-export default ItemShieldAttributes;
+}

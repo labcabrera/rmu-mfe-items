@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Grid } from '@mui/material';
-import { Item } from '../../api/item.dto';
+import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemArmorAttributes from './ItemArmorAttributes';
 import ItemInfoAttributes from './ItemInfoAttributes';
 import ItemShieldAttributes from './ItemShieldAttributes';

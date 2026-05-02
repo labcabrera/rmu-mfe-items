@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from '@mui/material';
-import { t } from 'i18next';
-import { WeaponMode } from '../../api/item.dto';
+import { WeaponMode } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-const ItemWeaponModeTable: FC<{
-  modes: WeaponMode[];
-}> = ({ modes }) => {
+export default function ItemWeaponModeTable({ modes }: { modes: WeaponMode[] }) {
+  const { t } = useTranslation();
+
   if (!modes || modes.length === 0) return <p>{t('no-modes') || 'No modes.'}</p>;
 
   return (
@@ -45,6 +45,4 @@ const ItemWeaponModeTable: FC<{
       </TableContainer>
     </Box>
   );
-};
-
-export default ItemWeaponModeTable;
+}

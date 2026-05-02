@@ -1,18 +1,17 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
-import { CategorySeparator, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
-import { ItemWeapon } from '../../api/item.dto';
+import { CategorySeparator, ItemWeapon, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
 import ItemWeaponModeTable from './ItemWeaponModeTable';
 
-const ItemWeaponAttributes: FC<{
-  weapon: ItemWeapon;
-}> = ({ weapon }) => {
+export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon }) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <CategorySeparator text={t('Weapon')} />
+      <CategorySeparator text={t('weapon')} />
       <Grid container spacing={1}>
         <Grid size={gridSizeCard}>
           <RmuTextCard
@@ -31,7 +30,7 @@ const ItemWeaponAttributes: FC<{
         </Grid>
       </Grid>
       <Grid size={12}>
-        <CategorySeparator text={t('Attack modes')} />
+        <CategorySeparator text={t('attack-modes')} />
       </Grid>
       <Grid size={12}>
         <Grid size={12}>
@@ -40,6 +39,4 @@ const ItemWeaponAttributes: FC<{
       </Grid>
     </>
   );
-};
-
-export default ItemWeaponAttributes;
+}

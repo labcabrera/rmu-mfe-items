@@ -1,8 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Pagination } from '@mui/material';
 import { fetchItems, Item, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard, gridSizeMain, gridSizeResume, itemFilter } from '../../services/display';
@@ -11,7 +12,9 @@ import ItemListSearch from './ItemListSearch';
 
 const PAGE_SIZE = 24;
 
-const ItemList: FC = () => {
+export default function ItemList() {
+  const auth = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { showError } = useError();
   const [items, setItems] = useState<Item[]>([]);
@@ -32,7 +35,7 @@ const ItemList: FC = () => {
       query += `category==${category}`;
     }
 
-    fetchItems(query, pageNumber, PAGE_SIZE)
+    fetchItems(query, pageNumber, PAGE_SIZE, auth)
       .then((response) => {
         setItems(response.content);
         setTotalPages(response.pagination.totalPages || 1);
@@ -77,13 +80,11 @@ const ItemList: FC = () => {
             ))}
             {items.length === 0 ? <p>No items found.</p> : null}
           </Grid>
-          <Box mt={1} display="flex" justifyContent="center">
+          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
             <Pagination count={totalPages} page={page + 1} onChange={handlePageChange} color="primary" />
           </Box>
         </Grid>
       </Grid>
     </>
   );
-};
-
-export default ItemList;
+}

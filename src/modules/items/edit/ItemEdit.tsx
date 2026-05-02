@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { useParams } from 'react-router-dom';
-import { Grid } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { EditableAvatar, fetchItem, Item, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { imageBaseUrl } from '../../services/config';
@@ -9,11 +10,12 @@ import { gridSizeMain, gridSizeResume } from '../../services/display';
 import ItemForm from '../shared/ItemForm';
 import ItemEditActions from './ItemEditActions';
 
-const ItemEdit: FC = () => {
+export default function ItemEdit() {
+  const auth = useAuth();
   const { showError } = useError();
   const { itemId } = useParams<{ itemId?: string }>();
   const [item, setItem] = useState<Item>();
-  const [formData, setFormData] = useState<Item>();
+  const [formData, setFormData] = useState<Item>({} as Item);
 
   const itemImageUrl = item?.imageUrl ? item.imageUrl : `${imageBaseUrl}images/items/${item?.id}.png`;
 
@@ -29,7 +31,7 @@ const ItemEdit: FC = () => {
 
   useEffect(() => {
     if (itemId) {
-      fetchItem(itemId)
+      fetchItem(itemId, auth)
         .then((response) => setItem(response))
         .catch((err) => showError(err.message));
     }
@@ -39,20 +41,20 @@ const ItemEdit: FC = () => {
 
   return (
     <>
-      <ItemEditActions item={item} formData={formData} />
       <Grid container spacing={1}>
         <Grid size={gridSizeResume}>
           <EditableAvatar imageUrl={itemImageUrl} images={[]} onImageChange={(image) => onImageChanged(image)} />
         </Grid>
         <Grid size={gridSizeMain}>
-          <ItemForm formData={formData} setFormData={setFormData} />
+          <ItemEditActions item={item} formData={formData} />
+          <Paper sx={{ p: 2 }}>
+            <ItemForm formData={formData} setFormData={setFormData} />
+          </Paper>
+          <TechnicalInfo>
+            <pre>FormData: {JSON.stringify(formData, null, 2)}</pre>
+          </TechnicalInfo>
         </Grid>
-        <TechnicalInfo>
-          <pre>FormData: {JSON.stringify(formData, null, 2)}</pre>
-        </TechnicalInfo>
       </Grid>
     </>
   );
-};
-
-export default ItemEdit;
+}

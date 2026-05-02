@@ -1,16 +1,15 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
-import { CategorySeparator, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
-import { Item } from '../../api/item.dto';
+import { CategorySeparator, Item, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
 
 const grayscale = 0.7;
 
-const ItemInfoAttributes: FC<{
-  item: Item;
-}> = ({ item }) => {
+export default function ItemInfoAttributes({ item }: { item: Item }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <CategorySeparator text={t('Item information')} />
@@ -109,6 +108,4 @@ const ItemInfoAttributes: FC<{
       </Grid>
     </>
   );
-};
-
-export default ItemInfoAttributes;
+}

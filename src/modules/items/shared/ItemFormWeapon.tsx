@@ -1,11 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
-import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
+import { CategorySeparator, CreateItemDto, fetchSkills, Skill } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { CreateItemDto } from '../../api/item.dto';
-import { fetchPagedSkills } from '../../api/skill';
-import { Skill } from '../../api/skill.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectSkill from '../../shared/selects/SelectSkill';
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
@@ -14,25 +13,27 @@ const ItemCreationWeaponAttributes: FC<{
   formData: CreateItemDto;
   setFormData: Dispatch<SetStateAction<CreateItemDto>>;
 }> = ({ formData, setFormData }) => {
+  const auth = useAuth();
+  const { t } = useTranslation();
   const { showError } = useError();
 
   const [combatSkills, setCombatSkills] = React.useState<Skill[]>([]);
 
   useEffect(() => {
-    fetchPagedSkills('categoryId==combat-training', 0, 100)
+    fetchSkills('categoryId==combat-training', 0, 100, auth)
       .then((response) => setCombatSkills(response.content))
-      .catch((err: Error) => showError(err.message));
-  }, [showError]);
+      .catch((err) => showError(err.message));
+  }, []);
 
   return (
     <Grid container spacing={1}>
       <Grid size={12}>
-        <CategorySeparator text={t('Weapon')} />
+        <CategorySeparator text={t('weapon')} />
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
         <SelectSkill
           name="skill"
-          label={t('Skill')}
+          label={t('skill')}
           value={formData.weapon!.skillId || ''}
           onChange={(skill) => setFormData({ ...formData, weapon: { ...formData.weapon!, skillId: skill?.id || '' } })}
           skills={combatSkills}
@@ -44,7 +45,7 @@ const ItemCreationWeaponAttributes: FC<{
           onChange={(fumble) => setFormData({ ...formData, weapon: { ...formData.weapon!, fumble: fumble ?? 0 } })}
           integer={true}
           min={0}
-          label={t('Fumble')}
+          label={t('fumble')}
         />
       </Grid>
       <Grid size={12}>

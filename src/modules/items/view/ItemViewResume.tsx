@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, Link, Typography } from '@mui/material';
-import { t } from 'i18next';
-import { Item } from '../../api/item.dto';
+import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-const ItemViewResume: FC<{
-  item: Item;
-}> = ({ item }) => {
+export default function ItemViewResume({ item }: { item: Item }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Grid container spacing={2}>
@@ -30,6 +30,4 @@ const ItemViewResume: FC<{
       </Grid>
     </>
   );
-};
-
-export default ItemViewResume;
+}

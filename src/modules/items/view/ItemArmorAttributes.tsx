@@ -1,19 +1,18 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
-import { CategorySeparator, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
-import { ItemArmor } from '../../api/item.dto';
+import { CategorySeparator, ItemArmor, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
 
 const grayscale = 0.7;
 
-const ItemArmorAttributes: FC<{
-  armor: ItemArmor;
-}> = ({ armor }) => {
+export default function ItemArmorAttributes({ armor }: { armor: ItemArmor }) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <CategorySeparator text={t('Armor')} />
+      <CategorySeparator text={t('armor')} />
       <Grid container spacing={1}>
         <Grid size={gridSizeCard}>
           <RmuTextCard
@@ -79,6 +78,4 @@ const ItemArmorAttributes: FC<{
       </Grid>
     </>
   );
-};
-
-export default ItemArmorAttributes;
+}

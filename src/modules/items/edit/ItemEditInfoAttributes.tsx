@@ -1,21 +1,22 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormControl, Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import { t } from 'i18next';
-import { Item, UpdateItemDto } from '../../api/item.dto';
+import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 
 const ItemEditInfoAttributes: FC<{
   formData: Item;
-  setFormData: Dispatch<SetStateAction<Item | undefined>>;
+  setFormData: Dispatch<SetStateAction<Item>>;
 }> = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
   if (!formData.info) return <p>Loading item info...</p>;
 
   // Helpers that assume formData.info is present and non-null
-  const updateInfo = (patch: Partial<UpdateItemDto['info']>) =>
-    setFormData((prev: UpdateItemDto) => ({ ...prev, info: { ...(prev.info || {}), ...patch } }));
+  const updateInfo = (patch: Partial<Item['info']>) =>
+    setFormData((prev) => ({ ...prev, info: { ...(prev.info || {}), ...patch } }));
 
-  const updateInfoCost = (patch: Partial<UpdateItemDto['info']['cost']>) =>
-    setFormData((prev: UpdateItemDto) => ({
+  const updateInfoCost = (patch: Partial<Item['info']['cost']>) =>
+    setFormData((prev) => ({
       ...prev,
       info: { ...(prev.info || {}), cost: { ...((prev.info || {}).cost || {}), ...patch } },
     }));

@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { FormControl, Grid, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { CategorySeparator, Item } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { CategorySeparator, fetchRealms, Item, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { NamedEntity } from '../../api/common.dto';
-import { fetchRealms } from '../../api/realm';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 import SelectRealm from '../../shared/selects/SelectRealm';
@@ -13,16 +12,20 @@ import ItemFormArmor from './ItemFormArmor';
 import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
 
-const ItemForm: FC<{
+export default function ItemForm({
+  formData,
+  setFormData,
+}: {
   formData: Item;
-  setFormData: Dispatch<SetStateAction<Item | null>>;
-}> = ({ formData, setFormData }) => {
+  setFormData: Dispatch<SetStateAction<Item>>;
+}) {
+  const auth = useAuth();
   const { showError } = useError();
-  const [realms, setRealms] = useState<NamedEntity[]>();
+  const [realms, setRealms] = useState<Realm[]>();
 
   useEffect(() => {
-    fetchRealms('', 0, 100)
-      .then((realms) => setRealms(realms))
+    fetchRealms('', 0, 100, auth)
+      .then((realms) => setRealms(realms.content))
       .catch((err) => showError(err.message));
   }, []);
 
@@ -227,7 +230,7 @@ const ItemForm: FC<{
 
       <Grid size={12}>
         <TextField
-          label={t('Description')}
+          label={t('description')}
           name="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -238,6 +241,4 @@ const ItemForm: FC<{
       </Grid>
     </Grid>
   );
-};
-
-export default ItemForm;
+}
