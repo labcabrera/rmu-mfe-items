@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
@@ -39,11 +40,7 @@ export default function ItemView() {
       .catch((err) => showError(err.message));
   };
 
-  const onEditButtonClick = () => {
-    navigate(`/items/edit/${item!.id}`, { state: { item } });
-  };
-
-  const onDeleteDialogClick = () => {
+  const onDelete = () => {
     deleteItem(item!.id, auth)
       .then(() => navigate('/items', { replace: true }))
       .catch((err) => showError(err.message));
@@ -71,7 +68,7 @@ export default function ItemView() {
         breadcrumbs={breadcrumbs}
         actions={[
           <RefreshButton onClick={() => bindItem(item.id)} />,
-          <EditButton onClick={() => onEditButtonClick()} />,
+          <EditButton onClick={() => navigate(`/items/edit/${item!.id}`, { state: { item } })} />,
           <DeleteButton onClick={() => setDeleteDialogOpen(true)} />,
         ]}
         leftPanel={
@@ -94,7 +91,7 @@ export default function ItemView() {
       <DeleteDialog
         open={deleteDialogOpen}
         message={`Are you sure you want to delete ${item.id} item? This action cannot be undone.`}
-        onDelete={() => onDeleteDialogClick()}
+        onDelete={() => onDelete()}
         onClose={() => setDeleteDialogOpen(false)}
       />
     </>
