@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Autocomplete, TextField } from '@mui/material';
-import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { fetchAttackTables } from '../../api/attack-tables';
 
@@ -10,7 +11,8 @@ const SelectAttackTable: FC<{
   name?: string;
   required?: boolean;
   onChange: (table: string | null) => void;
-}> = ({ value, label = t('Attack table'), name = 'attack-table', required = true, onChange }) => {
+}> = ({ value, label = 'attack-table', name = 'attack-table', required = true, onChange }) => {
+  const { t } = useTranslation();
   const { showError } = useError();
   const [tables, setTables] = useState<string[]>();
 
@@ -30,7 +32,7 @@ const SelectAttackTable: FC<{
       getOptionLabel={(option) => t(option)}
       isOptionEqualToValue={(option, value) => option === value}
       renderInput={(params) => (
-        <TextField {...params} label={label} name={name} variant="outlined" fullWidth error={required && !value} />
+        <TextField {...params} label={t(label)} name={name} variant="outlined" fullWidth error={required && !value} />
       )}
     />
   );

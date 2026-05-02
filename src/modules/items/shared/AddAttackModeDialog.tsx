@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Dialog,
@@ -14,9 +15,13 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import { NumericInput, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
-import { WeaponAttackType, WeaponMode, WeaponModeType } from '../../api/item.dto';
+import {
+  NumericInput,
+  TechnicalInfo,
+  WeaponAttackType,
+  WeaponMode,
+  WeaponModeType,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectAttackTable from '../../shared/selects/SelectAttackTable';
 import SelectFumbleTable from '../../shared/selects/SelectFumbleTable';
 
@@ -28,13 +33,14 @@ const emptyForm = {
   attackTable: '',
   fumbleTable: '',
   sizeAdjustment: 0,
-} as WeaponMode;
+} as unknown as WeaponMode;
 
 const AddAttackModeDialog: FC<{
   open: boolean;
   onModeAdded: (mode: WeaponMode) => void;
   onClose: () => void;
 }> = ({ open, onClose, onModeAdded }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<WeaponMode>(emptyForm);
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
 
@@ -140,9 +146,9 @@ const AddAttackModeDialog: FC<{
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>{t('Cancel')}</Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
         <Button onClick={handleAdd} variant="contained" disabled={!isValidForm}>
-          {t('Add')}
+          {t('add')}
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -5,23 +6,23 @@ import { ClearableTextField } from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectArmorSlot from '../../shared/selects/SelectItemCategory';
 
 const ItemListSearch: FC<{
-  onSearch: (id: string, category: string) => void;
+  onSearch: (name: string, category: string) => void;
 }> = ({ onSearch }) => {
   const { t } = useTranslation();
-  const [id, setId] = useState('');
+  const [name, setName] = useState('');
   const [category, setCategory] = useState('');
 
   const handleSearch = () => {
-    onSearch(id, category);
+    onSearch(name, category);
   };
 
   useEffect(() => {
     handleSearch();
-  }, [id, category]);
+  }, [name, category]);
 
   return (
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
-      <ClearableTextField value={id} onChange={(e) => setId(e.target.value)} label={t('Name')} name={'Name'} />
+      <ClearableTextField value={name} onChange={(e) => setName(e.target.value)} label={t('Name')} name={'Name'} />
       <SelectArmorSlot
         value={category}
         onChange={(value) => setCategory(value || '')}

@@ -3,14 +3,23 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useParams } from 'react-router-dom';
-import { Grid } from '@mui/material';
-import { fetchItem, GenericAvatar, Item, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { Card, CardContent, Grid } from '@mui/material';
+import {
+  EditableAvatar,
+  fetchItem,
+  Item,
+  TechnicalInfo,
+  updateItem,
+  UpdateItemDto,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { imageBaseUrl } from '../../services/config';
 import { gridSizeResume, gridSizeMain } from '../../services/display';
+import { getItemImages } from '../../services/image-service';
+import ItemInfoAttributes from './ItemInfoAttributes';
 import ItemViewActions from './ItemViewActions';
 import ItemViewAttributes from './ItemViewAttributes';
 import ItemViewResume from './ItemViewResume';
+import ItemWeaponAttributes from './ItemWeaponAttributes';
 
 const ItemView: FC = () => {
   const auth = useAuth();
@@ -18,6 +27,13 @@ const ItemView: FC = () => {
   const { showError } = useError();
   const { itemId } = useParams<{ itemId?: string }>();
   const [item, setItem] = useState<Item>();
+
+  const updateItemImage = (imageUrl: string) => {
+    const dto = { imageUrl } as UpdateItemDto;
+    updateItem(item!.id, dto, auth)
+      .then((response) => setItem(response))
+      .catch((err) => showError(err.message));
+  };
 
   useEffect(() => {
     if (itemId) {
@@ -33,15 +49,30 @@ const ItemView: FC = () => {
     <>
       <Grid container spacing={1}>
         <Grid size={gridSizeResume}>
-          <GenericAvatar imageUrl={`${imageBaseUrl}images/items/${item.id}.png`} variant="square" />
-          <ItemViewResume item={item} />
+          <Card variant="outlined">
+            <CardContent>
+              <EditableAvatar
+                imageUrl={item.imageUrl}
+                variant="square"
+                images={getItemImages()}
+                onImageChange={(e) => updateItemImage(e)}
+              />
+              <ItemViewResume item={item} />
+            </CardContent>
+          </Card>
         </Grid>
         <Grid size={gridSizeMain}>
-          <ItemViewActions item={item} setItem={setItem} />
-          <ItemViewAttributes item={item} />
-          <TechnicalInfo>
-            <pre>{JSON.stringify(item, null, 2)}</pre>
-          </TechnicalInfo>
+          <Card variant="outlined">
+            <CardContent>
+              <ItemViewActions item={item} setItem={setItem} />
+              <ItemWeaponAttributes weapon={item.weapon} />
+              <ItemInfoAttributes item={item} />
+              <ItemViewAttributes item={item} />
+              <TechnicalInfo>
+                <pre>{JSON.stringify(item, null, 2)}</pre>
+              </TechnicalInfo>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </>

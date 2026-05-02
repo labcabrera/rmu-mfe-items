@@ -2,8 +2,24 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { FormControl, Grid, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { CategorySeparator, fetchRealms, Item, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
+import {
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Switch,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+} from '@mui/material';
+import {
+  CategorySeparator,
+  fetchRealms,
+  Item,
+  ItemRarity,
+  Realm,
+  RmuSelect,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
@@ -12,13 +28,13 @@ import ItemFormArmor from './ItemFormArmor';
 import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
 
+const RARITY_OPTIONS: ItemRarity[] = ['common', 'uncommon', 'rare', 'very-rare'];
+
 export default function ItemForm({
   formData,
-  create,
   setFormData,
 }: {
   formData: Item;
-  create: boolean;
   setFormData: Dispatch<SetStateAction<Item>>;
 }) {
   const { t } = useTranslation();
@@ -86,12 +102,11 @@ export default function ItemForm({
     <Grid container spacing={1}>
       <Grid size={{ xs: 12, lg: 3 }}>
         <TextField
-          label={t('item-identifier')}
-          name="itemId"
-          value={formData.id}
-          disabled={!create}
-          onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-          error={!formData.id}
+          label={t('name')}
+          name="name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          error={!formData.name}
           fullWidth
         />
       </Grid>
@@ -111,11 +126,9 @@ export default function ItemForm({
           onChange={onChangeCategory}
         />
       </Grid>
-
       <Grid size={12}>
         <CategorySeparator text={t('Information')} />
       </Grid>
-
       <Grid size={3}>
         <NumericInput
           value={formData.info!.length ?? null}
@@ -134,17 +147,6 @@ export default function ItemForm({
           integer={false}
           label={t('weight')}
           maxFractionDigits={3}
-          allowNegatives={false}
-          min={0}
-        />
-      </Grid>
-      <Grid size={3}>
-        <NumericInput
-          value={formData.info!.weightPercent ?? null}
-          onChange={(weightPercent) => updateWeightPercent(weightPercent)}
-          integer={false}
-          label={t('weight-percent')}
-          maxFractionDigits={2}
           allowNegatives={false}
           min={0}
         />
@@ -212,24 +214,36 @@ export default function ItemForm({
           maxFractionDigits={4}
         />
       </Grid>
-      <Grid size={6}>
-        <FormControl sx={{ mt: 1 }}>
-          <ToggleButtonGroup
-            value={formData.info.stackable || false}
-            exclusive
-            size="small"
-            onChange={(_, val) =>
-              setFormData({ ...formData, info: { ...formData.info!, stackable: val === null ? undefined : val } })
+      <Grid size={3}>
+        <RmuSelect
+          value={formData.info.rarity}
+          label={t('rarity')}
+          options={RARITY_OPTIONS}
+          onChange={(e) => setFormData({ ...formData, info: { ...formData.info, rarity: e as ItemRarity } })}
+        />
+      </Grid>
+      <Grid size={3}>
+        <FormGroup>
+          <FormControlLabel
+            control={<Switch checked={formData.info.stackable} />}
+            label={'stackable'}
+            onChange={(_, v) => setFormData({ ...formData, info: { ...formData.info, stackable: v } })}
+          />
+        </FormGroup>
+      </Grid>
+      <Grid size={3}>
+        <FormGroup>
+          <FormControlLabel
+            control={<Switch checked={formData.info.unique} />}
+            label={'unique'}
+            onChange={(_, v) =>
+              setFormData({
+                ...formData,
+                info: { ...formData.info, unique: v },
+              })
             }
-          >
-            <ToggleButton value={false} size="small" sx={{ minWidth: 100 }}>
-              Single
-            </ToggleButton>
-            <ToggleButton value={true} size="small" sx={{ minWidth: 100 }}>
-              Stackable
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </FormControl>
+          />
+        </FormGroup>
       </Grid>
 
       <Grid size={12}>

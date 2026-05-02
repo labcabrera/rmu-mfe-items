@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Paper } from '@mui/material';
 import { Item, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { imageBaseUrl } from '../../services/config';
@@ -7,12 +7,12 @@ import GenericAvatar from '../../shared/avatars/GenericAvatar';
 import ItemForm from '../shared/ItemForm';
 import ItemCreationActions from './ItemCreationActions';
 
-const ItemCreation: FC = () => {
+export default function ItemCreation() {
   const [formData, setFormData] = useState<Item>({ info: {} } as Item);
   const [isValid, setIsValid] = useState(false);
 
   const validateForm = (formData: Item) => {
-    if (!formData.id) return false;
+    if (!formData.name) return false;
     return true;
   };
 
@@ -33,7 +33,7 @@ const ItemCreation: FC = () => {
         <Grid size={gridSizeMain}>
           <ItemCreationActions formData={formData} isValid={isValid} />
           <Paper sx={{ p: 2 }}>
-            <ItemForm formData={formData} setFormData={setFormData} create />
+            <ItemForm formData={formData} setFormData={setFormData} />
           </Paper>
           <TechnicalInfo>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
@@ -42,6 +42,4 @@ const ItemCreation: FC = () => {
       </Grid>
     </>
   );
-};
-
-export default ItemCreation;
+}

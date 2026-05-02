@@ -1,16 +1,16 @@
 import React, { useState, Dispatch, SetStateAction, FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { AddButton, DeleteButton } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
-import { CreateItemDto, WeaponMode } from '../../api/item.dto';
+import { AddButton, DeleteButton, Item, WeaponMode } from '@labcabrera-rmu/rmu-react-shared-lib';
 import AddAttackModeDialog from './AddAttackModeDialog';
 
 const tableMinWidth = 900;
 
 const ItemFormWeaponAttacks: FC<{
-  formData: CreateItemDto;
-  setFormData: Dispatch<SetStateAction<CreateItemDto>>;
+  formData: Item;
+  setFormData: Dispatch<SetStateAction<Item>>;
 }> = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const onModeAdded = (mode: WeaponMode) => {
@@ -56,6 +56,7 @@ const ItemFormWeaponAttacks: FC<{
 };
 
 const Row: FC<{ mode: WeaponMode; index: number; onDelete: (index: number) => void }> = ({ mode, index, onDelete }) => {
+  const { t } = useTranslation();
   return (
     <TableRow>
       <TableCell>{t(mode.type)}</TableCell>

@@ -1,13 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
-import { CategorySeparator, CreateItemDto, fetchSkills, Skill } from '@labcabrera-rmu/rmu-react-shared-lib';
+import {
+  CategorySeparator,
+  CreateItemDto,
+  fetchSkills,
+  fetchEnumerations,
+  RmuKeyLabelSelect,
+  KeyLabel,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { NumericInput } from '../../shared/inputs/NumericInput';
-import SelectSkill from '../../shared/selects/SelectSkill';
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
+
+const gridSize = { xs: 12, md: 3 };
 
 const ItemCreationWeaponAttributes: FC<{
   formData: CreateItemDto;
@@ -16,30 +24,56 @@ const ItemCreationWeaponAttributes: FC<{
   const auth = useAuth();
   const { t } = useTranslation();
   const { showError } = useError();
+  const [skills, setSkills] = useState<KeyLabel[]>();
 
-  const [combatSkills, setCombatSkills] = React.useState<Skill[]>([]);
+  const mapSkills = async () => {
+    try {
+      const meleeResp = await fetchEnumerations('category==melee-weapon-type', 0, 100, auth);
+      const rangedResp = await fetchEnumerations('category==ranged-weapon-type', 0, 100, auth);
+      const meleeSpecs = meleeResp?.content || [];
+      const rangedSpecs = rangedResp?.content || [];
+      const skillsResp = await fetchSkills('categoryId==combat-training', 0, 100, auth);
+      const list = skillsResp?.content || [];
+      const values: KeyLabel[] = [];
+      list.forEach((e) => {
+        const isMelee = e.specialization === 'melee-weapon-type';
+        const isRanged = e.specialization === 'ranged-weapon-type';
+        const specs = isMelee ? meleeSpecs : isRanged ? rangedSpecs : undefined;
+        if (specs) {
+          specs.forEach((s) => values.push({ key: `${e.id}@${s.key}`, label: `${t(e.id)} - ${t(s.key)}` }));
+        } else {
+          values.push({ key: e.id, label: e.id });
+        }
+      });
+      setSkills(values);
+    } catch (err: any) {
+      showError(err.message);
+    }
+  };
 
   useEffect(() => {
-    fetchSkills('categoryId==combat-training', 0, 100, auth)
-      .then((response) => setCombatSkills(response.content))
-      .catch((err) => showError(err.message));
+    mapSkills();
   }, []);
+
+  if (!skills) return <p>Loading...</p>;
 
   return (
     <Grid container spacing={1}>
       <Grid size={12}>
         <CategorySeparator text={t('weapon')} />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
-        <SelectSkill
-          name="skill"
+      <Grid size={gridSize}>
+        <RmuKeyLabelSelect
+          value={formData.weapon?.skillId || ''}
+          options={skills}
           label={t('skill')}
-          value={formData.weapon!.skillId || ''}
-          onChange={(skill) => setFormData({ ...formData, weapon: { ...formData.weapon!, skillId: skill?.id || '' } })}
-          skills={combatSkills}
+          i18n={false}
+          onChange={(e) => {
+            setFormData({ ...formData, weapon: { ...formData.weapon!, skillId: e } });
+          }}
         />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
+      <Grid size={gridSize}>
         <NumericInput
           value={formData.weapon!.fumble ?? null}
           onChange={(fumble) => setFormData({ ...formData, weapon: { ...formData.weapon!, fumble: fumble ?? 0 } })}

@@ -6,13 +6,17 @@ import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
 import ItemWeaponModeTable from './ItemWeaponModeTable';
 
-export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon }) {
+export default function ItemWeaponAttributes({ weapon }: { weapon: ItemWeapon | null }) {
   const { t } = useTranslation();
+
+  if (!weapon) return;
 
   return (
     <>
-      <CategorySeparator text={t('weapon')} />
       <Grid container spacing={1}>
+        <Grid size={12}>
+          <CategorySeparator text={t('weapon')} />
+        </Grid>
         <Grid size={gridSizeCard}>
           <RmuTextCard
             value={t(weapon.skillId)}

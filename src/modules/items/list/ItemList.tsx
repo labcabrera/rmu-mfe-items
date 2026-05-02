@@ -29,7 +29,7 @@ export default function ItemList() {
 
   const bindItems = (id: string, category: string, pageNumber: number = 0) => {
     let query = '';
-    if (id) query += `id=re=${id}`;
+    if (id) query += `name=re=${id}`;
     if (category) {
       if (query) query += ';';
       query += `category==${category}`;
@@ -70,9 +70,9 @@ export default function ItemList() {
             {items.map((item, index) => (
               <Grid size={gridSizeCard} key={index}>
                 <RmuTextCard
-                  value={t(item.id)}
+                  value={t(item.name)}
                   subtitle={t(item.category)}
-                  image={`${imageBaseUrl}images/items/${item.id}.png`}
+                  image={item.imageUrl}
                   onClick={() => onCardClick(item)}
                   imageFilter={itemFilter}
                 />
