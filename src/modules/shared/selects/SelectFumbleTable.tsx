@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { Autocomplete, TextField } from '@mui/material';
+import { fetchFumbleTables } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchFumbleTables } from '../../api/attack-tables';
 
 const SelectFumbleTable: FC<{
   value?: string;
@@ -12,12 +13,13 @@ const SelectFumbleTable: FC<{
   required?: boolean;
   onChange: (table: string) => void;
 }> = ({ value, label = 'fumble-table', name = 'fumble-table', required = true, onChange }) => {
+  const auth = useAuth();
   const { t } = useTranslation();
   const { showError } = useError();
   const [tables, setTables] = useState<string[]>();
 
   useEffect(() => {
-    fetchFumbleTables()
+    fetchFumbleTables(auth)
       .then(setTables)
       .catch((err) => showError(err.message));
   }, []);

@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { Autocomplete, TextField } from '@mui/material';
+import { fetchAttackTables } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchAttackTables } from '../../api/attack-tables';
 
 const SelectAttackTable: FC<{
   label?: string;
@@ -12,12 +13,13 @@ const SelectAttackTable: FC<{
   required?: boolean;
   onChange: (table: string | null) => void;
 }> = ({ value, label = 'attack-table', name = 'attack-table', required = true, onChange }) => {
+  const auth = useAuth();
   const { t } = useTranslation();
   const { showError } = useError();
   const [tables, setTables] = useState<string[]>();
 
   useEffect(() => {
-    fetchAttackTables()
+    fetchAttackTables(auth)
       .then(setTables)
       .catch((err) => showError(err.message));
   }, []);
