@@ -1,42 +1,81 @@
-import React, { FC, useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import {
+  AddButton,
+  fetchItems,
+  Item,
+  LayoutBase,
+  Page,
+  RefreshButton,
+  RmuPagination,
+  RmuTextCard,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchItems } from '../../api/item';
-import { Item } from '../../api/item.dto';
-import ItemCard from '../../shared/cards/ItemCard';
-import ItemListActions from './ItemListActions';
+import { gridSizeCard, itemFilter } from '../../services/display';
+import ItemListSearch from './ItemListSearch';
 
-const ItemList: FC = () => {
+export default function ItemList() {
+  const auth = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { showError } = useError();
-  const [items, setItems] = useState<Item[]>([]);
+  const [pageData, setPageData] = useState<Page<Item>>();
+  const [rsql, setRsql] = useState<string>('');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(24);
+  const breadcrumbs = [
+    { name: t('home'), link: '/' },
+    { name: t('items'), link: '/items' },
+  ];
 
   const onCardClick = (item: Item) => {
     navigate(`/items/view/${item.id}`, { state: { item } });
   };
 
-  useEffect(() => {
-    fetchItems('', 0, 20)
-      .then((response) => setItems(response))
+  const bindItems = () => {
+    fetchItems(rsql, page, pageSize, auth)
+      .then((response) => setPageData(response))
       .catch((err) => showError(err.message));
-  }, [showError]);
+  };
+
+  useEffect(() => {
+    bindItems();
+  }, [rsql, page, pageSize]);
 
   return (
     <>
-      <ItemListActions setItems={setItems} />
-      <Grid container spacing={2} mb={2} alignItems="center">
-        <Grid size={12}>
-          <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {items.map((item) => (
-              <ItemCard key={item.id} onClick={() => onCardClick(item)} item={item} />
-            ))}
-          </Box>
-          {items.length === 0 ? <p>No items found.</p> : null}
+      <LayoutBase
+        breadcrumbs={breadcrumbs}
+        actions={[
+          <RefreshButton onClick={() => bindItems()} />,
+          <AddButton onClick={() => navigate('/items/create')} />,
+        ]}
+      >
+        <ItemListSearch onChange={(e) => setRsql(e)} />
+        <Grid container spacing={1} sx={{ mt: 1 }}>
+          <>
+            {!pageData && <p>Loading...</p>}
+            {pageData &&
+              pageData.content.map((item, index) => (
+                <Grid size={gridSizeCard} key={index}>
+                  <RmuTextCard
+                    value={t(item.name)}
+                    subtitle={t(item.category)}
+                    image={item.imageUrl}
+                    onClick={() => onCardClick(item)}
+                    imageFilter={itemFilter}
+                  />
+                </Grid>
+              ))}
+            {pageData && pageData.content.length < 1 && <Typography>{t('no-results')}</Typography>}
+          </>
         </Grid>
-      </Grid>
+        <RmuPagination page={page} pageSize={pageSize} totalPages={page} setPage={setPage} setPageSize={setPageSize} />
+      </LayoutBase>
     </>
   );
-};
-
-export default ItemList;
+}

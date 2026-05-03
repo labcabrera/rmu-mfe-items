@@ -1,51 +1,85 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
+import { useNavigate } from 'react-router-dom';
+import {
+  CancelButton,
+  createItem,
+  CreateItemDto,
+  EditableAvatar,
+  Item,
+  LayoutBase,
+  SaveButton,
+  TechnicalInfo,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { CreateItemDto } from '../../api/item.dto';
-import { fetchRealms } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
-import GenericAvatar from '../../shared/avatars/GenericAvatar';
-import NpcCreationsSkills from '../shared/NpcSkills';
-import NpcCreationActions from './ItemCreationActions';
-import NpcCreationAttributes from './ItemCreationAttributes';
-import NpcCreationResume from './ItemCreationResume';
+import { imageBaseUrl } from '../../services/config';
+import { getItemImages } from '../../services/image-service';
+import ItemForm from '../shared/ItemForm';
 
-const ItemCreation: FC = () => {
+const EMPTY_ITEM = {
+  info: {
+    rarity: 'common',
+    stackable: false,
+    unique: false,
+  },
+  imageUrl: `${imageBaseUrl}images/generic/configuration.png`,
+} as Item;
+
+export default function ItemCreation() {
+  const auth = useAuth();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const { showError } = useError();
-  const [realms, setRealms] = useState<Realm[]>([]);
-  const [formData, setFormData] = useState<CreateItemDto | undefined>();
+  const [formData, setFormData] = useState<Item>(EMPTY_ITEM);
   const [isValid, setIsValid] = useState(false);
+  const breadcrumbs = [
+    { name: t('home'), link: '/items' },
+    { name: t('items'), link: '/items' },
+    { name: t('creation') },
+  ];
 
-  const validateForm = (formData: CreateItemDto) => {
-    if (!formData.id) return false;
+  const validateForm = (formData: Item) => {
+    if (!formData.name) return false;
     return true;
   };
 
+  const onSaveClick = () => {
+    const dto = formData as unknown as CreateItemDto;
+    createItem(dto, auth)
+      .then((item) => navigate(`/items/view/${item.id}`))
+      .catch((err) => showError(err.message));
+  };
+
+  const onBackClick = () => {
+    navigate(`/items`);
+  };
+
   useEffect(() => {
-    setIsValid(validateForm(formData!));
-    fetchRealms('', 0, 100)
-      .then((realms) => setRealms(realms))
-      .catch((err) => showError(err));
-  }, [formData, showError]);
+    if (formData) {
+      setIsValid(validateForm(formData));
+    }
+  }, [formData]);
 
   if (!formData) return <div>Loading...</div>;
 
   return (
-    <>
-      <NpcCreationActions formData={formData} isValid={isValid} />
-      <Grid container spacing={2}>
-        <Grid size={2}>
-          <GenericAvatar imageUrl="/static/images/generic/realm.png" size={300} />
-          <NpcCreationResume formData={formData!} setFormData={setFormData} realms={realms} />
-        </Grid>
-        <Grid size={8}>
-          <NpcCreationAttributes formData={formData} setFormData={setFormData} />
-          <NpcCreationsSkills formData={formData} setFormData={setFormData} />
-        </Grid>
-      </Grid>
-      <pre>{JSON.stringify(formData, null, 2)}</pre>
-    </>
+    <LayoutBase
+      breadcrumbs={breadcrumbs}
+      actions={[<CancelButton onClick={onBackClick} />, <SaveButton onClick={onSaveClick} disabled={!isValid} />]}
+      leftPanel={
+        <EditableAvatar
+          imageUrl={formData.imageUrl}
+          variant="rounded"
+          images={getItemImages()}
+          onImageChange={(e) => setFormData({ ...formData, imageUrl: e })}
+        />
+      }
+    >
+      <ItemForm formData={formData} setFormData={setFormData} />
+      <TechnicalInfo>
+        <pre>{JSON.stringify(formData, null, 2)}</pre>
+      </TechnicalInfo>
+    </LayoutBase>
   );
-};
-
-export default ItemCreation;
+}

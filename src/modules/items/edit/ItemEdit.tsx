@@ -1,60 +1,86 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { Grid } from '@mui/material';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  CancelButton,
+  EditableAvatar,
+  fetchItem,
+  Item,
+  LayoutBase,
+  SaveButton,
+  TechnicalInfo,
+  updateItem,
+  UpdateItemDto,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchItem } from '../../api/item';
-import { Item, UpdateItemDto } from '../../api/item.dto';
-import ItemAvatar from '../../shared/avatars/ItemAvatar';
-import ItemEditActions from './ItemEditActions';
-import ItemEditAttributes from './ItemEditAttributes';
-import ItemEditResume from './ItemEditResume';
+import { imageBaseUrl } from '../../services/config';
+import ItemForm from '../shared/ItemForm';
 
-const ItemEdit: FC = () => {
-  const location = useLocation();
+export default function ItemEdit() {
+  const auth = useAuth();
+  const { t } = useTranslation();
   const { showError } = useError();
+  const navigate = useNavigate();
   const { itemId } = useParams<{ itemId?: string }>();
-  const [item, setItem] = useState<Item | null>(null);
-  const [formData, setFormData] = useState<UpdateItemDto | null>(null);
+  const [item, setItem] = useState<Item>();
+  const [formData, setFormData] = useState<Item>({} as Item);
+  const breadcrumbs = [{ name: t('home'), link: '/' }, { name: t('items'), link: '/items' }, { name: t('edit') }];
 
-  const onImageUpdated = (updatedItem: Item) => {
-    setItem(updatedItem);
-    setFormData({ ...formData, imageUrl: updatedItem.imageUrl });
+  const itemImageUrl = item?.imageUrl ? item.imageUrl : `${imageBaseUrl}images/items/${item?.id}.png`;
+
+  const onImageChanged = (imageUrl: string) => {
+    showError('Not implemented image update ' + imageUrl);
+  };
+
+  const onSave = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    const { id, ...rest } = formData;
+    const dto = rest as unknown as UpdateItemDto;
+    updateItem(item!.id, dto, auth)
+      .then((data) => navigate(`/items/view/${item!.id}`, { state: { item: data } }))
+      .catch((err) => showError(err.message));
   };
 
   useEffect(() => {
     if (item) {
-      const { id, imageUrl, realmId, ...rest } = item;
-      setFormData({
-        ...rest,
-      });
+      setFormData(item);
     }
   }, [item]);
 
   useEffect(() => {
     if (itemId) {
-      fetchItem(itemId)
+      fetchItem(itemId, auth)
         .then((response) => setItem(response))
         .catch((err) => showError(err.message));
     }
-  }, [location.state, itemId, showError]);
+  }, [itemId]);
 
   if (!item || !formData) return <div>Loading item...</div>;
 
   return (
-    <>
-      <ItemEditActions item={item} formData={formData} />
-      <Grid container spacing={2}>
-        <Grid size={2}>
-          <ItemAvatar item={item} onItemUpdated={onImageUpdated} />
-          <ItemEditResume formData={formData!} setFormData={setFormData} />
-        </Grid>
-        <Grid size={8}>
-          <ItemEditAttributes formData={formData} setFormData={setFormData} />
-        </Grid>
-      </Grid>
-      <pre>{JSON.stringify(formData, null, 2)}</pre>
-    </>
+    <LayoutBase
+      breadcrumbs={breadcrumbs}
+      leftPanel={
+        <>
+          <EditableAvatar
+            imageUrl={itemImageUrl}
+            images={[]}
+            onImageChange={(image) => onImageChanged(image)}
+            variant="rounded"
+          />
+        </>
+      }
+      actions={[
+        <CancelButton onClick={() => navigate(`/items/view/${item.id}`, { state: item })} />,
+        <SaveButton onClick={onSave} />,
+      ]}
+    >
+      <ItemForm formData={formData} setFormData={setFormData} />
+      <TechnicalInfo>
+        <pre>FormData: {JSON.stringify(formData, null, 2)}</pre>
+      </TechnicalInfo>
+    </LayoutBase>
   );
-};
-
-export default ItemEdit;
+}

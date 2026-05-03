@@ -1,27 +1,29 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { ErrorProvider } from './ErrorContext';
-import './i18n';
-// import NpcCreation from './modules/items/create/NpcCreation';
-// import NpcEdit from './modules/items/edit/NpcEdit';
+import ItemCreation from './modules/items/create/ItemCreation';
+import ItemEdit from './modules/items/edit/ItemEdit';
 import ItemList from './modules/items/list/ItemList';
 import ItemView from './modules/items/view/ItemView';
 
-// import NpcView from './modules/items/view/NpcView';
-
 const App = () => {
   return (
-    <ErrorProvider>
-      <Box sx={{ p: 5 }}>
-        <Routes>
-          <Route path="/" element={<ItemList />} />
-          {/* <Route path="/create" element={<NpcCreation />} /> */}
-          <Route path="/view/:itemId" element={<ItemView />} />
-          {/* <Route path="/edit/:npcId" element={<NpcEdit />} /> */}
-        </Routes>
-      </Box>
-    </ErrorProvider>
+    <ThemeProvider theme={useTheme()}>
+      <ErrorProvider>
+        <Box>
+          <Routes>
+            <Route path="/" element={<ItemList />} />
+            <Route path="/view/:itemId" element={<ItemView />} />
+            <Route path="/create" element={<ItemCreation />} />
+            <Route path="/edit/:itemId" element={<ItemEdit />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Box>
+      </ErrorProvider>
+    </ThemeProvider>
   );
 };
 

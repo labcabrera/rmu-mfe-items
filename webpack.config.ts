@@ -51,7 +51,7 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
         const port =
           devServer.server?.address() && typeof devServer.server.address() === 'object'
             ? (devServer.server.address() as any).port
-            : 8089;
+            : 8088;
 
         printCompilationMessage('compiling', port);
 
@@ -122,6 +122,9 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
           '@mui/icons-material': { singleton: true, requiredVersion: deps['@mui/icons-material'] },
           '@emotion/react': { singleton: true, requiredVersion: deps['@emotion/react'] },
           '@emotion/styled': { singleton: true, requiredVersion: deps['@emotion/styled'] },
+          'react-oidc-context': { singleton: true, requiredVersion: deps['react-oidc-context'] },
+          'oidc-client-ts': { singleton: true, requiredVersion: deps['react-oidc-context'] },
+          'react-i18next': { singleton: true, requiredVersion: deps['react-i18next'] },
         },
       }),
       new HtmlWebPackPlugin({
@@ -135,9 +138,11 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
         defaults: './.env',
       }),
       new webpack.DefinePlugin({
+        'process.env.RMU_MFE_NPCS_PUBLIC_PATH': JSON.stringify(process.env.RMU_MFE_NPCS_PUBLIC_PATH || ''),
+        'process.env.RMU_MFE_ASSETS': JSON.stringify(process.env.RMU_MFE_ASSETS || ''),
         'process.env.RMU_API_CORE_URL': JSON.stringify(process.env.RMU_API_CORE_URL || ''),
         'process.env.RMU_API_NPCS_URL': JSON.stringify(process.env.RMU_API_NPCS_URL || ''),
-        'process.env.RMU_MFE_NPCS_PUBLIC_PATH': JSON.stringify(process.env.RMU_MFE_NPCS_PUBLIC_PATH || ''),
+        'process.env.RMU_API_ATTACK_TABLES_URL': JSON.stringify(process.env.RMU_API_ATTACK_TABLES_URL || ''),
       }),
     ],
   };
