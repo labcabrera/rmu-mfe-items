@@ -26,7 +26,7 @@ export default function ItemEdit() {
   const { itemId } = useParams<{ itemId?: string }>();
   const [item, setItem] = useState<Item>();
   const [formData, setFormData] = useState<Item>({} as Item);
-  const breadcrumbs = [{ name: t('Items'), link: '/items' }, { name: t('Edit') }];
+  const breadcrumbs = [{ name: t('home'), link: '/' }, { name: t('items'), link: '/items' }, { name: t('edit') }];
 
   const itemImageUrl = item?.imageUrl ? item.imageUrl : `${imageBaseUrl}images/items/${item?.id}.png`;
 

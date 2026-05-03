@@ -9,7 +9,6 @@ import {
   RmuSelect,
   SelectDifficulty,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectArmorType from '../../shared/selects/SelectArmorType';
 
 const ItemFormArmor: FC<{
   formData: Item;
@@ -29,16 +28,19 @@ const ItemFormArmor: FC<{
           label={t('slot')}
           value={formData.armor.slot || ''}
           options={['head', 'body', 'arms', 'legs']}
+          error={!formData.armor.slot}
           onChange={(value) =>
             setFormData({ ...formData, armor: { ...formData.armor!, slot: value! as ItemArmorSlot } })
           }
         />
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
-        <SelectArmorType
-          value={formData.armor?.at}
-          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor!, at: v ?? 0 } })}
+        <RmuSelect
           label={t('at')}
+          value={formData.armor.at ? `${formData.armor.at}` : ''}
+          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor!, at: Number(v) } })}
+          error={!formData.armor.at}
+          options={['2', '3', '4', '5', '6', '7', '8', '9', '10']}
         />
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>

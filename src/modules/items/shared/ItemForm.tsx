@@ -8,6 +8,7 @@ import {
   fetchRealms,
   Item,
   ITEM_RARITIES,
+  ItemArmorSlot,
   ItemRarity,
   NumericInput,
   Realm,
@@ -49,7 +50,7 @@ export default function ItemForm({
       next.shield = undefined;
     } else if (nextCategory === 'armor') {
       next.armor = {
-        slot: 'body',
+        slot: '' as unknown as ItemArmorSlot,
         at: 0,
         enc: 0,
         maneuverPenalty: 0,
