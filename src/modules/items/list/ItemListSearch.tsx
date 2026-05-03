@@ -18,7 +18,7 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
   const auth = useAuth();
   const { t } = useTranslation();
   const [realms, setRealms] = useState<Realm[]>([]);
-  const [name, setName] = useState('');
+  const [name, setName] = useState<string>();
   const [category, setCategory] = useState<string>();
   const [realmId, setRealmId] = useState<string>();
   const [rarity, setRarity] = useState<string>();
@@ -53,7 +53,13 @@ export default function ItemListSearch({ onChange }: { onChange: (rsql: string) 
 
   return (
     <Stack direction={isMobile ? 'column' : 'row'} spacing={1} sx={{ alignItems: 'center' }}>
-      <ClearableTextField value={name} onChange={(e) => setName(e.target.value)} label={t('Name')} name={'Name'} />
+      <ClearableTextField
+        label={t('name')}
+        name="name"
+        placeholder={t('name')}
+        value={name}
+        onChange={(e) => setName(e)}
+      />
       <SelectItemCategory
         value={category || ''}
         onChange={(value) => setCategory(value || '')}

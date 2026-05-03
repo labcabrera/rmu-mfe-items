@@ -14,16 +14,13 @@ const ItemFormWeaponAttacks: FC<{
   const [open, setOpen] = useState(false);
 
   const onModeAdded = (mode: WeaponMode) => {
-    setFormData({ ...formData, weapon: { ...formData.weapon, modes: [...formData.weapon!.modes!, mode] } });
+    setFormData({ ...formData, weapon: { ...formData.weapon!, modes: [...formData.weapon!.modes!, mode] } });
   };
 
   const onDeleted = (index: number) => {
     setFormData({
       ...formData,
-      weapon: {
-        ...formData.weapon,
-        modes: formData.weapon!.modes!.filter((_, i) => i !== index),
-      },
+      weapon: { ...formData.weapon!, modes: formData.weapon!.modes!.filter((_, i) => i !== index) },
     });
   };
 

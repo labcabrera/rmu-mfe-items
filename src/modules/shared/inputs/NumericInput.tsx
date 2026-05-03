@@ -16,7 +16,6 @@ export type NumericInputProps = {
   placeholder?: string;
   disabled?: boolean;
   autoFocus?: boolean;
-  className?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
@@ -37,7 +36,6 @@ export function NumericInput({
   placeholder,
   disabled,
   autoFocus,
-  className,
   inputMode,
   onBlur,
   onFocus,
@@ -125,7 +123,6 @@ export function NumericInput({
       placeholder={placeholder}
       disabled={disabled}
       autoFocus={autoFocus}
-      className={className}
       fullWidth
       size="small"
       variant="outlined"

@@ -66,9 +66,9 @@ function Row({ modifier, onDelete }: { modifier: ItemModifier; onDelete: (id: st
   return (
     <TableRow>
       <TableCell>{t(modifier.type)}</TableCell>
-      <TableCell>{modifier.value}</TableCell>
-      <TableCell>{modifier.modifier}</TableCell>
-      <TableCell></TableCell>
+      <TableCell>{modifier.value || '-'}</TableCell>
+      <TableCell>{modifier.modifier ? t(modifier.modifier) : '-'}</TableCell>
+      <TableCell>{modifier.specialization ? t(modifier.specialization) : '-'}</TableCell>
       <TableCell align="right">
         <DeleteButton onClick={() => onDelete(modifier.id)} />
       </TableCell>
