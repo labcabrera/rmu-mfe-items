@@ -8,13 +8,13 @@ import {
   EditableAvatar,
   fetchItem,
   Item,
+  LayoutBase,
   SaveButton,
   TechnicalInfo,
   updateItem,
   UpdateItemDto,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import LayoutBase from '../../components/LayoutBase';
 import { imageBaseUrl } from '../../services/config';
 import ItemForm from '../shared/ItemForm';
 

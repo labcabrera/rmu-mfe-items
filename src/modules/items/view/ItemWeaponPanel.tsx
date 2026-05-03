@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Divider, Stack } from '@mui/material';
-import { ItemWeapon, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
-import Section from '../../components/Section';
+import { ItemWeapon, Section, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemWeaponPanel({ weapon }: { weapon: ItemWeapon | null }) {
   const { t } = useTranslation();

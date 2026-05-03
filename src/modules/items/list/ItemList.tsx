@@ -8,13 +8,13 @@ import {
   AddButton,
   fetchItems,
   Item,
+  LayoutBase,
   Page,
   RefreshButton,
   RmuPagination,
   RmuTextCard,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import LayoutBase from '../../components/LayoutBase';
 import { gridSizeCard, itemFilter } from '../../services/display';
 import ItemListSearch from './ItemListSearch';
 

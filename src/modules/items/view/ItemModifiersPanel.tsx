@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
-import { Item } from '@labcabrera-rmu/rmu-react-shared-lib';
-import Section from '../../components/Section';
+import { Item, Section } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemModifiersPanel({ item }: { item: Item }) {
   const { t } = useTranslation();

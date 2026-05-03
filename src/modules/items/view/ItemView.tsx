@@ -10,11 +10,11 @@ import {
   EditButton,
   fetchItem,
   Item,
+  LayoutBase,
   RefreshButton,
   TechnicalInfo,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import LayoutBase from '../../components/LayoutBase';
 import ItemViewContent from './ItemViewContent';
 import ItemViewResume from './ItemViewResume';
 

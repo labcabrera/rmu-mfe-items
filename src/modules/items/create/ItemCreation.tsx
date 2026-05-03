@@ -8,11 +8,11 @@ import {
   CreateItemDto,
   EditableAvatar,
   Item,
+  LayoutBase,
   SaveButton,
   TechnicalInfo,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import LayoutBase from '../../components/LayoutBase';
 import { imageBaseUrl } from '../../services/config';
 import { getItemImages } from '../../services/image-service';
 import ItemForm from '../shared/ItemForm';

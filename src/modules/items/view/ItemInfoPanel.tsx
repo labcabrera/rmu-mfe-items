@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Divider, Stack } from '@mui/material';
-import { Item, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
-import Section from '../../components/Section';
+import { Item, Section, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemInfoPanel({ item }: { item: Item }) {
   const { t } = useTranslation();

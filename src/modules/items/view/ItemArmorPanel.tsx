@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@mui/material';
-import { ItemArmor, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
-import Section from '../../components/Section';
+import { ItemArmor, Section, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemArmorPanel({ armor }: { armor: ItemArmor }) {
   const { t } = useTranslation();

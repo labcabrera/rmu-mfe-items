@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@mui/material';
-import { ItemShield, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
-import Section from '../../components/Section';
+import { ItemShield, Section, StatRow } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export default function ItemShieldPanel({ shield }: { shield: ItemShield }) {
   const { t } = useTranslation();
