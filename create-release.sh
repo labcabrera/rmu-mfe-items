@@ -131,8 +131,8 @@ create_release() {
     
     # Push branches and tags
     echo "📤 Pushing changes to remote repository..."
-    git checkout master
-    git push origin master
+    git checkout main
+    git push origin main
     git checkout develop
     git push origin develop
     git push origin --tags
@@ -144,7 +144,7 @@ create_release() {
     echo "✅ Release branch created and finished"
     echo "✅ Version updated in package.json"
     echo "✅ Tag v$version created"
-    echo "✅ Changes pushed to master, develop and tags"
+    echo "✅ Changes pushed to main, develop and tags"
     echo ""
     echo "Tag created: v$version"
     echo "To view the tag: git show v$version"
