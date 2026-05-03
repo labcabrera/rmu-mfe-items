@@ -5,10 +5,10 @@ import {
   CategorySeparator,
   Item,
   ItemArmorSlot,
+  NumericInput,
   RmuSelect,
   SelectDifficulty,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectArmorType from '../../shared/selects/SelectArmorType';
 
 const ItemFormArmor: FC<{

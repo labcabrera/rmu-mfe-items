@@ -9,13 +9,13 @@ import {
   Item,
   ITEM_RARITIES,
   ItemRarity,
+  NumericInput,
   Realm,
   RmuSelect,
+  SelectRealm,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
-import SelectRealm from '../../shared/selects/SelectRealm';
 import ItemFormArmor from './ItemFormArmor';
 import ItemFormModifiers from './ItemFormModifiers';
 import ItemFormShield from './ItemFormShield';
@@ -87,13 +87,6 @@ export default function ItemForm({
           />
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
-          <SelectRealm
-            label={t('realm')}
-            value={formData.realmId || null}
-            onChange={(realm) => setFormData({ ...formData, realmId: realm ? realm.id : '' })}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, lg: 3 }}>
           <SelectItemCategory
             label={t('category')}
             name="category"
@@ -102,6 +95,14 @@ export default function ItemForm({
             onChange={onChangeCategory}
           />
         </Grid>
+        <Grid size={{ xs: 12, lg: 3 }}>
+          <SelectRealm
+            value={formData.realmId || null}
+            onChange={(realm) => setFormData({ ...formData, realmId: realm })}
+            realms={realms}
+          />
+        </Grid>
+
         <Grid size={12}>
           <CategorySeparator text={t('Information')} />
         </Grid>

@@ -1,8 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
-import { CategorySeparator, Item } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { NumericInput } from '../../shared/inputs/NumericInput';
+import { CategorySeparator, Item, NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 const ItemFormShield: FC<{
   formData: Item;

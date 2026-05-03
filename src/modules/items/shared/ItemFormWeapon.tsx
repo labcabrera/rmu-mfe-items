@@ -10,9 +10,9 @@ import {
   RmuKeyLabelSelect,
   KeyLabel,
   Item,
+  NumericInput,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { NumericInput } from '../../shared/inputs/NumericInput';
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 
 const gridSize = { xs: 12, md: 3 };

@@ -1,28 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Paper } from '@mui/material';
-import { Item, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
+import { useNavigate } from 'react-router-dom';
+import { Paper } from '@mui/material';
+import {
+  CancelButton,
+  createItem,
+  CreateItemDto,
+  EditableAvatar,
+  Item,
+  SaveButton,
+  TechnicalInfo,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
+import { useError } from '../../../ErrorContext';
+import LayoutBase from '../../components/LayoutBase';
 import { imageBaseUrl } from '../../services/config';
-import { gridSizeMain, gridSizeResume } from '../../services/display';
-import GenericAvatar from '../../shared/avatars/GenericAvatar';
+import { getItemImages } from '../../services/image-service';
 import ItemForm from '../shared/ItemForm';
-import ItemCreationActions from './ItemCreationActions';
 
 const EMPTY_ITEM = {
   info: {
-    cost: {},
     rarity: 'common',
     stackable: false,
     unique: false,
   },
+  imageUrl: `${imageBaseUrl}images/generic/configuration.png`,
 } as Item;
 
 export default function ItemCreation() {
+  const auth = useAuth();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { showError } = useError();
   const [formData, setFormData] = useState<Item>(EMPTY_ITEM);
   const [isValid, setIsValid] = useState(false);
+  const breadcrumbs = [
+    { name: t('home'), link: '/items' },
+    { name: t('items'), link: '/items' },
+    { name: t('creation') },
+  ];
 
   const validateForm = (formData: Item) => {
     if (!formData.name) return false;
     return true;
+  };
+
+  const onSaveClick = () => {
+    const dto = formData as unknown as CreateItemDto;
+    createItem(dto, auth)
+      .then((item) => navigate(`/items/view/${item.id}`))
+      .catch((err) => showError(err.message));
+  };
+
+  const onBackClick = () => {
+    navigate(`/items`);
   };
 
   useEffect(() => {
@@ -34,21 +65,24 @@ export default function ItemCreation() {
   if (!formData) return <div>Loading...</div>;
 
   return (
-    <>
-      <Grid container spacing={1}>
-        <Grid size={gridSizeResume}>
-          <GenericAvatar imageUrl={`${imageBaseUrl}images/generic/configuration.png`} />
-        </Grid>
-        <Grid size={gridSizeMain}>
-          <ItemCreationActions formData={formData} isValid={isValid} />
-          <Paper sx={{ p: 2 }}>
-            <ItemForm formData={formData} setFormData={setFormData} />
-          </Paper>
-          <TechnicalInfo>
-            <pre>{JSON.stringify(formData, null, 2)}</pre>
-          </TechnicalInfo>
-        </Grid>
-      </Grid>
-    </>
+    <LayoutBase
+      breadcrumbs={breadcrumbs}
+      actions={[<CancelButton onClick={onBackClick} />, <SaveButton onClick={onSaveClick} disabled={!isValid} />]}
+      leftPanel={
+        <EditableAvatar
+          imageUrl={formData.imageUrl}
+          variant="rounded"
+          images={getItemImages()}
+          onImageChange={(e) => setFormData({ ...formData, imageUrl: e })}
+        />
+      }
+    >
+      <Paper sx={{ p: 2 }}>
+        <ItemForm formData={formData} setFormData={setFormData} />
+      </Paper>
+      <TechnicalInfo>
+        <pre>{JSON.stringify(formData, null, 2)}</pre>
+      </TechnicalInfo>
+    </LayoutBase>
   );
 }
