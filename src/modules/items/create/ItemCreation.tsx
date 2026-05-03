@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
-import { Paper } from '@mui/material';
 import {
   CancelButton,
   createItem,
@@ -77,9 +76,7 @@ export default function ItemCreation() {
         />
       }
     >
-      <Paper sx={{ p: 2 }}>
-        <ItemForm formData={formData} setFormData={setFormData} />
-      </Paper>
+      <ItemForm formData={formData} setFormData={setFormData} />
       <TechnicalInfo>
         <pre>{JSON.stringify(formData, null, 2)}</pre>
       </TechnicalInfo>
