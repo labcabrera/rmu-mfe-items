@@ -13,7 +13,6 @@ import {
   UpdateItemDto,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { getItemImages } from '../../services/image-service';
 
 export default function ItemViewResume({
   item,
@@ -44,12 +43,7 @@ export default function ItemViewResume({
 
   return (
     <>
-      <EditableAvatar
-        imageUrl={item.imageUrl}
-        variant="rounded"
-        images={getItemImages()}
-        onImageChange={(e) => updateItemImage(e)}
-      />
+      <EditableAvatar imageUrl={item.imageUrl} variant="rounded" onImageChange={(e) => updateItemImage(e)} />
       <Stack direction="column" spacing={1}>
         <Typography variant="h6" color="primary" gutterBottom>
           {t(item.name)}

@@ -14,7 +14,6 @@ import {
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { imageBaseUrl } from '../../services/config';
-import { getItemImages } from '../../services/image-service';
 import ItemForm from '../shared/ItemForm';
 
 const EMPTY_ITEM = {
@@ -71,7 +70,6 @@ export default function ItemCreation() {
         <EditableAvatar
           imageUrl={formData.imageUrl}
           variant="rounded"
-          images={getItemImages()}
           onImageChange={(e) => setFormData({ ...formData, imageUrl: e })}
         />
       }
