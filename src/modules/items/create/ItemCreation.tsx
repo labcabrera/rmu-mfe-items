@@ -13,7 +13,6 @@ import {
   TechnicalInfo,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { imageBaseUrl } from '../../services/config';
 import ItemForm from '../shared/ItemForm';
 
 const EMPTY_ITEM = {
@@ -22,7 +21,7 @@ const EMPTY_ITEM = {
     stackable: false,
     unique: false,
   },
-  imageUrl: `${imageBaseUrl}images/generic/configuration.png`,
+  imageUrl: 'images/generic/configuration.png',
 } as Item;
 
 export default function ItemCreation() {
