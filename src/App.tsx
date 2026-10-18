@@ -1,30 +1,20 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Box, ThemeProvider } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { ErrorProvider } from './ErrorContext';
-import ItemCreation from './modules/items/create/ItemCreation';
-import ItemEdit from './modules/items/edit/ItemEdit';
-import ItemList from './modules/items/list/ItemList';
-import ItemView from './modules/items/view/ItemView';
+import { MfeRoot, NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
+import ItemFormPage from './modules/items/form/ItemFormPage';
+import ItemListPage from './modules/items/list/ItemListPage';
+import ItemViewPage from './modules/items/view/ItemViewPage';
 
-const App = () => {
-  return (
-    <ThemeProvider theme={useTheme()}>
-      <ErrorProvider>
-        <Box>
-          <Routes>
-            <Route path="/" element={<ItemList />} />
-            <Route path="/view/:itemId" element={<ItemView />} />
-            <Route path="/create" element={<ItemCreation />} />
-            <Route path="/edit/:itemId" element={<ItemEdit />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Box>
-      </ErrorProvider>
-    </ThemeProvider>
-  );
-};
+const App = () => (
+  <MfeRoot>
+    <Routes>
+      <Route path="/" element={<ItemListPage />} />
+      <Route path="/view/:itemId" element={<ItemViewPage />} />
+      <Route path="/create" element={<ItemFormPage mode="create" />} />
+      <Route path="/edit/:itemId" element={<ItemFormPage mode="edit" />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </MfeRoot>
+);
 
 export default App;

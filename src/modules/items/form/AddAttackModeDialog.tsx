@@ -17,13 +17,13 @@ import {
 } from '@mui/material';
 import {
   NumericInput,
+  SelectAttackTable,
+  SelectFumbleTable,
   TechnicalInfo,
   WeaponAttackType,
   WeaponMode,
   WeaponModeType,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectAttackTable from '../../shared/selects/SelectAttackTable';
-import SelectFumbleTable from '../../shared/selects/SelectFumbleTable';
 
 const attackTypes = ['melee', 'ranged', 'thrown'] as WeaponAttackType[];
 const types = ['one-hand', 'two-hands'] as WeaponModeType[];
@@ -78,16 +78,16 @@ const AddAttackModeDialog: FC<{
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-      <DialogTitle>{t('Add skill')}</DialogTitle>
+      <DialogTitle>{t('add-attack-mode')}</DialogTitle>
       <DialogContent>
         <Grid container spacing={1} sx={{ mt: 1 }}>
           <Grid size={12}>
             <FormControl fullWidth margin="normal">
-              <InputLabel id="mode-type-label">Tipo</InputLabel>
+              <InputLabel id="mode-type-label">{t('type')}</InputLabel>
               <Select
                 labelId="mode-type-label"
                 value={formData.type}
-                label={t('Type')}
+                label={t('type')}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               >
                 {types.map((type, index) => (
@@ -118,7 +118,6 @@ const AddAttackModeDialog: FC<{
           </Grid>
           <Grid size={12}>
             <SelectAttackTable
-              label="Attack table"
               name="attackTable"
               value={formData.attackTable}
               onChange={(e) => setFormData({ ...formData, attackTable: e || '' })}
@@ -126,7 +125,6 @@ const AddAttackModeDialog: FC<{
           </Grid>
           <Grid size={12}>
             <SelectFumbleTable
-              label="Fumble table"
               name="fumbleTable"
               value={formData.fumbleTable}
               onChange={(e) => setFormData({ ...formData, fumbleTable: e || '' })}
@@ -134,7 +132,7 @@ const AddAttackModeDialog: FC<{
           </Grid>
           <Grid size={12}>
             <NumericInput
-              label="Size adjustment"
+              label={t('size-adjustment')}
               value={formData.sizeAdjustment}
               onChange={(e) => setFormData({ ...formData, sizeAdjustment: e || 0 })}
             />

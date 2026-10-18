@@ -126,9 +126,7 @@ export default function AddItemModifierDialog({
         )}
       </Grid>
       <TechnicalInfo>
-        <pre>FormData: {JSON.stringify(formData, null, 2)}</pre>
-        <pre>Option: {JSON.stringify(option, null, 2)}</pre>
-        <pre>Options: {JSON.stringify(options, null, 2)}</pre>
+        <pre>{JSON.stringify({ formData, option, options }, null, 2)}</pre>
       </TechnicalInfo>
     </RmuDialog>
   );

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Link as RouterLink } from 'react-router-dom';
@@ -11,33 +11,27 @@ import {
   Realm,
   updateItem,
   UpdateItemDto,
+  useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../ErrorContext';
 
-export default function ItemViewResume({
-  item,
-  setItem,
-}: {
-  item: Item;
-  setItem: Dispatch<SetStateAction<Item | undefined>>;
-}) {
+export default function ItemViewResume({ item, setItem }: { item: Item; setItem: (item: Item) => void }) {
   const auth = useAuth();
   const { t } = useTranslation();
-  const { showError } = useError();
+  const notify = useNotify();
   const [realm, setRealm] = useState<Realm>();
 
   const updateItemImage = (imageUrl: string) => {
     const dto = { imageUrl } as UpdateItemDto;
     updateItem(item!.id, dto, auth)
       .then((response) => setItem(response))
-      .catch((err) => showError(err.message));
+      .catch((err) => notify.error(err));
   };
 
   useEffect(() => {
     if (item && item.realmId) {
       fetchRealm(item.realmId, auth)
         .then((response) => setRealm(response))
-        .catch((err) => showError(err.message));
+        .catch((err) => notify.error(err));
     }
   }, [item]);
 

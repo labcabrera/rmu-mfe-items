@@ -1,8 +1,14 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { AddButton, CategorySeparator, DeleteButton, Item, ItemModifier } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../ErrorContext';
+import {
+  AddButton,
+  CategorySeparator,
+  DeleteButton,
+  Item,
+  ItemModifier,
+  useNotify,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import AddItemModifierDialog from './AddItemModifierDialog';
 
 export default function ItemFormModifiers({
@@ -10,10 +16,10 @@ export default function ItemFormModifiers({
   setFormData,
 }: {
   formData: Item;
-  setFormData: Dispatch<SetStateAction<Item>>;
+  setFormData: (item: Item) => void;
 }) {
   const { t } = useTranslation();
-  const { showError } = useError();
+  const notify = useNotify();
   const [modifierDialogOpen, setModifierDialogOpen] = useState<boolean>(false);
 
   const onModifierAdded = (modifier: ItemModifier) => {
@@ -31,10 +37,10 @@ export default function ItemFormModifiers({
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="left">{t('Type')}</TableCell>
-              <TableCell align="left">{t('Bonus')}</TableCell>
-              <TableCell align="left">{t('Modifier')}</TableCell>
-              <TableCell align="left">{t('Spec')}</TableCell>
+              <TableCell align="left">{t('type')}</TableCell>
+              <TableCell align="left">{t('bonus')}</TableCell>
+              <TableCell align="left">{t('modifier')}</TableCell>
+              <TableCell align="left">{t('spec')}</TableCell>
               <TableCell align="right">
                 <AddButton onClick={() => setModifierDialogOpen(true)} />
               </TableCell>
@@ -51,7 +57,7 @@ export default function ItemFormModifiers({
         open={modifierDialogOpen}
         onAdd={(e) => onModifierAdded(e)}
         onClose={() => setModifierDialogOpen(false)}
-        onError={(err) => showError(err)}
+        onError={(err) => notify.error(err)}
       />
     </>
   );

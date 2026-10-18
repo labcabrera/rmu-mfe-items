@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Dispatch, FC, SetStateAction, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
 import {
   CategorySeparator,
-  fetchSkills,
   fetchEnumerations,
-  RmuKeyLabelSelect,
-  KeyLabel,
+  fetchSkills,
   Item,
+  KeyLabel,
   NumericInput,
+  RmuKeyLabelSelect,
+  useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../ErrorContext';
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 
 const gridSize = { xs: 12, md: 3 };
 
 const ItemCreationWeaponAttributes: FC<{
   formData: Item;
-  setFormData: Dispatch<SetStateAction<Item>>;
+  setFormData: (item: Item) => void;
 }> = ({ formData, setFormData }) => {
   const auth = useAuth();
   const { t } = useTranslation();
-  const { showError } = useError();
+  const notify = useNotify();
   const [skills, setSkills] = useState<KeyLabel[]>();
 
   const mapSkills = async () => {
@@ -47,7 +47,7 @@ const ItemCreationWeaponAttributes: FC<{
       });
       setSkills(values);
     } catch (err: any) {
-      showError(err.message);
+      notify.error(err);
     }
   };
 
@@ -55,7 +55,7 @@ const ItemCreationWeaponAttributes: FC<{
     mapSkills();
   }, []);
 
-  if (!skills) return <p>Loading...</p>;
+  if (!skills) return <p>{t('loading')}</p>;
 
   return (
     <Grid container spacing={1}>

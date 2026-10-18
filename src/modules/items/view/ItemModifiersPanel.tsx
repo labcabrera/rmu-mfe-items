@@ -12,7 +12,7 @@ export default function ItemModifiersPanel({ item }: { item: Item }) {
       <Grid container spacing={1}>
         {modifiers.length === 0 && (
           <Grid size={12}>
-            <Typography color="textSecondary">No modifiers</Typography>
+            <Typography color="textSecondary">{t('no-modifiers')}</Typography>
           </Grid>
         )}
         {modifiers.map((m) => (

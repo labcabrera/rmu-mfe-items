@@ -31,8 +31,8 @@ const SelectItemCategory: FC<{
       error={required && (value === undefined || value === null || value === '')}
     >
       {allowAll && (
-        <MenuItem key={null} value={t('All')}>
-          <em>All</em>
+        <MenuItem key="all" value="">
+          <em>{t('all')}</em>
         </MenuItem>
       )}
       {values.map((option, index) => (

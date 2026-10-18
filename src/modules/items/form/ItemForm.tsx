@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { FormControlLabel, FormGroup, Grid, Switch, TextField } from '@mui/material';
@@ -14,30 +14,24 @@ import {
   Realm,
   RmuSelect,
   SelectRealm,
+  useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../ErrorContext';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 import ItemFormArmor from './ItemFormArmor';
 import ItemFormModifiers from './ItemFormModifiers';
 import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
 
-export default function ItemForm({
-  formData,
-  setFormData,
-}: {
-  formData: Item;
-  setFormData: Dispatch<SetStateAction<Item>>;
-}) {
+export default function ItemForm({ formData, setFormData }: { formData: Item; setFormData: (item: Item) => void }) {
   const { t } = useTranslation();
   const auth = useAuth();
-  const { showError } = useError();
+  const notify = useNotify();
   const [realms, setRealms] = useState<Realm[]>();
 
   useEffect(() => {
     fetchRealms('', 0, 100, auth)
       .then((realms) => setRealms(realms.content))
-      .catch((err) => showError(err.message));
+      .catch((err) => notify.error(err));
   }, []);
 
   const onChangeCategory = (category: string | null) => {
@@ -72,7 +66,7 @@ export default function ItemForm({
     setFormData({ ...formData, ...next });
   };
 
-  if (!formData || !realms) return <p>Loading item info...</p>;
+  if (!formData || !realms) return <p>{t('loading')}</p>;
 
   return (
     <>
@@ -105,7 +99,7 @@ export default function ItemForm({
         </Grid>
 
         <Grid size={12}>
-          <CategorySeparator text={t('Information')} />
+          <CategorySeparator text={t('information')} />
         </Grid>
         <Grid size={3}>
           <NumericInput

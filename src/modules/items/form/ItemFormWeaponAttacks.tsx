@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction, FC } from 'react';
+import React, { useState, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { AddButton, DeleteButton, Item, WeaponMode } from '@labcabrera-rmu/rmu-react-shared-lib';
@@ -8,7 +8,7 @@ const tableMinWidth = 900;
 
 const ItemFormWeaponAttacks: FC<{
   formData: Item;
-  setFormData: Dispatch<SetStateAction<Item>>;
+  setFormData: (item: Item) => void;
 }> = ({ formData, setFormData }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -30,11 +30,11 @@ const ItemFormWeaponAttacks: FC<{
         <Table size="small" sx={{ minWidth: tableMinWidth }}>
           <TableHead>
             <TableRow>
-              <TableCell align="left">{t('Type')}</TableCell>
-              <TableCell align="left">{t('Types')}</TableCell>
-              <TableCell align="left">{t('Attack table')}</TableCell>
-              <TableCell align="left">{t('Fumble table')}</TableCell>
-              <TableCell align="right">{t('Size adjustment')}</TableCell>
+              <TableCell align="left">{t('type')}</TableCell>
+              <TableCell align="left">{t('types')}</TableCell>
+              <TableCell align="left">{t('attack-table')}</TableCell>
+              <TableCell align="left">{t('fumble-table')}</TableCell>
+              <TableCell align="right">{t('size-adjustment')}</TableCell>
               <TableCell align="right">
                 <AddButton onClick={() => setOpen(true)} />
               </TableCell>

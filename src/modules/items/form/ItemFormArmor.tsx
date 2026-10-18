@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import {
@@ -12,7 +12,7 @@ import {
 
 const ItemFormArmor: FC<{
   formData: Item;
-  setFormData: Dispatch<SetStateAction<Item>>;
+  setFormData: (item: Item) => void;
 }> = ({ formData, setFormData }) => {
   const { t } = useTranslation();
 

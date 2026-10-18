@@ -28,7 +28,7 @@ export default function ItemWeaponPanel({ weapon }: { weapon: ItemWeapon | null 
             {e.ranges && (
               <>
                 <Divider />
-                <StatRow label={t('Ranges')} value="" />
+                <StatRow label={t('ranges')} value="" />
                 {e.ranges.map((r, i) => (
                   <StatRow
                     key={i}
