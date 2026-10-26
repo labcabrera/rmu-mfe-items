@@ -2,7 +2,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { Grid } from '@mui/material';
+import { Autocomplete, Chip, Grid, TextField } from '@mui/material';
 import {
   CategorySeparator,
   fetchEnumerations,
@@ -16,6 +16,10 @@ import {
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 
 const gridSize = { xs: 12, md: 3 };
+
+/** Tags the fighting styles ask for when the type and the skill can't tell (spec 032). */
+const WEAPON_TAGS = ['fencing', 'quarterstaff', 'axe', 'hooked', 'whip', 'improvised', 'net'];
+const TAG_PATTERN = /^[a-z0-9-]{1,50}$/;
 
 const ItemCreationWeaponAttributes: FC<{
   formData: Item;
@@ -80,6 +84,33 @@ const ItemCreationWeaponAttributes: FC<{
           integer={true}
           min={0}
           label={t('fumble')}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Autocomplete
+          multiple
+          freeSolo
+          size="small"
+          options={WEAPON_TAGS}
+          value={formData.weapon?.tags || []}
+          getOptionLabel={(tag) => t(`weapon-tag-${tag}`, { defaultValue: tag })}
+          onChange={(_, tags) => {
+            const valid = [
+              ...new Set(tags.map((tag) => tag.trim().toLowerCase()).filter((tag) => TAG_PATTERN.test(tag))),
+            ];
+            setFormData({ ...formData, weapon: { ...formData.weapon!, tags: valid } });
+          }}
+          renderValue={(tags, getItemProps) =>
+            tags.map((tag, index) => {
+              const { key, ...itemProps } = getItemProps({ index });
+              return (
+                <Chip key={key} size="small" label={t(`weapon-tag-${tag}`, { defaultValue: tag })} {...itemProps} />
+              );
+            })
+          }
+          renderInput={(params) => (
+            <TextField {...params} variant="standard" label={t('weapon-tags')} helperText={t('weapon-tags-help')} />
+          )}
         />
       </Grid>
       <Grid size={12}>

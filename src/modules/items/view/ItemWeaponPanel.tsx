@@ -17,6 +17,12 @@ export default function ItemWeaponPanel({ weapon }: { weapon: ItemWeapon | null 
         <StatRow label={t('skill')} value={t(skillId)} />
         <StatRow label={t('specialization')} value={t(specialization)} />
         <StatRow label={t('fumble')} value={weapon.fumble} />
+        {!!weapon.tags?.length && (
+          <StatRow
+            label={t('weapon-tags')}
+            value={weapon.tags.map((tag) => t(`weapon-tag-${tag}`, { defaultValue: tag })).join(', ')}
+          />
+        )}
         {weapon.modes.map((e, index) => (
           <Fragment key={index}>
             <Divider />
