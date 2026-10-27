@@ -16,6 +16,10 @@ export default function ItemArmorPanel({ armor }: { armor: ItemArmor }) {
         <StatRow label={t('perception-penalty')} value={armor.perceptionPenalty} danger={armor.perceptionPenalty < 0} />
         <StatRow label={t('ranged-penalty')} value={armor.rangedPenalty} danger={armor.rangedPenalty < 0} />
         <StatRow label={t('difficulty')} value={t(`difficulty-${armor.baseDifficulty}`)} />
+        {armor.class && <StatRow label={t('armor-class')} value={t(`item-armor-class-${armor.class}`)} />}
+        {(armor.coverage?.length ?? 0) > 1 && (
+          <StatRow label={t('item-feature-full-suit')} value={armor.coverage!.map((slot) => t(slot)).join(', ')} />
+        )}
       </Stack>
     </Section>
   );

@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MenuItem, TextField } from '@mui/material';
+import { ITEM_CATEGORIES } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 const SelectItemCategory: FC<{
   label: string;
@@ -11,8 +12,6 @@ const SelectItemCategory: FC<{
   onChange: (value: string | null) => void;
 }> = ({ label, value, name, required = false, allowAll = false, onChange }) => {
   const { t } = useTranslation();
-
-  const values = ['weapon', 'armor', 'shield', 'clothes', 'coins', 'tools', 'food', 'ammunition', 'other'];
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedValue = event.target.value;
@@ -35,9 +34,9 @@ const SelectItemCategory: FC<{
           <em>{t('all')}</em>
         </MenuItem>
       )}
-      {values.map((option, index) => (
-        <MenuItem key={index} value={option}>
-          {t(option)}
+      {ITEM_CATEGORIES.map((option) => (
+        <MenuItem key={option} value={option}>
+          {t(`item-category-${option}`, t(option))}
         </MenuItem>
       ))}
     </TextField>

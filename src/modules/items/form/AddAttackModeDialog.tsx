@@ -138,6 +138,13 @@ const AddAttackModeDialog: FC<{
             />
           </Grid>
           <Grid size={12}>
+            <NumericInput
+              label={t('ob-modifier')}
+              value={formData.obModifier ?? null}
+              onChange={(e) => setFormData({ ...formData, obModifier: e || undefined })}
+            />
+          </Grid>
+          <Grid size={12}>
             <TechnicalInfo>
               <pre>{JSON.stringify(formData, null, 2)}</pre>
             </TechnicalInfo>
