@@ -43,7 +43,7 @@ export default function ItemViewResume({ item, setItem }: { item: Item; setItem:
           {t(item.name)}
         </Typography>
         <Typography variant="body1" color="primary" gutterBottom>
-          {t(item.category)}
+          {t(`item-category-${item.category}`, t(item.category))}
         </Typography>
         {realm && (
           <Typography variant="body1" gutterBottom>

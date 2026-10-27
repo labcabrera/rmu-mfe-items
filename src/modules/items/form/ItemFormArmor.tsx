@@ -1,14 +1,19 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid } from '@mui/material';
+import { FormControlLabel, Grid, Switch } from '@mui/material';
 import {
   CategorySeparator,
   Item,
+  ItemArmorClass,
   ItemArmorSlot,
   NumericInput,
   RmuSelect,
   SelectDifficulty,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
+
+/** Spec 041: a full suit covers the four slots. */
+const FULL_SUIT: ItemArmorSlot[] = ['body', 'head', 'arms', 'legs'];
+const ARMOR_CLASSES: ItemArmorClass[] = ['light', 'medium', 'heavy'];
 
 const ItemFormArmor: FC<{
   formData: Item;
@@ -80,6 +85,32 @@ const ItemFormArmor: FC<{
           label={t('base-difficulty')}
           value={formData.armor?.baseDifficulty || ''}
           onChange={(k) => setFormData({ ...formData, armor: { ...formData.armor!, baseDifficulty: k.key } })}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, md: 3 }}>
+        <RmuSelect
+          label={t('armor-class')}
+          value={formData.armor.class || ''}
+          options={['', ...ARMOR_CLASSES]}
+          onChange={(value) =>
+            setFormData({ ...formData, armor: { ...formData.armor!, class: (value || undefined) as ItemArmorClass } })
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12, md: 3 }}>
+        <FormControlLabel
+          control={<Switch checked={(formData.armor.coverage?.length ?? 0) > 1} />}
+          label={t('item-feature-full-suit')}
+          onChange={(_, checked) =>
+            setFormData({
+              ...formData,
+              armor: {
+                ...formData.armor!,
+                slot: checked ? 'body' : formData.armor!.slot,
+                coverage: checked ? FULL_SUIT : undefined,
+              },
+            })
+          }
         />
       </Grid>
     </Grid>

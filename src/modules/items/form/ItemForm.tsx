@@ -18,6 +18,7 @@ import {
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 import ItemFormArmor from './ItemFormArmor';
+import ItemFormFeatures, { emptyFeatures } from './ItemFormFeatures';
 import ItemFormModifiers from './ItemFormModifiers';
 import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
@@ -36,7 +37,8 @@ export default function ItemForm({ formData, setFormData }: { formData: Item; se
 
   const onChangeCategory = (category: string | null) => {
     const nextCategory = category || '';
-    const next: Partial<typeof formData> = { category: nextCategory };
+    // Spec 041: the general equipment block of the new category, or none
+    const next: Partial<typeof formData> = { category: nextCategory, features: emptyFeatures(nextCategory) };
     // const info = { cost: { min: 0, average: 0, max: 0 } };
     if (nextCategory === 'weapon') {
       next.weapon = { skillId: '', fumble: 0, modes: [] };
@@ -195,6 +197,15 @@ export default function ItemForm({ formData, setFormData }: { formData: Item; se
           </FormGroup>
         </Grid>
         <Grid size={3}>
+          <NumericInput
+            value={formData.info.lotSize ?? null}
+            onChange={(lotSize) => setFormData({ ...formData, info: { ...formData.info, lotSize } })}
+            integer
+            label={t('lot-size')}
+            min={1}
+          />
+        </Grid>
+        <Grid size={3}>
           <FormGroup>
             <FormControlLabel
               control={<Switch checked={formData.info.unique} />}
@@ -207,6 +218,10 @@ export default function ItemForm({ formData, setFormData }: { formData: Item; se
               }
             />
           </FormGroup>
+        </Grid>
+
+        <Grid size={12}>
+          <ItemFormFeatures formData={formData} setFormData={setFormData} />
         </Grid>
 
         <Grid size={12}>

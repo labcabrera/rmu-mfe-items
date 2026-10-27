@@ -31,6 +31,7 @@ export default function ItemWeaponPanel({ weapon }: { weapon: ItemWeapon | null 
             <StatRow label={t('attack-table')} value={t(e.attackTable)} />
             <StatRow label={t('fumble-table')} value={t(e.fumbleTable)} />
             <StatRow label={t('size-adjustment')} value={e.sizeAdjustment} />
+            {e.obModifier !== undefined && e.obModifier !== null && <StatRow label={t('ob-modifier')} value={e.obModifier} />}
             {e.ranges && (
               <>
                 <Divider />

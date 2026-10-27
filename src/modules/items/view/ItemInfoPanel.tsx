@@ -12,6 +12,7 @@ export default function ItemInfoPanel({ item }: { item: Item }) {
         <StatRow label={t('rarity')} value={t(item.info.rarity) || '-'} success={item.info.rarity !== 'common'} />
         <StatRow label={t('unique')} value={t(`${item.info.unique}`)} success={item.info.unique} />
         <StatRow label={t('stackable')} value={t(`${item.info.stackable}`)} />
+        {!!item.info.lotSize && <StatRow label={t('lot-size')} value={item.info.lotSize} />}
         <Divider />
         <StatRow label={t('weight')} value={item.info.weight ? `${item.info.weight} lbs` : '-'} />
         <StatRow label={t('length')} value={item.info.length ? `${item.info.length}'` : '-'} />
