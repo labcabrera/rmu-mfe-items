@@ -35,6 +35,7 @@ const ItemFormWeaponAttacks: FC<{
               <TableCell align="left">{t('attack-table')}</TableCell>
               <TableCell align="left">{t('fumble-table')}</TableCell>
               <TableCell align="right">{t('size-adjustment')}</TableCell>
+              <TableCell align="right">{t('ob-modifier')}</TableCell>
               <TableCell align="right">
                 <AddButton onClick={() => setOpen(true)} />
               </TableCell>
@@ -61,6 +62,7 @@ const Row: FC<{ mode: WeaponMode; index: number; onDelete: (index: number) => vo
       <TableCell>{t(mode.attackTable)}</TableCell>
       <TableCell>{t(mode.fumbleTable)}</TableCell>
       <TableCell align="right">{mode.sizeAdjustment}</TableCell>
+      <TableCell align="right">{mode.obModifier ?? '-'}</TableCell>
       <TableCell align="right">
         <DeleteButton onClick={() => onDelete(index)} />
       </TableCell>
