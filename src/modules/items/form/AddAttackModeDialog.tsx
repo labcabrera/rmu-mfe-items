@@ -1,32 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@mui/material';
-import {
+  AttackTablePicker,
+  EnumPicker,
+  FumbleTablePicker,
   NumericInput,
-  SelectAttackTable,
-  SelectFumbleTable,
   TechnicalInfo,
+  WEAPON_ATTACKS,
+  WEAPON_HANDS,
   WeaponAttackType,
   WeaponMode,
   WeaponModeType,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-const attackTypes = ['melee', 'ranged', 'thrown'] as WeaponAttackType[];
-const types = ['one-hand', 'two-hands'] as WeaponModeType[];
 const emptyForm = {
   type: 'one-hand',
   attackTypes: [],
@@ -62,16 +50,6 @@ const AddAttackModeDialog: FC<{
     return true;
   };
 
-  const onTypeChange = (type: WeaponAttackType) => {
-    let newTypes = formData.attackTypes;
-    if (formData.attackTypes.includes(type)) {
-      newTypes = newTypes.filter((e) => e !== type);
-    } else {
-      newTypes.push(type);
-    }
-    setFormData({ ...formData, attackTypes: newTypes });
-  };
-
   useEffect(() => {
     setIsValidForm(validateForm());
   }, [formData]);
@@ -82,52 +60,37 @@ const AddAttackModeDialog: FC<{
       <DialogContent>
         <Grid container spacing={1} sx={{ mt: 1 }}>
           <Grid size={12}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="mode-type-label">{t('type')}</InputLabel>
-              <Select
-                labelId="mode-type-label"
-                value={formData.type}
-                label={t('type')}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-              >
-                {types.map((type, index) => (
-                  <MenuItem key={index} value={type}>
-                    {t(type)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid size={12}>
-            <FormControl component="fieldset" variant="standard" sx={{ width: '100%' }}>
-              <ToggleButtonGroup value={formData.attackTypes}>
-                {attackTypes.map((option, index) => (
-                  <ToggleButton
-                    key={index}
-                    value={option}
-                    onClick={() => onTypeChange(option)}
-                    size="small"
-                    sx={{ minWidth: 160 }}
-                    selected={formData.attackTypes.includes(option)}
-                  >
-                    {t(option)}
-                  </ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-            </FormControl>
-          </Grid>
-          <Grid size={12}>
-            <SelectAttackTable
-              name="attackTable"
-              value={formData.attackTable}
-              onChange={(e) => setFormData({ ...formData, attackTable: e || '' })}
+            <EnumPicker
+              label={t('type')}
+              values={WEAPON_HANDS}
+              required
+              value={formData.type}
+              onChange={(type) => type && setFormData({ ...formData, type: type as WeaponModeType })}
             />
           </Grid>
           <Grid size={12}>
-            <SelectFumbleTable
+            <EnumPicker
+              mode="multiple"
+              label={t('attack-types')}
+              values={WEAPON_ATTACKS}
+              value={formData.attackTypes}
+              onChange={(types) => setFormData({ ...formData, attackTypes: types as WeaponAttackType[] })}
+            />
+          </Grid>
+          <Grid size={12}>
+            <AttackTablePicker
+              name="attackTable"
+              required
+              value={formData.attackTable || null}
+              onChange={(attackTable) => setFormData({ ...formData, attackTable: attackTable || '' })}
+            />
+          </Grid>
+          <Grid size={12}>
+            <FumbleTablePicker
               name="fumbleTable"
-              value={formData.fumbleTable}
-              onChange={(e) => setFormData({ ...formData, fumbleTable: e || '' })}
+              required
+              value={formData.fumbleTable || null}
+              onChange={(fumbleTable) => setFormData({ ...formData, fumbleTable: fumbleTable || '' })}
             />
           </Grid>
           <Grid size={12}>

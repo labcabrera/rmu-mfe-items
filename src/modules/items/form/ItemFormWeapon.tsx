@@ -5,13 +5,14 @@ import { useAuth } from 'react-oidc-context';
 import { Autocomplete, Chip, Grid, TextField } from '@mui/material';
 import {
   CategorySeparator,
+  EntityOption,
+  EntityPicker,
   fetchEnumerations,
   fetchSkills,
   Item,
-  KeyLabel,
   NumericInput,
-  RmuKeyLabelSelect,
   useNotify,
+  weaponSkillImage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 
@@ -28,7 +29,7 @@ const ItemCreationWeaponAttributes: FC<{
   const auth = useAuth();
   const { t } = useTranslation();
   const notify = useNotify();
-  const [skills, setSkills] = useState<KeyLabel[]>();
+  const [skills, setSkills] = useState<EntityOption[]>();
 
   const mapSkills = async () => {
     try {
@@ -38,15 +39,18 @@ const ItemCreationWeaponAttributes: FC<{
       const rangedSpecs = rangedResp?.content || [];
       const skillsResp = await fetchSkills('categoryId==combat-training', 0, 100, auth);
       const list = skillsResp?.content || [];
-      const values: KeyLabel[] = [];
+      const values: EntityOption[] = [];
       list.forEach((e) => {
         const isMelee = e.specialization === 'melee-weapon-type';
         const isRanged = e.specialization === 'ranged-weapon-type';
         const specs = isMelee ? meleeSpecs : isRanged ? rangedSpecs : undefined;
         if (specs) {
-          specs.forEach((s) => values.push({ key: `${e.id}@${s.key}`, label: `${t(e.id)} - ${t(s.key)}` }));
+          specs.forEach((s) => {
+            const id = `${e.id}@${s.key}`;
+            values.push({ id, label: t(s.key), group: t(e.id), imageUrl: weaponSkillImage(id) });
+          });
         } else {
-          values.push({ key: e.id, label: e.id });
+          values.push({ id: e.id, label: t(e.id), group: t(e.id), imageUrl: weaponSkillImage(e.id) });
         }
       });
       setSkills(values);
@@ -67,14 +71,14 @@ const ItemCreationWeaponAttributes: FC<{
         <CategorySeparator text={t('weapon')} />
       </Grid>
       <Grid size={gridSize}>
-        <RmuKeyLabelSelect
-          value={formData.weapon?.skillId || ''}
+        <EntityPicker
+          variant="select"
+          kind="item"
+          required
+          value={formData.weapon?.skillId || null}
           options={skills}
           label={t('skill')}
-          i18n={false}
-          onChange={(e) => {
-            setFormData({ ...formData, weapon: { ...formData.weapon!, skillId: e } });
-          }}
+          onChange={(skillId) => setFormData({ ...formData, weapon: { ...formData.weapon!, skillId: skillId ?? '' } })}
         />
       </Grid>
       <Grid size={gridSize}>

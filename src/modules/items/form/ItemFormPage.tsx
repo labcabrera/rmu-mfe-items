@@ -8,6 +8,7 @@ import {
   CreateItemDto,
   EditableAvatar,
   fetchItem,
+  itemCategoryImage,
   FormPage,
   Item,
   LoadingState,
@@ -25,7 +26,6 @@ const EMPTY_ITEM = {
     stackable: false,
     unique: false,
   },
-  imageUrl: 'images/generic/configuration.png',
 } as Item;
 
 /** Create and edit page of an item. */
@@ -85,6 +85,7 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
         formData && (
           <EditableAvatar
             imageUrl={formData.imageUrl}
+            altImageUrl={itemCategoryImage(formData.category)}
             variant="rounded"
             onImageChange={(imageUrl) => setFormData({ ...formData, imageUrl })}
           />

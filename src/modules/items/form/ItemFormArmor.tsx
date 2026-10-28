@@ -2,18 +2,26 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormControlLabel, Grid, Switch } from '@mui/material';
 import {
+  ARMOR_CLASSES,
+  ARMOR_TYPES,
   CategorySeparator,
+  DifficultyPicker,
+  EnumPicker,
   Item,
   ItemArmorClass,
   ItemArmorSlot,
   NumericInput,
-  RmuSelect,
-  SelectDifficulty,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 /** Spec 041: a full suit covers the four slots. */
 const FULL_SUIT: ItemArmorSlot[] = ['body', 'head', 'arms', 'legs'];
-const ARMOR_CLASSES: ItemArmorClass[] = ['light', 'medium', 'heavy'];
+const ARMOR_SLOTS: ItemArmorSlot[] = ['head', 'body', 'arms', 'legs'];
+const slotImages: Record<string, string> = {
+  head: 'images/items/category-head.png',
+  body: 'images/items/category-body.png',
+  arms: 'images/items/category-arms.png',
+  legs: 'images/items/category-legs.png',
+};
 
 const ItemFormArmor: FC<{
   formData: Item;
@@ -28,24 +36,26 @@ const ItemFormArmor: FC<{
       <Grid size={12}>
         <CategorySeparator text={t('armor')} />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
-        <RmuSelect
+      <Grid size={{ xs: 12, md: 6 }}>
+        <EnumPicker
           label={t('slot')}
-          value={formData.armor.slot || ''}
-          options={['head', 'body', 'arms', 'legs']}
-          error={!formData.armor.slot}
-          onChange={(value) =>
-            setFormData({ ...formData, armor: { ...formData.armor!, slot: value! as ItemArmorSlot } })
+          values={ARMOR_SLOTS}
+          images={slotImages}
+          required
+          value={formData.armor.slot || null}
+          onChange={(slot) =>
+            slot && setFormData({ ...formData, armor: { ...formData.armor!, slot: slot as ItemArmorSlot } })
           }
         />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
-        <RmuSelect
+      <Grid size={{ xs: 12, md: 6 }}>
+        <EnumPicker
           label={t('at')}
-          value={formData.armor.at ? `${formData.armor.at}` : ''}
-          onChange={(v) => setFormData({ ...formData, armor: { ...formData.armor!, at: Number(v) } })}
-          error={!formData.armor.at}
-          options={['2', '3', '4', '5', '6', '7', '8', '9', '10']}
+          values={ARMOR_TYPES}
+          variant="tiles"
+          required
+          value={formData.armor.at ? `${formData.armor.at}` : null}
+          onChange={(at) => at && setFormData({ ...formData, armor: { ...formData.armor!, at: Number(at) } })}
         />
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
@@ -80,21 +90,23 @@ const ItemFormArmor: FC<{
           label={t('perception-penalty')}
         />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
-        <SelectDifficulty
-          label={t('base-difficulty')}
-          value={formData.armor?.baseDifficulty || ''}
-          onChange={(k) => setFormData({ ...formData, armor: { ...formData.armor!, baseDifficulty: k.key } })}
-        />
-      </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
-        <RmuSelect
+      <Grid size={{ xs: 12, md: 6 }}>
+        <EnumPicker
           label={t('armor-class')}
-          value={formData.armor.class || ''}
-          options={['', ...ARMOR_CLASSES]}
+          values={ARMOR_CLASSES}
+          labelPrefix="item-armor-class-"
+          allowAll
+          allLabel={t('none')}
+          value={formData.armor.class || null}
           onChange={(value) =>
             setFormData({ ...formData, armor: { ...formData.armor!, class: (value || undefined) as ItemArmorClass } })
           }
+        />
+      </Grid>
+      <Grid size={12}>
+        <DifficultyPicker
+          value={formData.armor?.baseDifficulty || null}
+          onChange={(baseDifficulty) => setFormData({ ...formData, armor: { ...formData.armor!, baseDifficulty } })}
         />
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
