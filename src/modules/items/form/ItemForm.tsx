@@ -7,16 +7,15 @@ import {
   CategorySeparator,
   fetchRealms,
   Item,
-  ITEM_RARITIES,
   ItemArmorSlot,
+  ItemCategoryPicker,
   ItemRarity,
   NumericInput,
+  RarityPicker,
   Realm,
-  RmuSelect,
-  SelectRealm,
+  RealmPicker,
   useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectItemCategory from '../../shared/selects/SelectItemCategory';
 import ItemFormArmor from './ItemFormArmor';
 import ItemFormFeatures, { emptyFeatures } from './ItemFormFeatures';
 import ItemFormModifiers from './ItemFormModifiers';
@@ -84,18 +83,12 @@ export default function ItemForm({ formData, setFormData }: { formData: Item; se
           />
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
-          <SelectItemCategory
-            label={t('category')}
-            name="category"
-            value={formData.category}
-            required
-            onChange={onChangeCategory}
-          />
+          <ItemCategoryPicker name="category" value={formData.category || null} required onChange={onChangeCategory} />
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
-          <SelectRealm
+          <RealmPicker
             value={formData.realmId || null}
-            onChange={(realm) => setFormData({ ...formData, realmId: realm })}
+            onChange={(realmId) => setFormData({ ...formData, realmId })}
             realms={realms}
           />
         </Grid>
@@ -179,12 +172,13 @@ export default function ItemForm({ formData, setFormData }: { formData: Item; se
             maxFractionDigits={4}
           />
         </Grid>
-        <Grid size={3}>
-          <RmuSelect
+        <Grid size={{ xs: 12, md: 6 }}>
+          <RarityPicker
             value={formData.info.rarity}
-            label={t('rarity')}
-            options={ITEM_RARITIES}
-            onChange={(e) => setFormData({ ...formData, info: { ...formData.info, rarity: e as ItemRarity } })}
+            required
+            onChange={(rarity) =>
+              rarity && setFormData({ ...formData, info: { ...formData.info, rarity: rarity as ItemRarity } })
+            }
           />
         </Grid>
         <Grid size={3}>

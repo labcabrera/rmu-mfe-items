@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormControlLabel, Grid, MenuItem, Switch, TextField } from '@mui/material';
+import { FormControlLabel, Grid, Switch, TextField } from '@mui/material';
 import {
   ANY_POISON,
   CategorySeparator,
+  EnumPicker,
   Item,
   ItemAntidote,
   ItemFeatures,
@@ -16,6 +17,9 @@ import {
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 type FeatureBlock = keyof ItemFeatures;
+
+/** i18n prefixes of the poison values. */
+const LABEL_PREFIX = { category: 'poison-category-', form: 'poison-form-', severity: 'poison-severity-' };
 
 /** The block of general equipment data each category edits (spec 041; poison and antidote, spec 042). */
 export const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
@@ -91,26 +95,21 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
     label: string,
     value: T | null,
     options: readonly T[],
-    labelOf: (option: T) => string,
+    labelPrefix: string,
     onChange: (v: T | null) => void,
     empty = false
   ) => (
-    <Grid size={{ xs: 12, md: 3 }}>
-      <TextField
-        select
-        size="small"
-        fullWidth
+    <Grid size={{ xs: 12, md: 6 }}>
+      <EnumPicker
         label={label}
-        value={value ?? ''}
-        onChange={(e) => onChange((e.target.value || null) as T | null)}
-      >
-        {empty && <MenuItem value="">-</MenuItem>}
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            {labelOf(option)}
-          </MenuItem>
-        ))}
-      </TextField>
+        values={options}
+        labelPrefix={labelPrefix}
+        value={value}
+        required={!empty}
+        allowAll={empty}
+        allLabel={empty ? t('none') : undefined}
+        onChange={(v) => onChange(v as T | null)}
+      />
     </Grid>
   );
 
@@ -205,7 +204,7 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
             t('poison-category'),
             features.poison.category,
             POISON_CATEGORIES,
-            (category) => t(`poison-category-${category}`),
+            LABEL_PREFIX.category,
             (category) => category && setPoison({ category })
           )}
           {number(t('level'), features.poison.level, (level) => setPoison({ level: level ?? 0 }), true)}
@@ -213,14 +212,14 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
             t('poison-form'),
             features.poison.form,
             POISON_FORMS,
-            (form) => t(`poison-form-${form}`),
+            LABEL_PREFIX.form,
             (form) => form && setPoison({ form })
           )}
           {select(
             t('poison-max-severity'),
             features.poison.maxSeverity,
             POISON_SEVERITIES,
-            (severity) => t(`poison-severity-${severity}`),
+            LABEL_PREFIX.severity,
             (maxSeverity) => setPoison({ maxSeverity }),
             true
           )}
@@ -253,21 +252,14 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
       {block === 'antidote' && features.antidote && (
         <>
           <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              select
-              size="small"
-              fullWidth
+            <EnumPicker
+              mode="multiple"
               label={t('poison-categories')}
+              values={[...POISON_CATEGORIES, ANY_POISON]}
+              labelPrefix="poison-category-"
               value={features.antidote.categories}
-              slotProps={{ select: { multiple: true } }}
-              onChange={(e) => setAntidote({ categories: e.target.value as unknown as ItemAntidote['categories'] })}
-            >
-              {[...POISON_CATEGORIES, ANY_POISON].map((category) => (
-                <MenuItem key={category} value={category}>
-                  {t(`poison-category-${category}`)}
-                </MenuItem>
-              ))}
-            </TextField>
+              onChange={(categories) => setAntidote({ categories: categories as ItemAntidote['categories'] })}
+            />
           </Grid>
           {number(t('level'), features.antidote.level, (level) => setAntidote({ level: level ?? 0 }), true)}
           {number(t('item-feature-field-antidote-within'), features.antidote.withinHours, (withinHours) =>

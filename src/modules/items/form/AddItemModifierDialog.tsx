@@ -9,9 +9,9 @@ import {
   ItemModifier,
   ItemModifierOption,
   ItemModifierType,
+  EnumPicker,
   NumericInput,
   RmuDialog,
-  RmuSelect,
   SkillSelector,
   TechnicalInfo,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
@@ -93,11 +93,11 @@ export default function AddItemModifierDialog({
     >
       <Grid container spacing={2}>
         <Grid size={12}>
-          <RmuSelect
-            value={formData.type}
+          <EnumPicker
+            value={formData.type || null}
             label={t('type')}
-            options={types}
-            onChange={(e) => onTypeChange(e as ItemModifierType)}
+            values={types}
+            onChange={(type) => type && onTypeChange(type as ItemModifierType)}
           />
         </Grid>
         {option && option.value !== 'forbidden' && (
@@ -117,12 +117,14 @@ export default function AddItemModifierDialog({
           />
         )}
         {option && modifierOptions && (
-          <RmuSelect
-            value={formData.modifier || ''}
-            label={t('modifier')}
-            options={modifierOptions}
-            onChange={(e) => setFormData({ ...formData, modifier: e })}
-          />
+          <Grid size={12}>
+            <EnumPicker
+              value={formData.modifier || null}
+              label={t('modifier')}
+              values={modifierOptions}
+              onChange={(modifier) => setFormData({ ...formData, modifier })}
+            />
+          </Grid>
         )}
       </Grid>
       <TechnicalInfo>
