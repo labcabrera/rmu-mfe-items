@@ -12,6 +12,7 @@ import {
   HERB_BIOMES,
   HERB_EFFECT_DELAYS,
   HERB_GROUPS,
+  HERB_INJURY_KINDS,
   HERB_PREPS,
   HerbEffects,
   ITEM_DIFFICULTY_CODES,
@@ -26,9 +27,6 @@ import {
   NumberRange,
   NumericInput,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-
-/** Injury types a herb may treat (strategic `injury.vo.ts`), and `any`. */
-const HERB_TREATS = ['bone', 'cut-burn', 'muscle-tendon', 'organ', 'poison-disease', 'skin-tissue', ANY_INJURY];
 
 /** The Treasure Law blocks of spec 062. */
 export type TreasureBlock = 'herb' | 'acid' | 'intoxicant' | 'gem' | 'jewelry' | 'animal' | 'property';
@@ -242,7 +240,7 @@ const HerbFields: FC<{ herb: ItemHerb; set: Setter }> = ({ herb, set }) => {
       <EnumPicker
         mode="multiple"
         label={t('herb-treats')}
-        values={HERB_TREATS}
+        values={HERB_INJURY_KINDS}
         formatLabel={(type) => t(type === ANY_INJURY ? 'herb-treats-any' : `injury-type-${type}`)}
         value={effects.treats ?? []}
         onChange={(treats) => setEffects({ treats: treats.length ? (treats as HerbEffects['treats']) : null })}
