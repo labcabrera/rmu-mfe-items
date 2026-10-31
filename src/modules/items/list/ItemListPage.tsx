@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
 import {
   fetchRealms,
-  gridSizeItemCard,
   Item,
   ITEM_CATALOG_MAX,
   ItemCard,
@@ -57,11 +56,10 @@ export default function ItemListPage() {
       filtersStorageKey="items.list"
       filters={<ItemCatalogFilterSections filters={filters} realms={realms} />}
       resultsActions={<ItemSortControl filters={filters} />}
-      loading={<LoadingState variant="showcase" imageRatio="square" cardSize={gridSizeItemCard} />}
+      loading={<LoadingState variant="showcase" />}
       collection={{
         modes: ['cards', 'table'],
         storageKey: 'items.list',
-        cardSize: gridSizeItemCard,
         columns: itemCatalogColumns(t),
         onSelect: open,
       }}

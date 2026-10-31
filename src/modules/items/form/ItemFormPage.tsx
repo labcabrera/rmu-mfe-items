@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   createItem,
   CreateItemDto,
-  EditableAvatar,
+  EntityImage,
   fetchItem,
   itemCategoryImage,
   FormPage,
@@ -83,10 +83,9 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
       dirty={!!formData && JSON.stringify(formData) !== initialData}
       leftPanel={
         formData && (
-          <EditableAvatar
-            imageUrl={formData.imageUrl}
-            altImageUrl={itemCategoryImage(formData.category)}
-            variant="rounded"
+          <EntityImage
+            image={formData.imageUrl}
+            fallbackImages={[itemCategoryImage(formData.category)]}
             onImageChange={(imageUrl) => setFormData({ ...formData, imageUrl })}
           />
         )
