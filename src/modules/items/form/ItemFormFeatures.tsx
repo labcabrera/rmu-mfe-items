@@ -15,13 +15,17 @@ import {
   POISON_SEVERITIES,
   PoisonRange,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { emptyTreasureBlock, TreasureBlock, TreasureBlockFields } from './ItemFormTreasureFeatures';
 
 type FeatureBlock = keyof ItemFeatures;
 
 /** i18n prefixes of the poison values. */
 const LABEL_PREFIX = { category: 'poison-category-', form: 'poison-form-', severity: 'poison-severity-' };
 
-/** The block of general equipment data each category edits (spec 041; poison and antidote, spec 042). */
+/**
+ * The block of general equipment data each category edits (spec 041; poison and antidote, spec 042), with the
+ * Treasure Law blocks of spec 062. A herb may also be an antidote, and a mount an animal of the market.
+ */
 export const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
   container: 'container',
   light: 'light',
@@ -29,11 +33,24 @@ export const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
   vehicle: 'transport',
   ammunition: 'ammunition',
   poison: 'poison',
-  herb: 'antidote',
+  herb: 'herb',
+  acid: 'acid',
+  intoxicant: 'intoxicant',
+  gem: 'gem',
+  jewelry: 'jewelry',
+  animal: 'animal',
+  property: 'property',
 };
 
-export const emptyFeatures = (category: string): ItemFeatures | null => {
-  switch (FEATURE_BLOCKS[category]) {
+/** Blocks a category may add with a switch (spec 062): the antidote of a herb, the animal data of a mount. */
+export const OPTIONAL_BLOCKS: Record<string, FeatureBlock[]> = { herb: ['antidote'], mount: ['animal'] };
+
+const TREASURE_BLOCKS: FeatureBlock[] = ['herb', 'acid', 'intoxicant', 'gem', 'jewelry', 'animal', 'property'];
+const isTreasureBlock = (block: FeatureBlock): block is TreasureBlock => TREASURE_BLOCKS.includes(block);
+
+const emptyBlock = (block: FeatureBlock | undefined): ItemFeatures | null => {
+  if (block && isTreasureBlock(block)) return emptyTreasureBlock(block);
+  switch (block) {
     case 'container':
       return { container: { weight: null, volume: null, liquid: null, units: null } };
     case 'light':
@@ -60,6 +77,8 @@ export const emptyFeatures = (category: string): ItemFeatures | null => {
   }
 };
 
+export const emptyFeatures = (category: string): ItemFeatures | null => emptyBlock(FEATURE_BLOCKS[category]);
+
 /** Categories whose items may be used as improvised weapons (spec 041, decision 5). */
 const IMPROVISED_CATEGORIES = ['tools', 'other'];
 
@@ -71,12 +90,30 @@ const EMPTY_IMPROVISED_WEAPON = { skillId: '', fumble: 0, modes: [], tags: ['imp
  */
 const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }> = ({ formData, setFormData }) => {
   const { t } = useTranslation();
-  const block = FEATURE_BLOCKS[formData.category];
+  const main = FEATURE_BLOCKS[formData.category];
+  const optional = OPTIONAL_BLOCKS[formData.category] ?? [];
   const features = formData.features ?? emptyFeatures(formData.category) ?? {};
   const improvisable = IMPROVISED_CATEGORIES.includes(formData.category);
-  if (!block && !improvisable) return null;
+  if (!main && !improvisable) return null;
+  // Each block is edited by its own fields; an optional one shows them once its switch is on
+  const blocks = [main, ...optional.filter((each) => !!features[each])].filter((each): each is FeatureBlock => !!each);
+  const has = (each: FeatureBlock) => blocks.includes(each);
+  // Outside the JSX: the i18n lint reads string arguments there as visible text
+  const show = {
+    container: has('container'),
+    light: has('light'),
+    transport: has('transport'),
+    ammunition: has('ammunition'),
+    poison: has('poison'),
+    antidote: has('antidote'),
+  };
 
   const setFeatures = (next: ItemFeatures) => setFormData({ ...formData, features: { ...features, ...next } });
+  const toggleBlock = (each: FeatureBlock, on: boolean) => {
+    const rest = { ...features };
+    delete rest[each];
+    setFormData({ ...formData, features: on ? { ...rest, ...emptyBlock(each) } : rest });
+  };
   const setContainer = (patch: Partial<NonNullable<ItemFeatures['container']>>) =>
     setFeatures({ container: { ...features.container!, ...patch } });
   const setLight = (patch: Partial<NonNullable<ItemFeatures['light']>>) =>
@@ -137,7 +174,7 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
       <Grid size={12}>
         <CategorySeparator text={t('item-features')} />
       </Grid>
-      {block === 'container' &&
+      {show.container &&
         features.container && [
           number(t('item-feature-field-container-weight'), features.container.weight, (weight) =>
             setContainer({ weight })
@@ -155,21 +192,21 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
             true
           ),
         ]}
-      {block === 'light' &&
+      {show.light &&
         features.light && [
           number(t('item-feature-field-light-radius'), features.light.radius, (radius) => setLight({ radius })),
           number(t('item-feature-field-light-duration'), features.light.durationHours, (durationHours) =>
             setLight({ durationHours })
           ),
         ]}
-      {block === 'transport' &&
+      {show.transport &&
         features.transport && [
           number(t('item-feature-field-transport-capacity'), features.transport.capacity, (capacity) =>
             setTransport({ capacity })
           ),
           number(t('item-feature-field-transport-speed'), features.transport.speed, (speed) => setTransport({ speed })),
         ]}
-      {block === 'ammunition' && features.ammunition && (
+      {show.ammunition && features.ammunition && (
         <>
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
@@ -198,7 +235,7 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
           </Grid>
         </>
       )}
-      {block === 'poison' && features.poison && (
+      {show.poison && features.poison && (
         <>
           {select(
             t('poison-category'),
@@ -249,7 +286,7 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
           )}
         </>
       )}
-      {block === 'antidote' && features.antidote && (
+      {show.antidote && features.antidote && (
         <>
           <Grid size={{ xs: 12, md: 6 }}>
             <EnumPicker
@@ -267,6 +304,17 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
           )}
         </>
       )}
+      {blocks.filter(isTreasureBlock).map((each) => (
+        <TreasureBlockFields key={each} block={each} features={features} set={setFeatures} />
+      ))}
+      {optional.map((each) => (
+        <Grid key={`toggle-${each}`} size={12}>
+          <FormControlLabel
+            control={<Switch checked={!!features[each]} onChange={(_, checked) => toggleBlock(each, checked)} />}
+            label={t(`item-feature-toggle-${each}`)}
+          />
+        </Grid>
+      ))}
       {improvisable && (
         <Grid size={12}>
           <FormControlLabel
