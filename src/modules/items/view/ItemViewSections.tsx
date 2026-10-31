@@ -7,6 +7,7 @@ import {
   Item,
   itemCategoryLabel,
   ItemFeatureChips,
+  ItemFeaturesView,
   itemFeatureLines,
   ItemFeatureTranslate,
   KeyValuePanel,
@@ -180,12 +181,16 @@ export function ItemCombatSection({ item }: { item: Item }) {
   );
 }
 
+/** The chips of the data of the item and, for the Treasure Law goods (spec 062), a panel per block. */
 export function ItemFeaturesSection({ item }: { item: Item }) {
   const { t } = useTranslation();
   return (
-    <Panel title={t('item-features')}>
-      <ItemFeatureChips item={featureSource(item)} />
-    </Panel>
+    <Stack spacing={2}>
+      <Panel title={t('item-features')}>
+        <ItemFeatureChips item={featureSource(item)} />
+      </Panel>
+      <ItemFeaturesView features={item.features} />
+    </Stack>
   );
 }
 
