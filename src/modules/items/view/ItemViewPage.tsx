@@ -227,6 +227,7 @@ export default function ItemViewPage() {
             open={imageDialogOpen}
             onClose={() => setImageDialogOpen(false)}
             onSelect={(selected) => onImageSelected(entity, selected)}
+            defaultCategory="items"
           />
         </Stack>
       )}

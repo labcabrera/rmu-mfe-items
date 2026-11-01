@@ -92,6 +92,7 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
       leftPanel={
         formData && (
           <EntityImage
+            kind="item"
             image={formData.imageUrl}
             fallbackImages={[itemCategoryImage(formData.category)]}
             onImageChange={(imageUrl) => setFormData({ ...formData, imageUrl })}
