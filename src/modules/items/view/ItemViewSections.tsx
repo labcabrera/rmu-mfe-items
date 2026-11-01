@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Chip, Grid, Link, Stack, Typography } from '@mui/material';
 import {
+  EmptyState,
   formatBonus,
   Item,
   itemCategoryLabel,
@@ -91,13 +92,13 @@ export function ItemSummarySection({ item, realm }: { item: Item; realm?: Realm 
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
         <Panel title={t('description')}>
-          <Typography
-            variant="body2"
-            color={item.description ? undefined : 'text.secondary'}
-            sx={{ whiteSpace: 'pre-line' }}
-          >
-            {item.description ? t(item.description, { defaultValue: item.description }) : t('no-description')}
-          </Typography>
+          {item.description ? (
+            <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
+              {t(item.description, { defaultValue: item.description })}
+            </Typography>
+          ) : (
+            <EmptyState dense title={t('no-description')} />
+          )}
         </Panel>
       </Grid>
     </Grid>
