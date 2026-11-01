@@ -60,6 +60,7 @@ const AddAttackModeDialog: FC<{
       open={open}
       title={t('add-attack-mode')}
       maxWidth="sm"
+      onDismiss={handleClose}
       buttons={
         <>
           <Button onClick={handleClose}>{t('cancel')}</Button>
