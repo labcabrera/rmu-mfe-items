@@ -14,9 +14,12 @@ import AddItemModifierDialog from './AddItemModifierDialog';
 export default function ItemFormModifiers({
   formData,
   setFormData,
+  editable = true,
 }: {
   formData: Item;
   setFormData: (item: Item) => void;
+  /** Spec 063: without permission on the item, its modifiers cannot be added or removed. */
+  editable?: boolean;
 }) {
   const { t } = useTranslation();
   const notify = useNotify();
@@ -42,13 +45,13 @@ export default function ItemFormModifiers({
               <TableCell align="left">{t('modifier')}</TableCell>
               <TableCell align="left">{t('spec')}</TableCell>
               <TableCell align="right">
-                <AddButton onClick={() => setModifierDialogOpen(true)} />
+                {editable && <AddButton onClick={() => setModifierDialogOpen(true)} />}
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {(formData.modifiers || []).map((e, index) => (
-              <Row key={index} modifier={e} onDelete={onDelete} />
+              <Row key={index} modifier={e} onDelete={editable ? onDelete : undefined} />
             ))}
           </TableBody>
         </Table>
@@ -63,7 +66,7 @@ export default function ItemFormModifiers({
   );
 }
 
-function Row({ modifier, onDelete }: { modifier: ItemModifier; onDelete: (id: string) => void }) {
+function Row({ modifier, onDelete }: { modifier: ItemModifier; onDelete?: (id: string) => void }) {
   const { t } = useTranslation();
   return (
     <TableRow>
@@ -71,9 +74,7 @@ function Row({ modifier, onDelete }: { modifier: ItemModifier; onDelete: (id: st
       <TableCell>{modifier.value || '-'}</TableCell>
       <TableCell>{modifier.modifier ? t(modifier.modifier) : '-'}</TableCell>
       <TableCell>{modifier.specialization ? t(modifier.specialization) : '-'}</TableCell>
-      <TableCell align="right">
-        <DeleteButton onClick={() => onDelete(modifier.id)} />
-      </TableCell>
+      <TableCell align="right">{onDelete && <DeleteButton onClick={() => onDelete(modifier.id)} />}</TableCell>
     </TableRow>
   );
 }

@@ -3,10 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
 import {
+  canEditEntity,
   createItem,
   CreateItemDto,
   EntityImage,
+  EntitySourceField,
+  EntityType,
   fetchItem,
   itemCategoryImage,
   FormPage,
@@ -42,6 +46,9 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
   });
   const [formData, setFormData] = useState<Item>();
   const [initialData, setInitialData] = useState<string>();
+  // Spec 063: set only by an admin through the source field; otherwise not sent.
+  const [entitySource, setEntitySource] = useState<EntityType>();
+  const editable = mode === 'create' || canEditEntity(existing.entity, auth);
 
   useEffect(() => {
     const data = mode === 'create' ? EMPTY_ITEM : existing.entity;
@@ -53,15 +60,16 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
 
   const onSave = () => {
     if (!formData) return;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    const { id, owner, entitySource: current, ...rest } = formData;
+    const source = entitySource ? { entitySource } : {};
     if (mode === 'create') {
-      createItem(formData as unknown as CreateItemDto, auth)
+      createItem({ id, ...rest, ...source } as unknown as CreateItemDto, auth)
         .then((item) => navigate(`/items/view/${item.id}`, { state: { item } }))
         .catch(notify.error);
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    const { id, ...rest } = formData;
-    updateItem(itemId!, rest as unknown as UpdateItemDto, auth)
+    updateItem(itemId!, { ...rest, ...source } as unknown as UpdateItemDto, auth)
       .then((item) => navigate(`/items/view/${item.id}`, { state: { item } }))
       .catch(notify.error);
   };
@@ -79,8 +87,8 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
       breadcrumbs={breadcrumbs}
       onSave={onSave}
       onCancel={onCancel}
-      saveDisabled={!formData?.name}
-      dirty={!!formData && JSON.stringify(formData) !== initialData}
+      saveDisabled={!formData?.name || !editable}
+      dirty={!!formData && (JSON.stringify(formData) !== initialData || !!entitySource)}
       leftPanel={
         formData && (
           <EntityImage
@@ -93,7 +101,10 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
     >
       {formData ? (
         <>
-          <ItemForm formData={formData} setFormData={setFormData} />
+          <ItemForm formData={formData} setFormData={setFormData} editable={editable} />
+          <Box sx={{ mt: 2 }}>
+            <EntitySourceField value={entitySource ?? formData.entitySource} onChange={setEntitySource} />
+          </Box>
           <TechnicalInfo>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
           </TechnicalInfo>

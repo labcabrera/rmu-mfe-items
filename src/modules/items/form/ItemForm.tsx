@@ -22,7 +22,15 @@ import ItemFormModifiers from './ItemFormModifiers';
 import ItemFormShield from './ItemFormShield';
 import ItemFormWeapon from './ItemFormWeapon';
 
-export default function ItemForm({ formData, setFormData }: { formData: Item; setFormData: (item: Item) => void }) {
+export default function ItemForm({
+  formData,
+  setFormData,
+  editable = true,
+}: {
+  formData: Item;
+  setFormData: (item: Item) => void;
+  editable?: boolean;
+}) {
   const { t } = useTranslation();
   const auth = useAuth();
   const notify = useNotify();
@@ -225,7 +233,7 @@ export default function ItemForm({ formData, setFormData }: { formData: Item; se
         </Grid>
 
         <Grid size={12}>
-          <ItemFormModifiers formData={formData} setFormData={setFormData} />
+          <ItemFormModifiers formData={formData} setFormData={setFormData} editable={editable} />
         </Grid>
 
         <Grid size={12}>
