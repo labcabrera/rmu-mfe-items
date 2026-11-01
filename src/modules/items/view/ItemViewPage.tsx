@@ -10,9 +10,11 @@ import SportsMmaIcon from '@mui/icons-material/SportsMma';
 import TuneIcon from '@mui/icons-material/Tune';
 import { Box, Chip, Stack } from '@mui/material';
 import {
+  canEditEntity,
   defaultImages,
   deleteItem,
   DetailPage,
+  EntitySourceChip,
   fetchItem,
   fetchRealm,
   ImageSelectorDialog,
@@ -100,6 +102,8 @@ export default function ItemViewPage() {
   const sectionIds = useMemo(() => sections, [sectionKey]);
   const [section, setSection] = useSectionParam(sectionIds);
   const image = useLoadedImage(item);
+  // Spec 063: rulebook items only for admins, user items for their owner.
+  const editable = canEditEntity(item, auth);
   // The filters of the list it was opened from (spec 046, decision 7)
   const listUrl = `/items${typeof location.state?.from === 'string' ? location.state.from : ''}`;
 
@@ -165,6 +169,7 @@ export default function ItemViewPage() {
 
   const chips = (entity: Item): ReactNode[] => [
     <Chip key="rarity" label={t(entity.info.rarity)} color={RARITY_COLORS[entity.info.rarity]} />,
+    <EntitySourceChip key="source" entity={entity} />,
     ...(entity.info.unique ? [<Chip key="unique" label={t('unique')} color="secondary" variant="outlined" />] : []),
     ...(entity.info.stackable ? [<Chip key="stackable" label={t('stackable')} variant="outlined" />] : []),
     ...(entity.weapon?.tags ?? []).map((tag) => (
@@ -189,16 +194,15 @@ export default function ItemViewPage() {
       ]}
       entity={state}
       technicalInfo={false}
-      onEdit={(entity) => navigate(`/items/edit/${entity.id}`, { state: { item: entity } })}
-      onDelete={onDelete}
+      onEdit={editable ? (entity) => navigate(`/items/edit/${entity.id}`, { state: { item: entity } }) : undefined}
+      onDelete={editable ? onDelete : undefined}
       hero={(entity) => ({
         title: itemName(entity, t),
         overline: [itemCategoryLabel(entity.category, t), realm ? t(realm.name) : undefined]
           .filter(Boolean)
           .join(' · '),
         image,
-        onImageClick: () => setImageDialogOpen(true),
-        imageActionLabel: t('change-image'),
+        ...(editable ? { onImageClick: () => setImageDialogOpen(true), imageActionLabel: t('change-image') } : {}),
         chips: chips(entity),
         pills: pills(entity),
       })}
