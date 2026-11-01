@@ -16,11 +16,12 @@ import {
 /** Spec 041: a full suit covers the four slots. */
 const FULL_SUIT: ItemArmorSlot[] = ['body', 'head', 'arms', 'legs'];
 const ARMOR_SLOTS: ItemArmorSlot[] = ['head', 'body', 'arms', 'legs'];
+// The slot images were removed from rmu-mfe-assets: every slot shows the armor category image.
 const slotImages: Record<string, string> = {
-  head: 'images/items/category-head.png',
-  body: 'images/items/category-body.png',
-  arms: 'images/items/category-arms.png',
-  legs: 'images/items/category-legs.png',
+  head: 'images/items/category-armor.png',
+  body: 'images/items/category-armor.png',
+  arms: 'images/items/category-armor.png',
+  legs: 'images/items/category-armor.png',
 };
 
 const ItemFormArmor: FC<{
