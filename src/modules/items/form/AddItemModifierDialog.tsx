@@ -84,6 +84,7 @@ export default function AddItemModifierDialog({
     <RmuDialog
       title={t('add-modifier')}
       open={open}
+      onDismiss={onClose}
       buttons={[
         <Button onClick={onClose}>{t('close')}</Button>,
         <Button color="success" disabled={!validForm} onClick={() => onClickAdd()}>

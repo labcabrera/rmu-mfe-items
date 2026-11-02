@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import {
   AddButton,
   CategorySeparator,
+  DataTable,
+  DataTableColumn,
   DeleteButton,
   Item,
   ItemModifier,
@@ -33,29 +34,37 @@ export default function ItemFormModifiers({
     setFormData({ ...formData, modifiers: (formData.modifiers || []).filter((e) => e.id !== id) });
   };
 
+  const columns: DataTableColumn<{ modifier: ItemModifier; index: number }>[] = [
+    { key: 'type', header: t('type'), render: ({ modifier }) => t(modifier.type) },
+    { key: 'bonus', header: t('bonus'), render: ({ modifier }) => modifier.value || '-' },
+    {
+      key: 'modifier',
+      header: t('modifier'),
+      render: ({ modifier }) => (modifier.modifier ? t(modifier.modifier) : '-'),
+    },
+    {
+      key: 'spec',
+      header: t('spec'),
+      render: ({ modifier }) => (modifier.specialization ? t(modifier.specialization) : '-'),
+    },
+    {
+      key: 'actions',
+      // The add button lives in the header, so the table stays a table on phones (no cards without header).
+      header: editable && <AddButton onClick={() => setModifierDialogOpen(true)} />,
+      align: 'right',
+      render: ({ modifier }) => editable && <DeleteButton onClick={() => onDelete(modifier.id)} />,
+    },
+  ];
+
   return (
     <>
       <CategorySeparator text={t('modifiers')} />
-      <TableContainer component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">{t('type')}</TableCell>
-              <TableCell align="left">{t('bonus')}</TableCell>
-              <TableCell align="left">{t('modifier')}</TableCell>
-              <TableCell align="left">{t('spec')}</TableCell>
-              <TableCell align="right">
-                {editable && <AddButton onClick={() => setModifierDialogOpen(true)} />}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(formData.modifiers || []).map((e, index) => (
-              <Row key={index} modifier={e} onDelete={editable ? onDelete : undefined} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <DataTable
+        columns={columns}
+        rows={(formData.modifiers || []).map((modifier, index) => ({ modifier, index }))}
+        getKey={({ index }) => String(index)}
+        cardsOnMobile={false}
+      />
       <AddItemModifierDialog
         open={modifierDialogOpen}
         onAdd={(e) => onModifierAdded(e)}
@@ -63,18 +72,5 @@ export default function ItemFormModifiers({
         onError={(err) => notify.error(err)}
       />
     </>
-  );
-}
-
-function Row({ modifier, onDelete }: { modifier: ItemModifier; onDelete?: (id: string) => void }) {
-  const { t } = useTranslation();
-  return (
-    <TableRow>
-      <TableCell>{t(modifier.type)}</TableCell>
-      <TableCell>{modifier.value || '-'}</TableCell>
-      <TableCell>{modifier.modifier ? t(modifier.modifier) : '-'}</TableCell>
-      <TableCell>{modifier.specialization ? t(modifier.specialization) : '-'}</TableCell>
-      <TableCell align="right">{onDelete && <DeleteButton onClick={() => onDelete(modifier.id)} />}</TableCell>
-    </TableRow>
   );
 }
