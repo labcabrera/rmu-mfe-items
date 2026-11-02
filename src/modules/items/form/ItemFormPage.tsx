@@ -13,6 +13,7 @@ import {
   EntityType,
   fetchItem,
   itemCategoryImage,
+  itemImageFolder,
   FormPage,
   Item,
   LoadingState,
@@ -95,6 +96,7 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
             kind="item"
             image={formData.imageUrl}
             fallbackImages={[itemCategoryImage(formData.category)]}
+            imageCategory={itemImageFolder(formData.category)}
             onImageChange={(imageUrl) => setFormData({ ...formData, imageUrl })}
           />
         )

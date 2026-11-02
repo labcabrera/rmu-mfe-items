@@ -20,6 +20,7 @@ import {
   ImageSelectorDialog,
   Item,
   itemCategoryImage,
+  itemImageFolder,
   itemCategoryLabel,
   itemImageUrl,
   itemName,
@@ -232,7 +233,7 @@ export default function ItemViewPage() {
             open={imageDialogOpen}
             onClose={() => setImageDialogOpen(false)}
             onSelect={(selected) => onImageSelected(entity, selected)}
-            defaultCategory="items"
+            defaultCategory={itemImageFolder(entity.category)}
           />
         </Stack>
       )}
