@@ -57,7 +57,7 @@ const sectionIcons: Record<ItemSectionId, ReactElement> = {
 };
 
 /**
- * The first of the images that loads: the item's own (or `images/items/<id>.png`), its category's, the generic one.
+ * The first of the images that loads: the item's own (or `images/<folder>/<id>.png`), its category's, the generic one.
  * The hero avatar has no fallback chain of its own.
  */
 const useLoadedImage = (item: Item | undefined): string | undefined => {
