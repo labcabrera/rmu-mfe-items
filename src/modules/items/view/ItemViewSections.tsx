@@ -5,6 +5,7 @@ import { Box, Chip, Grid, Link, Stack, Typography } from '@mui/material';
 import {
   EmptyState,
   formatBonus,
+  GemTraits,
   Item,
   itemCategoryLabel,
   ItemFeatureChips,
@@ -13,6 +14,7 @@ import {
   ItemFeatureTranslate,
   KeyValuePanel,
   KeyValueRow,
+  MagicItemInfo,
   MoneyDisplay,
   Panel,
   Realm,
@@ -182,15 +184,38 @@ export function ItemCombatSection({ item }: { item: Item }) {
   );
 }
 
-/** The chips of the data of the item and, for the Treasure Law goods (spec 062), a panel per block. */
+/**
+ * The chips of the data of the item and, for the Treasure Law goods (spec 062), a panel per block. Spec 067: the magic
+ * block of the item, and the magic traits of a gem in a panel of their own (out of the gem panel).
+ */
 export function ItemFeaturesSection({ item }: { item: Item }) {
   const { t } = useTranslation();
+  const magic = item.features?.magic;
+  const gem = item.features?.gem;
+  const gemMagic = gem?.magic;
+  const gemTraits =
+    !!gemMagic && (!!gemMagic.spells || !!gemMagic.stats?.length || !!gemMagic.skills || !!gemMagic.other);
+  const features = gem && gemTraits ? { ...item.features, gem: { ...gem, magic: null } } : item.features;
   return (
     <Stack spacing={2}>
       <Panel title={t('item-features')}>
         <ItemFeatureChips item={featureSource(item)} />
       </Panel>
-      <ItemFeaturesView features={item.features} />
+      {(magic || gemTraits) && (
+        <Grid container spacing={2}>
+          {magic && (
+            <Grid size={{ xs: 12, md: 6 }}>
+              <MagicItemInfo magic={magic} />
+            </Grid>
+          )}
+          {gemTraits && (
+            <Grid size={{ xs: 12, md: 6 }}>
+              <GemTraits gem={gem} />
+            </Grid>
+          )}
+        </Grid>
+      )}
+      <ItemFeaturesView features={features} />
     </Stack>
   );
 }

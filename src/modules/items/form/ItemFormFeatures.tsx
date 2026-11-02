@@ -15,6 +15,7 @@ import {
   POISON_SEVERITIES,
   PoisonRange,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
+import ItemFormMagic, { emptyMagicBlock } from './ItemFormMagic';
 import { emptyTreasureBlock, TreasureBlock, TreasureBlockFields } from './ItemFormTreasureFeatures';
 
 type FeatureBlock = keyof ItemFeatures;
@@ -40,17 +41,28 @@ export const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
   jewelry: 'jewelry',
   animal: 'animal',
   property: 'property',
+  // Spec 067: potions and spell items are magic items
+  potion: 'magic',
+  'spell-item': 'magic',
 };
 
 /** Blocks a category may add with a switch (spec 062): the antidote of a herb, the animal data of a mount. */
 export const OPTIONAL_BLOCKS: Record<string, FeatureBlock[]> = { herb: ['antidote'], mount: ['animal'] };
 
+/** The optional blocks of a category: any item may be a magic item (spec 067). */
+const optionalBlocks = (category: string): FeatureBlock[] => [
+  ...(OPTIONAL_BLOCKS[category] ?? []),
+  ...(FEATURE_BLOCKS[category] === 'magic' ? [] : (['magic'] as FeatureBlock[])),
+];
+
 const TREASURE_BLOCKS: FeatureBlock[] = ['herb', 'acid', 'intoxicant', 'gem', 'jewelry', 'animal', 'property'];
 const isTreasureBlock = (block: FeatureBlock): block is TreasureBlock => TREASURE_BLOCKS.includes(block);
 
-const emptyBlock = (block: FeatureBlock | undefined): ItemFeatures | null => {
+const emptyBlock = (block: FeatureBlock | undefined, category = ''): ItemFeatures | null => {
   if (block && isTreasureBlock(block)) return emptyTreasureBlock(block);
   switch (block) {
+    case 'magic':
+      return { magic: emptyMagicBlock(category) };
     case 'container':
       return { container: { weight: null, volume: null, liquid: null, units: null } };
     case 'light':
@@ -77,7 +89,7 @@ const emptyBlock = (block: FeatureBlock | undefined): ItemFeatures | null => {
   }
 };
 
-export const emptyFeatures = (category: string): ItemFeatures | null => emptyBlock(FEATURE_BLOCKS[category]);
+export const emptyFeatures = (category: string): ItemFeatures | null => emptyBlock(FEATURE_BLOCKS[category], category);
 
 /** Categories whose items may be used as improvised weapons (spec 041, decision 5). */
 const IMPROVISED_CATEGORIES = ['tools', 'other'];
@@ -91,10 +103,10 @@ const EMPTY_IMPROVISED_WEAPON = { skillId: '', fumble: 0, modes: [], tags: ['imp
 const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }> = ({ formData, setFormData }) => {
   const { t } = useTranslation();
   const main = FEATURE_BLOCKS[formData.category];
-  const optional = OPTIONAL_BLOCKS[formData.category] ?? [];
+  const optional = optionalBlocks(formData.category);
   const features = formData.features ?? emptyFeatures(formData.category) ?? {};
   const improvisable = IMPROVISED_CATEGORIES.includes(formData.category);
-  if (!main && !improvisable) return null;
+  if (!formData.category) return null;
   // Each block is edited by its own fields; an optional one shows them once its switch is on
   const blocks = [main, ...optional.filter((each) => !!features[each])].filter((each): each is FeatureBlock => !!each);
   const has = (each: FeatureBlock) => blocks.includes(each);
@@ -106,13 +118,14 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
     ammunition: has('ammunition'),
     poison: has('poison'),
     antidote: has('antidote'),
+    magic: has('magic'),
   };
 
   const setFeatures = (next: ItemFeatures) => setFormData({ ...formData, features: { ...features, ...next } });
   const toggleBlock = (each: FeatureBlock, on: boolean) => {
     const rest = { ...features };
     delete rest[each];
-    setFormData({ ...formData, features: on ? { ...rest, ...emptyBlock(each) } : rest });
+    setFormData({ ...formData, features: on ? { ...rest, ...emptyBlock(each, formData.category) } : rest });
   };
   const setContainer = (patch: Partial<NonNullable<ItemFeatures['container']>>) =>
     setFeatures({ container: { ...features.container!, ...patch } });
@@ -303,6 +316,12 @@ const ItemFormFeatures: FC<{ formData: Item; setFormData: (item: Item) => void }
             setAntidote({ withinHours })
           )}
         </>
+      )}
+      {show.magic && (
+        <ItemFormMagic
+          magic={features.magic ?? emptyMagicBlock(formData.category)}
+          onChange={(magic) => setFeatures({ magic })}
+        />
       )}
       {blocks.filter(isTreasureBlock).map((each) => (
         <TreasureBlockFields key={each} block={each} features={features} set={setFeatures} />

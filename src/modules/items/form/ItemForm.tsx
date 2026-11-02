@@ -45,7 +45,13 @@ export default function ItemForm({
   const onChangeCategory = (category: string | null) => {
     const nextCategory = category || '';
     // Spec 041: the general equipment block of the new category, or none
-    const next: Partial<typeof formData> = { category: nextCategory, features: emptyFeatures(nextCategory) };
+    // Spec 067: the magic block of any category survives the change
+    const magic = formData.features?.magic;
+    const features = emptyFeatures(nextCategory);
+    const next: Partial<typeof formData> = {
+      category: nextCategory,
+      features: magic ? { ...features, magic } : features,
+    };
     // const info = { cost: { min: 0, average: 0, max: 0 } };
     if (nextCategory === 'weapon') {
       next.weapon = { skillId: '', fumble: 0, modes: [] };

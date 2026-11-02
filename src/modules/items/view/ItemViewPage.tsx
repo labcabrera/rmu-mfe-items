@@ -23,6 +23,7 @@ import {
   itemCategoryLabel,
   itemImageUrl,
   itemName,
+  magicItemSummary,
   MoneyDisplay,
   RARITY_COLORS,
   Realm,
@@ -170,6 +171,10 @@ export default function ItemViewPage() {
   const chips = (entity: Item): ReactNode[] => [
     <Chip key="rarity" label={t(entity.info.rarity)} color={RARITY_COLORS[entity.info.rarity]} />,
     <EntitySourceChip key="source" entity={entity} />,
+    // Spec 067: kind, level and bonuses of a magic item
+    ...(entity.features?.magic
+      ? [<Chip key="magic" label={magicItemSummary(entity.features.magic, t)} color="primary" variant="outlined" />]
+      : []),
     ...(entity.info.unique ? [<Chip key="unique" label={t('unique')} color="secondary" variant="outlined" />] : []),
     ...(entity.info.stackable ? [<Chip key="stackable" label={t('stackable')} variant="outlined" />] : []),
     ...(entity.weapon?.tags ?? []).map((tag) => (
