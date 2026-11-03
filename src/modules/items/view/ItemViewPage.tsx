@@ -104,7 +104,7 @@ export default function ItemViewPage() {
   const sectionIds = useMemo(() => sections, [sectionKey]);
   const [section, setSection] = useSectionParam(sectionIds);
   const image = useLoadedImage(item);
-  // Spec 063: rulebook items only for admins, user items for their owner.
+  // Spec 073: the access the API sends (an item of a realm follows the realm); before it, spec 063 by owner.
   const editable = canEditEntity(item, auth);
   // The filters of the list it was opened from (spec 046, decision 7)
   const listUrl = `/items${typeof location.state?.from === 'string' ? location.state.from : ''}`;

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { FormControlLabel, FormGroup, Grid, Switch, TextField } from '@mui/material';
 import {
+  canEditEntity,
   CategorySeparator,
   fetchRealms,
   Item,
@@ -103,7 +104,8 @@ export default function ItemForm({
           <RealmPicker
             value={formData.realmId || null}
             onChange={(realmId) => setFormData({ ...formData, realmId })}
-            realms={realms}
+            // Spec 073: items go to realms the user writes in (the current one stays listed)
+            realms={realms?.filter((realm) => canEditEntity(realm, auth) || realm.id === formData.realmId)}
           />
         </Grid>
 
