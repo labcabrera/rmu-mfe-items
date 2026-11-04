@@ -15,6 +15,7 @@ import {
   itemCategoryImage,
   itemImageFolder,
   FormPage,
+  isAdmin,
   Item,
   LoadingState,
   TechnicalInfo,
@@ -50,6 +51,8 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
   // Spec 063: set only by an admin through the source field; otherwise not sent.
   const [entitySource, setEntitySource] = useState<EntityType>();
   const editable = mode === 'create' || canEditEntity(existing.entity, auth);
+  // Spec 073: an item without realm is global, and only an admin creates one
+  const realmMissing = mode === 'create' && !formData?.realmId && !isAdmin(auth);
 
   useEffect(() => {
     const data = mode === 'create' ? EMPTY_ITEM : existing.entity;
@@ -88,7 +91,7 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
       breadcrumbs={breadcrumbs}
       onSave={onSave}
       onCancel={onCancel}
-      saveDisabled={!formData?.name || !editable}
+      saveDisabled={!formData?.name || !editable || realmMissing}
       dirty={!!formData && (JSON.stringify(formData) !== initialData || !!entitySource)}
       leftPanel={
         formData && (
