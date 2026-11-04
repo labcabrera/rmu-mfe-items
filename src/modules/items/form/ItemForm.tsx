@@ -7,6 +7,7 @@ import {
   canEditEntity,
   CategorySeparator,
   fetchRealms,
+  isAdmin,
   Item,
   ItemArmorSlot,
   ItemCategoryPicker,
@@ -104,6 +105,9 @@ export default function ItemForm({
           <RealmPicker
             value={formData.realmId || null}
             onChange={(realmId) => setFormData({ ...formData, realmId })}
+            // Spec 073: only an admin leaves it empty (a global item, seen from every realm)
+            required={!isAdmin(auth)}
+            helperText={!formData.realmId && isAdmin(auth) ? t('realm-global') : undefined}
             // Spec 073: items go to realms the user writes in (the current one stays listed)
             realms={realms?.filter((realm) => canEditEntity(realm, auth) || realm.id === formData.realmId)}
           />

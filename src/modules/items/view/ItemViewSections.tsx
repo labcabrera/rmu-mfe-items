@@ -68,18 +68,17 @@ export function ItemSummarySection({ item, realm }: { item: Item; realm?: Realm 
   const { info } = item;
   const rows: KeyValueRow[] = [
     { label: t('category'), value: itemCategoryLabel(item.category, t) },
-    ...(item.realmId
-      ? [
-          {
-            label: t('realm'),
-            value: (
-              <Link component={RouterLink} to={`/core/realms/view/${item.realmId}`}>
-                {realm ? t(realm.name) : item.realmId}
-              </Link>
-            ),
-          },
-        ]
-      : []),
+    {
+      label: t('realm'),
+      // Spec 073: an item without realm is global
+      value: item.realmId ? (
+        <Link component={RouterLink} to={`/core/realms/view/${item.realmId}`}>
+          {realm ? t(realm.name) : item.realmId}
+        </Link>
+      ) : (
+        t('realm-global')
+      ),
+    },
     { label: t('rarity'), value: t(info.rarity) },
     { label: t('unique'), value: t(info.unique ? 'yes' : 'no') },
     { label: t('stackable'), value: t(info.stackable ? 'yes' : 'no') },
