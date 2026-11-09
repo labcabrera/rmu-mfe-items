@@ -6,6 +6,7 @@ import { MfeRoot, NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
 const ItemFormPage = lazy(() => import('./modules/items/form/ItemFormPage'));
 const ItemListPage = lazy(() => import('./modules/items/list/ItemListPage'));
 const ItemViewPage = lazy(() => import('./modules/items/view/ItemViewPage'));
+const TreasureTablesPage = lazy(() => import('./modules/treasure-tables/TreasureTablesPage'));
 
 const App = () => (
   <MfeRoot>
@@ -14,6 +15,7 @@ const App = () => (
       <Route path="/view/:itemId" element={<ItemViewPage />} />
       <Route path="/create" element={<ItemFormPage mode="create" />} />
       <Route path="/edit/:itemId" element={<ItemFormPage mode="edit" />} />
+      <Route path="/treasure-tables" element={<TreasureTablesPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </MfeRoot>

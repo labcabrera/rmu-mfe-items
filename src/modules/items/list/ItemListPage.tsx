@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
 import { Alert } from '@mui/material';
 import {
   fetchRealms,
@@ -16,6 +17,7 @@ import {
   ListPage,
   LoadingState,
   Realm,
+  RmuIconButton,
   useItemCatalog,
   useItemCatalogQuery,
   useListFilters,
@@ -52,6 +54,15 @@ export default function ItemListPage() {
       breadcrumbs={[{ name: t('home'), link: '/' }, { name: t('items') }]}
       query={query}
       onAdd={() => navigate('/items/create')}
+      actions={[
+        <RmuIconButton
+          key="treasure-tables"
+          Icon={CasinoOutlinedIcon}
+          tooltip={t('loot-tables-title')}
+          ariaLabel={t('loot-tables-title')}
+          onClick={() => navigate('/items/treasure-tables')}
+        />,
+      ]}
       filtersLayout="side"
       filterState={filters}
       filtersStorageKey="items.list"
