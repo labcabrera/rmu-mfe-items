@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -64,7 +64,7 @@ export default function ItemFormPage({ mode }: { mode: 'create' | 'edit' }) {
 
   const onSave = () => {
     if (!formData) return;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, owner, entitySource: current, ...rest } = formData;
     const source = entitySource ? { entitySource } : {};
     if (mode === 'create') {

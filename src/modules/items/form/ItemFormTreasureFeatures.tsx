@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormControlLabel, Grid, Switch, TextField } from '@mui/material';
 import {

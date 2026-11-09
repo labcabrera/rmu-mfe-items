@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Autocomplete, Chip, Grid, TextField } from '@mui/material';
@@ -13,6 +13,7 @@ import {
   NumericInput,
   useNotify,
   weaponSkillImage,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemFormWeaponAttacks from './ItemFormWeaponAttacks';
 
@@ -33,11 +34,11 @@ const ItemCreationWeaponAttributes: FC<{
 
   const mapSkills = async () => {
     try {
-      const meleeResp = await fetchEnumerations('category==melee-weapon-type', 0, 100, auth);
-      const rangedResp = await fetchEnumerations('category==ranged-weapon-type', 0, 100, auth);
+      const meleeResp = await fetchFullPage((rsql, page, size) => fetchEnumerations(rsql, page, size, auth), 'category==melee-weapon-type');
+      const rangedResp = await fetchFullPage((rsql, page, size) => fetchEnumerations(rsql, page, size, auth), 'category==ranged-weapon-type');
       const meleeSpecs = meleeResp?.content || [];
       const rangedSpecs = rangedResp?.content || [];
-      const skillsResp = await fetchSkills('categoryId==combat-training', 0, 100, auth);
+      const skillsResp = await fetchFullPage((rsql, page, size) => fetchSkills(rsql, page, size, auth), 'categoryId==combat-training');
       const list = skillsResp?.content || [];
       const values: EntityOption[] = [];
       list.forEach((e) => {

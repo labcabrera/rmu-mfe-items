@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Chip, Grid, Link, Stack, Typography } from '@mui/material';
@@ -22,7 +22,7 @@ import {
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 /** Sections of the item view (spec 046, decision 14), in the order of their tabs. */
-export const itemSectionIds = ['summary', 'combat', 'features', 'modifiers', 'economy'] as const;
+const itemSectionIds = ['summary', 'combat', 'features', 'modifiers', 'economy'] as const;
 export type ItemSectionId = (typeof itemSectionIds)[number];
 
 const present = (value: number | null | undefined): value is number => value !== null && value !== undefined;
@@ -49,7 +49,7 @@ export const visibleItemSections = (item: Item | undefined, t: ItemFeatureTransl
   });
 
 /** The skill of a weapon and, when it has one, its specialization (`melee-weapon@blade`). */
-export const weaponSkillParts = (skillId: string): { skill: string; specialization?: string } => {
+const weaponSkillParts = (skillId: string): { skill: string; specialization?: string } => {
   const [skill, specialization] = skillId.split('@');
   return { skill, specialization: specialization || undefined };
 };

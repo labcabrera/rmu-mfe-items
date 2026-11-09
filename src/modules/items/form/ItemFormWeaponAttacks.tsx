@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import { useState, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AddButton,

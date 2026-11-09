@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ import {
   useItemCatalogQuery,
   useListFilters,
   useNotify,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 /**
@@ -38,7 +39,7 @@ export default function ItemListPage() {
   const query = useItemCatalogQuery(items, filters, { error, refresh });
 
   useEffect(() => {
-    fetchRealms('', 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchRealms(rsql, page, size, auth), '')
       .then((response) => setRealms(response.content))
       .catch(notify.error);
   }, []);

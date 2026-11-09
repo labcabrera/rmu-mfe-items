@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Button, Grid } from '@mui/material';
@@ -14,6 +14,7 @@ import {
   RmuDialog,
   SkillSelector,
   TechnicalInfo,
+  useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 const ENUM_PREFIX = '@enumeration:';
@@ -30,6 +31,7 @@ export default function AddItemModifierDialog({
   onError: (err: string) => void;
 }) {
   const auth = useAuth();
+  const notify = useNotify();
   const { t } = useTranslation();
   const [options, setOptions] = useState<ItemModifierOption[]>();
   const [option, setOption] = useState<ItemModifierOption>();
@@ -75,7 +77,9 @@ export default function AddItemModifierDialog({
   }, [formData]);
 
   useEffect(() => {
-    fetchItemModifierOptions(auth).then((response) => setOptions(response));
+    fetchItemModifierOptions(auth)
+      .then((response) => setOptions(response))
+      .catch(notify.error);
   }, []);
 
   if (!types) return;

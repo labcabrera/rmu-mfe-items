@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { FormControlLabel, FormGroup, Grid, Switch, TextField } from '@mui/material';
@@ -17,6 +17,7 @@ import {
   Realm,
   RealmPicker,
   useNotify,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import ItemFormArmor from './ItemFormArmor';
 import ItemFormFeatures, { emptyFeatures } from './ItemFormFeatures';
@@ -39,7 +40,7 @@ export default function ItemForm({
   const [realms, setRealms] = useState<Realm[]>();
 
   useEffect(() => {
-    fetchRealms('', 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchRealms(rsql, page, size, auth), '')
       .then((realms) => setRealms(realms.content))
       .catch((err) => notify.error(err));
   }, []);
