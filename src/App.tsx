@@ -1,9 +1,11 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { MfeRoot, NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
-import ItemFormPage from './modules/items/form/ItemFormPage';
-import ItemListPage from './modules/items/list/ItemListPage';
-import ItemViewPage from './modules/items/view/ItemViewPage';
+
+// Workspace spec 091, E1: every page is its own chunk; the Suspense is in MfeRoot / the shell layout.
+const ItemFormPage = lazy(() => import('./modules/items/form/ItemFormPage'));
+const ItemListPage = lazy(() => import('./modules/items/list/ItemListPage'));
+const ItemViewPage = lazy(() => import('./modules/items/view/ItemViewPage'));
 
 const App = () => (
   <MfeRoot>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormControlLabel, Grid, Switch, TextField } from '@mui/material';
 import {
@@ -27,7 +27,7 @@ const LABEL_PREFIX = { category: 'poison-category-', form: 'poison-form-', sever
  * The block of general equipment data each category edits (spec 041; poison and antidote, spec 042), with the
  * Treasure Law blocks of spec 062. A herb may also be an antidote, and a mount an animal of the market.
  */
-export const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
+const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
   container: 'container',
   light: 'light',
   mount: 'transport',
@@ -47,7 +47,7 @@ export const FEATURE_BLOCKS: Record<string, FeatureBlock> = {
 };
 
 /** Blocks a category may add with a switch (spec 062): the antidote of a herb, the animal data of a mount. */
-export const OPTIONAL_BLOCKS: Record<string, FeatureBlock[]> = { herb: ['antidote'], mount: ['animal'] };
+const OPTIONAL_BLOCKS: Record<string, FeatureBlock[]> = { herb: ['antidote'], mount: ['animal'] };
 
 /** The optional blocks of a category: any item may be a magic item (spec 067). */
 const optionalBlocks = (category: string): FeatureBlock[] => [
